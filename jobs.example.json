@@ -1,0 +1,28 @@
+[
+  {
+    "crop": "cane",
+    "year": "2025",
+    "district_name": "Muzaffargarh",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "stac_static_mode": "auto"
+  },
+  {
+    "crop": "cane",
+    "year": "2025",
+    "district_name": "Bahawalpur",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "stac_static_mode": "manual",
+    "stac_static_dates": ["2025-11-02", "2025-11-03"]
+  },
+  {
+    "crop": "wheat",
+    "year": "2021",
+    "district_name": "Attock",
+    "ndvi_source": "stac",
+    "static_source": "gee",
+    "gee_static_mode": "manual_gcs_link",
+    "gee_static_gcs_uri": "gs://farmdar_data_catalog/fao_wheat_static_image/year_2021/Attock_2021-Jan-25.tif"
+  }
+]

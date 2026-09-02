@@ -1,0 +1,30 @@
+# Core raster / vector stack
+numpy>=1.24
+pandas>=2.0
+scipy>=1.10
+rasterio>=1.3
+geopandas>=0.14
+shapely>=2.0
+tqdm>=4.65
+
+# Models
+joblib>=1.3            # NDVI RandomForest (.joblib)
+scikit-learn>=1.3      # required to unpickle the RandomForest
+xgboost>=2.0           # static-image classifier (.json)
+
+# Google Earth Engine + Cloud Storage (only needed when a *_source is "gee")
+earthengine-api>=0.1.380
+google-cloud-storage>=2.10
+google-auth>=2.20
+
+# STAC acquisition (only needed when a *_source is "stac").
+# Provided by the internal `farmdar` package (farmdar.sentinel); these are its deps.
+pystac-client>=0.7
+odc-stac>=0.3.8
+planetary-computer>=1.0
+# boto3>=1.28          # optional: S3 read-through cache (FARMDAR_S2_CACHE_BUCKET)
+
+# Optional but strongly recommended: GDAL Python bindings enable streaming (low-memory)
+# mosaicking. Without them the pipeline falls back to in-memory rasterio.merge.
+# Install via conda/mamba (`conda install -c conda-forge gdal`) rather than pip.
+# GDAL>=3.6

@@ -1,0 +1,45 @@
+# Credentials -- never commit service-account keys
+*.json
+!jobs.example.json
+!.vscode/*.json
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Pipeline outputs and intermediates
+*.tif
+*.tiff
+*.vrt
+*.gpkg
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.qix
+*.zip
+batch_results.csv
+raw_ndvi_tiles/
+tile_predictions/
+static_staging/
+final_output/
+
+# Model cache (models are pulled from GCS on demand)
+.cache/
+*.joblib
+
+# Vendored read-only copy of the internal farmdar package; the pipeline imports
+# `farmdar.sentinel`, not this file. Delete this line if you want it tracked.
+sentinel.py
+
+# Original per-source notebooks: kept locally for reference, not published.
+1_fao_model_execution_pipeline_using_gee.ipynb
+2_fao_model_execution_pipeline_without_gee.ipynb
+3_fao_run_only_static_model_using_gcs.ipynb
