@@ -27,8 +27,8 @@ def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[s
     """Returns (static image path, date suffix). In 'auto' mode the cloud-aware
     selector inside farmdar.sentinel picks the dates; in 'manual' mode the configured
     dates are fetched as-is."""
-    # from farmdar.sentinel import fetch_sentinel_static_imagery  # never modified, only called
-    from sentinel import fetch_sentinel_static_imagery
+    from farmdar.sentinel import fetch_sentinel_static_imagery  # never modified, only called
+    # from sentinel import fetch_sentinel_static_imagery
 
     if cfg.stac_static_mode == "manual":
         requested_dates = cfg.stac_static_dates
