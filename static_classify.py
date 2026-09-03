@@ -145,6 +145,33 @@ def configure_model_hardware(model: Any) -> Any:
     return model
 
 
+def _estimate_aoi_pixels(aoi, transform, grid_pixels: int) -> int:
+    """How many raster pixels the AOI polygon itself covers.
+
+    Computed geometrically (projected AOI area / projected pixel area) rather than by
+    rasterising, which would cost a full extra pass over the grid.
+    """
+    try:
+        centroid = aoi.geometry.union_all().centroid if hasattr(aoi.geometry, "union_all")             else aoi.geometry.unary_union.centroid
+        utm_zone = int((centroid.x + 180) / 6) + 1
+        utm_epsg = (32600 if centroid.y >= 0 else 32700) + utm_zone
+        projected = aoi.to_crs(epsg=utm_epsg)
+
+        pixel_width_deg, pixel_height_deg = abs(transform.a), abs(transform.e)
+        bounds = projected.total_bounds
+        degrees_bounds = aoi.total_bounds
+        metres_per_degree_x = (bounds[2] - bounds[0]) / max(degrees_bounds[2] - degrees_bounds[0], 1e-12)
+        metres_per_degree_y = (bounds[3] - bounds[1]) / max(degrees_bounds[3] - degrees_bounds[1], 1e-12)
+
+        pixel_area_m2 = (pixel_width_deg * metres_per_degree_x) * (pixel_height_deg * metres_per_degree_y)
+        aoi_area_m2 = float(projected.geometry.area.sum())
+        if pixel_area_m2 > 0:
+            return max(1, int(aoi_area_m2 / pixel_area_m2))
+    except Exception as exc:
+        logger.warning(f"Could not measure the AOI's pixel count ({exc}); falling back to the full grid.")
+    return grid_pixels
+
+
 def assert_grid_parity(path_a: str, path_b: str) -> None:
     """Hard gate: two rasters must share CRS, transform and dimensions."""
     with rasterio.open(path_a) as a, rasterio.open(path_b) as b:
@@ -188,7 +215,12 @@ def build_crop_mask(
 
     crop_class_array = np.asarray(crop_classes)
     kept_pixels = 0
-    total_pixels = target_width * target_height
+
+    # Measure against the AOI, not the raster grid. The grid is the AOI's bounding box,
+    # and an irregular AOI fills only part of it (42% for one test AOI), so a bbox
+    # denominator can neither fire on a genuinely degenerate mask nor report an honest
+    # crop share -- while a rectangular AOI that really is one crop would trip it.
+    aoi_pixels = _estimate_aoi_pixels(aoi, target_transform, target_width * target_height)
 
     with rasterio.open(ndvi_classification_path) as source:
         warp_options = {
@@ -233,12 +265,12 @@ def build_crop_mask(
                         dst.write(block, 1, window=window)
                         progress.update(1)
 
-    coverage = kept_pixels / total_pixels
-    logger.info(f"Crop mask coverage: {kept_pixels:,} px ({coverage:.2%} of the static image grid)")
+    coverage = kept_pixels / aoi_pixels if aoi_pixels else 0.0
+    logger.info(f"Crop mask coverage: {kept_pixels:,} px ({coverage:.2%} of the AOI)")
     if coverage == 0:
         logger.warning(f"Crop mask is empty: classes {tuple(crop_classes)} not present in this AOI.")
     assert coverage < max_coverage_fraction, (
-        f"Degenerate crop mask: {coverage:.2%} coverage exceeds {max_coverage_fraction:.0%}; "
+        f"Degenerate crop mask: {coverage:.2%} of the AOI exceeds {max_coverage_fraction:.0%}; "
         "the mask is likely admitting background classes."
     )
     assert_grid_parity(static_image_path, output_mask_path)

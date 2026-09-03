@@ -189,6 +189,20 @@ def run_static_pipeline(
     else:
         static_image_path, date_suffix = _acquire_static_from_gee(cfg, staging_dir)
 
+    # A resumed static run whose config now selects different dates would leave two
+    # unrelated date folders side by side, and which one downstream reads depends only on
+    # the current config's date suffix. Say so rather than let it pass unnoticed.
+    sibling_dates = [
+        child.name for child in out_dir.iterdir()
+        if child.is_dir() and child.name != date_suffix and not child.name.startswith(("static_staging", "final_output"))
+    ] if out_dir.exists() else []
+    if sibling_dates:
+        logger.warning(
+            f"This static run folder already holds output for {sibling_dates} and is now "
+            f"adding {date_suffix}. The folder no longer identifies one result -- use "
+            f"static_run_mode='new' when the static dates change."
+        )
+
     classified_dir = out_dir / date_suffix
     classified_dir.mkdir(parents=True, exist_ok=True)
     classified_path = classified_dir / f"static_mosaic_{date_suffix}_Cls.tif"
