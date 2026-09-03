@@ -54,6 +54,66 @@ def get_static_model(model_path: str) -> Any:
     return model
 
 
+def available_memory_bytes() -> Optional[int]:
+    """Free RAM, or None when it cannot be determined on this platform."""
+    try:
+        import psutil
+
+        return int(psutil.virtual_memory().available)
+    except Exception:
+        try:  # Linux without psutil
+            return os.sysconf("SC_AVPHYS_PAGES") * os.sysconf("SC_PAGE_SIZE")
+        except (ValueError, OSError, AttributeError):
+            return None
+
+
+def resolve_worker_count(
+    requested: Optional[int],
+    window_count: int,
+    model_path: str,
+    memory_fraction: float = 0.5,
+    model_memory_expansion: float = 12.0,
+) -> int:
+    """Chooses a pool size bounded by cores, by work, and by the model's memory cost.
+
+    Every worker holds its own copy of the model, so the pool's floor is
+    `workers x resident model size` before a single pixel is read. A gradient-boosted
+    model can expand roughly an order of magnitude from its JSON on disk -- one 563 MB
+    model measured at 5.2 GiB resident -- so a pool sized purely from `cpu_count()`
+    reserves tens of GiB of identical copies and OOMs on a large machine, which is the
+    opposite of what more cores should buy.
+
+    Also capped by `window_count`: spawning more workers than there are windows spends
+    memory on parallelism that cannot be used.
+    """
+    ceiling = requested if requested else max(1, multiprocessing.cpu_count() - 1)
+    reasons = [f"requested={ceiling}"]
+
+    if window_count > 0 and window_count < ceiling:
+        ceiling = window_count
+        reasons.append(f"windows={window_count}")
+
+    try:
+        model_bytes = os.path.getsize(model_path) * model_memory_expansion
+        available = available_memory_bytes()
+        if available and model_bytes > 0:
+            budget = int(available * memory_fraction)
+            memory_cap = max(1, int(budget // model_bytes))
+            if memory_cap < ceiling:
+                reasons.append(
+                    f"memory={memory_cap} "
+                    f"({available / 2**30:.1f} GiB free x {memory_fraction:g} / "
+                    f"~{model_bytes / 2**30:.1f} GiB per worker)"
+                )
+                ceiling = memory_cap
+    except OSError:
+        pass  # cannot stat the model; fall back to the core/window bounds
+
+    if len(reasons) > 1:
+        logger.info(f"Static worker pool = {ceiling}  [{'; '.join(reasons)}]")
+    return max(1, ceiling)
+
+
 def _open_cached(path: str):
     dataset = _DATASET_CACHE.get(path)
     if dataset is None or dataset.closed:
@@ -246,6 +306,8 @@ def classify_static_image(
     background_label: int = 0,
     worker_count: Optional[int] = None,
     output_nodata: Optional[int] = None,
+    memory_fraction: float = 0.5,
+    model_memory_expansion: float = 12.0,
 ) -> Optional[str]:
     """Windowed, multiprocess XGBoost inference over the static image.
 
@@ -271,9 +333,6 @@ def classify_static_image(
             chunk_size=chunk_size,
         )
 
-    if worker_count is None:
-        worker_count = max(1, multiprocessing.cpu_count() - 1)
-
     windows: List[Window] = []
     with rasterio.open(static_image_path) as src:
         output_profile = src.profile
@@ -296,6 +355,10 @@ def classify_static_image(
     output_profile.update(driver="GTiff", dtype=rasterio.uint8, count=1, nodata=output_nodata,
                           compress="lzw", tiled=True, blockxsize=256, blockysize=256, BIGTIFF="YES")
 
+    worker_count = resolve_worker_count(
+        requested=worker_count, window_count=len(windows), model_path=model_path,
+        memory_fraction=memory_fraction, model_memory_expansion=model_memory_expansion,
+    )
     logger.info(f"Classifying {len(windows)} window(s) across {worker_count} worker(s)...")
     spawn_context = multiprocessing.get_context("spawn")
 

@@ -16,6 +16,7 @@ as one parameterised version each, with the memory profile tightened:
 from __future__ import annotations
 
 import gc
+import json
 import shutil
 import tempfile
 from pathlib import Path
@@ -47,19 +48,50 @@ def _class_membership_mask(data: np.ndarray, class_values: Sequence[int]) -> np.
     return np.isin(data, class_values)
 
 
+def _describe_source_raster(raster_path: Union[str, Path]) -> dict:
+    """Fingerprints the raster a vector product was built from."""
+    stats = Path(raster_path).stat()
+    return {
+        "source_raster": str(Path(raster_path).resolve()),
+        "size_bytes": stats.st_size,
+        "mtime_ns": stats.st_mtime_ns,
+    }
+
+
+def _read_source_record(record_path: Path, key: Optional[str] = None):
+    if not record_path.exists():
+        return None
+    try:
+        record = json.loads(record_path.read_text())
+    except (json.JSONDecodeError, OSError):
+        return None
+    return record.get(key) if key else record
+
+
+def _write_source_record(record_path: Path, payload: dict) -> None:
+    try:
+        record_path.write_text(json.dumps(payload, indent=2))
+    except OSError as exc:  # bookkeeping must never fail a finished product
+        print(f"  [Warning] Could not record the source raster: {exc}")
+
+
 def apply_strict_directional_sieve(
     input_raster_path: Union[str, Path],
     target_classes: List[int],
     min_pixel_size: int = 15,
     connectivity: int = 4,
-    nodata_val: int = 255,
+    nodata_val: Optional[int] = 255,
 ) -> str:
     """Sieves blobs smaller than `min_pixel_size`, then reverts any merge of a
     non-target clump into a target class unless that clump is fully encapsulated by
     target pixels -- touching NoData or another class aborts the merge.
 
-    Pass the raster's real background value as `nodata_val` (255 for the NDVI/RF
-    classification map, the static background label for the static classification).
+    `nodata_val` names pixels that hold no data and must be excluded from sieving --
+    255 for the NDVI/RF map, whose unclassified pixels really are absent. Pass **None**
+    when every pixel carries a real class, as in the static classification: naming a
+    legitimate class as nodata masks it out of `rasterio.features.sieve`, leaving small
+    target blobs with no valid neighbour to merge into, so the sieve silently does
+    nothing at all.
     """
     in_path = Path(input_raster_path)
     out_path = in_path.parent / f"{in_path.stem}_sieved_p{min_pixel_size}{in_path.suffix}"
@@ -77,9 +109,13 @@ def apply_strict_directional_sieve(
             profile.update(dtype=rasterio.uint8)
 
     print(f"Phase 1: base sieve filter (removing blobs < {min_pixel_size} px)...")
-    valid_mask = data != nodata_val
-    sieved = sieve(data, size=min_pixel_size, connectivity=connectivity, mask=valid_mask)
-    del valid_mask
+    if nodata_val is None:
+        # Every pixel is a real class, so the whole raster participates.
+        sieved = sieve(data, size=min_pixel_size, connectivity=connectivity)
+    else:
+        valid_mask = data != nodata_val
+        sieved = sieve(data, size=min_pixel_size, connectivity=connectivity, mask=valid_mask)
+        del valid_mask
 
     print("Phase 2: enforcing strict topological encapsulation...")
     structure = generate_binary_structure(2, 1 if connectivity == 4 else 2)
@@ -123,7 +159,8 @@ def apply_strict_directional_sieve(
     else:
         del touching_bad, clump_ids
 
-    np.copyto(sieved, np.uint8(nodata_val), where=(data == nodata_val))
+    if nodata_val is not None:
+        np.copyto(sieved, np.uint8(nodata_val), where=(data == nodata_val))
     del data
     gc.collect()
 
@@ -164,10 +201,23 @@ def vectorize_process_and_export(
     out_base_path = out_dir_path / output_basename
     gpkg_output = f"{out_base_path}.gpkg"
     zip_output = f"{out_base_path}.zip"
+    source_record_path = out_base_path.with_suffix(".source.json")
 
-    if Path(gpkg_output).exists() and (not save_shp_zip or Path(zip_output).exists()):
-        print(f"[Skipped] Vectorised outputs already exist for: {output_basename}")
-        return gpkg_output
+    # Resuming must not hand back polygons built from a *different* raster. A filename
+    # check alone cannot tell: the output name depends only on the AOI, crop and year, so
+    # a re-run that recomputes the static stage would return the previous run's product.
+    # Skip only when the recorded source raster is byte-for-byte the one we were handed.
+    current_source = _describe_source_raster(input_raster_path)
+    outputs_present = Path(gpkg_output).exists() and (not save_shp_zip or Path(zip_output).exists())
+    if outputs_present:
+        if _read_source_record(source_record_path) == current_source:
+            print(f"[Skipped] Vectorised outputs already exist for: {output_basename}")
+            return gpkg_output
+        print(
+            f"[Rebuilding] {output_basename} exists but was built from a different raster "
+            f"({_read_source_record(source_record_path, 'source_raster') or 'unrecorded'}); "
+            f"regenerating from {Path(input_raster_path).name}."
+        )
 
     if isinstance(target_labels, int):
         target_labels = [target_labels]
@@ -257,6 +307,8 @@ def vectorize_process_and_export(
             singlepart_gdf.to_file(Path(tmpdir) / f"{output_basename}.shp", driver="ESRI Shapefile")
             shutil.make_archive(base_name=str(out_base_path), format="zip", root_dir=tmpdir)
         print(f"   -> Saved ZIP (Shapefile): {zip_output}")
+
+    _write_source_record(source_record_path, current_source)
 
     del singlepart_gdf
     gc.collect()

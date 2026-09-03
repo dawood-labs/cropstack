@@ -207,6 +207,10 @@ class PipelineConfig:
     stac_static_selection: dict = field(default_factory=lambda: dict(
         cloud_lt=80, n_dates=2, selection_mode="greedy", cloud_metric="aoi"))
     stac_static_dates: Optional[List[str]] = None  # required when stac_static_mode == "manual"
+    # A date can be cloud-free by metadata yet cover a fraction of the AOI. Below this
+    # share of usable AOI the run warns loudly; set "error" to refuse the result.
+    stac_static_min_coverage_pct: Optional[float] = 80.0
+    stac_static_on_low_coverage: Literal["warn", "error"] = "warn"
     stac_resolution_m: int = 10
     stac_tile_size_deg: float = 0.1
     stac_worker_count: int = 8
@@ -242,6 +246,12 @@ class PipelineConfig:
     ndvi_worker_max_tasks: int = 8
     static_worker_count: Optional[int] = None  # default: CPU cores - 1
     static_chunk_size: int = 2048
+    # Each static worker holds its own copy of the model, so the pool is capped by
+    # memory as well as by cores: workers x (model size x expansion) must fit inside
+    # this fraction of free RAM. A 563 MB gradient-boosted JSON was measured at 5.2 GiB
+    # resident, so sizing purely from cpu_count() reserves tens of GiB of copies.
+    static_memory_fraction: float = 0.5
+    static_model_memory_expansion: float = 12.0
     ndvi_tile_timeout_s: int = 900
 
     # ------------------------------------------------ classification thresholds
@@ -459,7 +469,15 @@ def build_pipeline_config(
     year = str(year)
     preset = get_crop_config(crop, year)
     base_dir = overrides.pop("base_dir", "/home/jovyan/FAO")
-    aoi_path = aoi_path or overrides.pop("aoi_shapefile", None)
+    # `pop` unconditionally: `aoi_path or overrides.pop(...)` short-circuits when
+    # aoi_path is set, leaving the alias in overrides to be reported as an unknown field.
+    aoi_alias = overrides.pop("aoi_shapefile", None)
+    if aoi_path is not None and aoi_alias is not None:
+        raise TypeError(
+            "Pass either aoi_path or its alias aoi_shapefile, not both "
+            f"(aoi_path={aoi_path!r}, aoi_shapefile={aoi_alias!r})."
+        )
+    aoi_path = aoi_path or aoi_alias
     aoi_gcs_key_path = overrides.pop("aoi_gcs_key_path", None)
     aoi_cache_dir = overrides.pop("aoi_cache_dir", DEFAULT_AOI_CACHE_DIR)
     gee_key_path = overrides.get(

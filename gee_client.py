@@ -364,10 +364,22 @@ def build_static_composite(
 ) -> ee.Image:
     def one_day_mosaic(date_text: str) -> ee.Image:
         day = ee.Date(date_text)
-        return build_harmonized_collection(
+        collection = build_harmonized_collection(
             geometry, day.format("YYYY-MM-dd"), day.advance(1, "day").format("YYYY-MM-dd"),
             sensor_mode, mask_clouds=True,
-        ).mosaic()
+        )
+        # Check here, client-side. An empty collection mosaics to a band-less image whose
+        # .select() only fails once GEE has scheduled the export, surfacing minutes later
+        # as "1 export task(s) failed" with the real reason in a separate log line. The
+        # usual cause is a date picked from Sentinel-2 availability on a pre-cutover year,
+        # where the static side silently switches to Landsat 8.
+        if collection.size().getInfo() == 0:
+            raise ValueError(
+                f"No {sensor_mode} acquisition on {date_text} over this AOI. "
+                f"(Years before cfg.gee_landsat_cutover_year use Landsat 8, whose overpass "
+                f"dates differ from Sentinel-2's.)"
+            )
+        return collection.mosaic()
 
     if manual_mode:
         if composite_type == "single" and single_date:

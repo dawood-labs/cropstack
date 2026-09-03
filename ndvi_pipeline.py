@@ -107,7 +107,10 @@ def run_ndvi_pipeline(
         if not tile_paths:
             raise FileNotFoundError(f"NDVI acquisition produced no tiles in {tiles_dir}")
 
+        # Parallelism is capped by tile count, not cores: extra workers would spawn,
+        # load a model, and idle.
         worker_count = cfg.ndvi_worker_count or max(1, int(multiprocessing.cpu_count() * 0.75))
+        worker_count = max(1, min(worker_count, len(tile_paths)))
         logger.info(f"Running RF inference over {len(tile_paths)} tile(s) on {worker_count} worker(s)...")
 
         prediction_paths, failed_tiles = [], []
