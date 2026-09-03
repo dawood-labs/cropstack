@@ -197,8 +197,12 @@ def build_crop_mask(
     logger.info(f"Building crop mask | crop_classes={tuple(crop_classes)} | AOI={aoi_path}")
 
     aoi = gpd.read_file(aoi_path)
-    assert not aoi.empty, "AOI shapefile is empty."
-    assert aoi.is_valid.all(), "AOI shapefile contains invalid geometries."
+    if aoi.empty:
+        raise ValueError(f"AOI contains no features: {aoi_path}")
+    invalid = ~aoi.geometry.is_valid
+    if invalid.any():
+        logger.warning(f"Repairing {int(invalid.sum())} invalid AOI geometr(ies) before masking.")
+        aoi.loc[invalid, "geometry"] = aoi.loc[invalid, "geometry"].make_valid()
 
     with rasterio.open(static_image_path) as target:
         mask_profile = target.profile.copy()

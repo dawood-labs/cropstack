@@ -102,6 +102,22 @@ def split_aoi_into_grid(
         return {"gridded_aoi": gridded_aoi_path, "grid_overlay": grid_overlay_path}
 
     aoi = gpd.read_file(aoi_path)
+    if aoi.empty:
+        raise ValueError(f"AOI contains no features: {aoi_path}")
+
+    # Repair before overlaying. A self-intersecting or mixed-type AOI makes the
+    # intersection produce GeometryCollections, and gpd.overlay(keep_geom_type=True)
+    # raises "`keep_geom_type` does not support GeometryCollection" outright.
+    invalid = ~aoi.geometry.is_valid
+    if invalid.any():
+        logger.warning(f"Repairing {int(invalid.sum())} invalid AOI geometr(ies) before gridding.")
+        aoi.loc[invalid, "geometry"] = aoi.loc[invalid, "geometry"].make_valid()
+    aoi = aoi.explode(index_parts=False).reset_index(drop=True)
+    aoi = aoi[aoi.geometry.geom_type.isin(["Polygon", "MultiPolygon"])]
+    aoi = aoi[~aoi.geometry.is_empty]
+    if aoi.empty:
+        raise ValueError(f"AOI has no polygon geometry after cleaning: {aoi_path}")
+
     min_x, min_y, max_x, max_y = aoi.total_bounds
     bbox = box(min_x, min_y, max_x, max_y)
 
@@ -131,8 +147,21 @@ def split_aoi_into_grid(
                 next_id += 1
 
     grid = gpd.GeoDataFrame({"grid_id": cell_ids}, geometry=cells, crs=utm_crs)
-    gridded_aoi = gpd.overlay(aoi_utm, grid, how="intersection", keep_geom_type=True)
+    try:
+        gridded_aoi = gpd.overlay(aoi_utm, grid, how="intersection", keep_geom_type=True)
+    except TypeError as exc:
+        # Some geometry pairs still intersect into a GeometryCollection despite the
+        # cleaning above; keep every type, then filter to polygons ourselves.
+        logger.warning(f"Grid overlay produced mixed geometry types ({exc}); filtering manually.")
+        gridded_aoi = gpd.overlay(aoi_utm, grid, how="intersection", keep_geom_type=False)
+        gridded_aoi = gridded_aoi.explode(index_parts=False).reset_index(drop=True)
+        gridded_aoi = gridded_aoi[gridded_aoi.geometry.geom_type.isin(["Polygon", "MultiPolygon"])]
+
     gridded_aoi = gridded_aoi[~gridded_aoi.geometry.is_empty].reset_index(drop=True)
+    if gridded_aoi.empty:
+        raise ValueError(
+            f"Gridding {aoi_path} produced no cells -- the AOI and the grid do not intersect."
+        )
     gridded_aoi["f_Id"] = range(1, len(gridded_aoi) + 1)
 
     # Keep only what GEE needs. Carrying the source AOI's own attributes through would

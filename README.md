@@ -81,6 +81,39 @@ Validated on real AOIs, so these are measurements rather than preferences:
   `run_static_model=True` raises. A pre-2018 **STAC** static image is still Sentinel-2
   and remains supported.
 
+### Static acquisition windows
+
+A single wide date range lets the selector pick anything inside it, and a scene that
+looks perfect by `eo:cloud_cover` can still be a swath edge covering 15% of the AOI, or
+hazy enough to shift the DN values the static model keys on. Each crop therefore defines
+**windows in preference order**, scored against farmdar's selector (a coarse scan, no
+imagery downloaded) until one clears `stac_static_min_coverage_pct`:
+
+| Crop | Windows, best first |
+|---|---|
+| cane | 7–15 Nov · 1–6 Nov · 15–31 Oct · 16–25 Nov |
+| wheat (punjab) | 10–25 Feb · 25 Jan–10 Feb · 26 Feb–10 Mar · 11–20 Mar |
+| wheat (sindh) | 1–20 Feb · 20–31 Jan · 21 Feb–end Feb |
+| spr_maize | 1–10 May · 20–30 Apr · 11–20 May |
+
+Pass `region="punjab"` / `region="sindh"` for wheat; without it the Punjab schedule is
+used. February end dates are leap-year aware. If no window clears the floor the best
+one is used and the run says so loudly. `stac_static_mode="manual"` bypasses all of it.
+
+Haze defence is `cloud_metric="aoi"` (the default): it scores against the SCL band,
+which classes cirrus alongside cloud, rather than trusting scene-level `eo:cloud_cover`.
+
+### Sensor eras
+
+| Year | NDVI | Static |
+|---|---|---|
+| ≥ 2016 | STAC (Sentinel-2) | Sentinel-2, either backend |
+| 2014–2015 | GEE (Landsat 8), selected automatically | none — no Sentinel-2 to use |
+
+`sentinel2_start_year` (default 2016) draws the line. Below it, `ndvi_source` switches to
+GEE automatically, `ndvi_source="stac"` is refused with the reason, and the static stage
+turns itself off. GEE NDVI is kept for Sentinel-2 years too, as a fallback, and warns.
+
 ### Cost to budget
 
 - Pre-2018 STAC years cost roughly 8× the network and 2.4× the time of a recent year

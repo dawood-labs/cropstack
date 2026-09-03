@@ -111,7 +111,14 @@ def get_crop_config(crop_name: str, year_str: str) -> dict:
             "ndvi_inference_start": f"{current_year}-01-01",
             "ndvi_inference_end": f"{current_year}-11-15",
             "static_window_start": f"{current_year}-10-15",
-            "static_window_end": f"{current_year}-11-15",
+            "static_window_end": f"{current_year}-11-25",
+            # Tried in order; the first window that yields a clean enough image wins.
+            "static_priority_windows": [
+                ("11-07", "11-15"),   # best: crop fully developed, dry season begun
+                ("11-01", "11-06"),
+                ("10-15", "10-31"),
+                ("11-16", "11-25"),   # last resort
+            ],
             "composite_step_days": 8,
             "ndvi_model": "gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib",
             "static_model": "gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json",
@@ -128,8 +135,13 @@ def get_crop_config(crop_name: str, year_str: str) -> dict:
             "ndvi_series_end": f"{current_year}-07-17",
             "ndvi_inference_start": f"{current_year}-01-01",
             "ndvi_inference_end": f"{current_year}-07-15",
-            "static_window_start": f"{current_year}-05-01",
-            "static_window_end": f"{current_year}-05-15",
+            "static_window_start": f"{current_year}-04-20",
+            "static_window_end": f"{current_year}-05-20",
+            "static_priority_windows": [
+                ("05-01", "05-10"),
+                ("04-20", "04-30"),
+                ("05-11", "05-20"),
+            ],
             "composite_step_days": 8,
             "ndvi_model": "gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib",
             "static_model": "gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json",
@@ -146,8 +158,28 @@ def get_crop_config(crop_name: str, year_str: str) -> dict:
             "ndvi_series_end": f"{current_year}-07-01",
             "ndvi_inference_start": f"{prev_year}-09-01",
             "ndvi_inference_end": f"{current_year}-06-30",
-            "static_window_start": f"{current_year}-02-01",
-            "static_window_end": f"{current_year}-02-25",
+            "static_window_start": f"{current_year}-01-20",
+            "static_window_end": f"{current_year}-03-20",
+            # Wheat phenology differs by province, so the windows are region-specific.
+            "static_priority_windows_by_region": {
+                "punjab": [
+                    ("02-10", "02-25"),
+                    ("01-25", "02-10"),
+                    ("02-26", "03-10"),
+                    ("03-11", "03-20"),   # last resort
+                ],
+                "sindh": [
+                    ("02-01", "02-20"),
+                    ("01-20", "01-31"),
+                    ("02-21", "02-29"),   # to end of February; clamped on non-leap years
+                ],
+            },
+            "static_priority_windows": [      # used when no region is given
+                ("02-10", "02-25"),
+                ("01-25", "02-10"),
+                ("02-26", "03-10"),
+                ("03-11", "03-20"),
+            ],
             "composite_step_days": 8,
             "ndvi_model": "gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib",
             "static_model": "gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json",
@@ -190,6 +222,7 @@ class PipelineConfig:
     aoi_path: str          # resolved local path (see aoi_io.resolve_aoi)
     base_dir: str = "/home/jovyan/FAO"
     output_basename: str = ""
+    region: Optional[str] = None   # e.g. "punjab" / "sindh"; selects region-specific windows
     aoi_source: str = ""   # what the user originally passed, kept for reporting
     aoi_gcs_key_path: Optional[str] = None  # credentials for a gs:// AOI, if different
     aoi_cache_dir: str = DEFAULT_AOI_CACHE_DIR
@@ -229,6 +262,9 @@ class PipelineConfig:
     gcs_base_folder: Optional[str] = None  # default: fao_{crop}_{year}
     gee_grid_cell_acres: int = 15000
     gee_landsat_cutover_year: int = 2018  # year < this -> Landsat 8 only (never Landsat 7)
+    # Sentinel-2 archive start. Below this there is no Sentinel-2 static image to be had
+    # from either backend, and the static models cannot use Landsat (see uses_landsat_static).
+    sentinel2_start_year: int = 2016
     gee_sentinel_resolution_m: int = 10
     gee_landsat_resolution_m: int = 30
     gee_static_mode: GeeStaticMode = "api_auto"
@@ -286,6 +322,11 @@ class PipelineConfig:
     ndvi_inference_end: str = ""
     static_window_start: str = ""
     static_window_end: str = ""
+    # Acquisition windows tried in preference order, as ("MM-DD", "MM-DD") pairs. The
+    # first that yields an image clean enough for the coverage floor wins, so the
+    # pipeline reaches for the phenologically best imagery before settling.
+    static_priority_windows: List[tuple] = field(default_factory=list)
+    static_priority_windows_by_region: dict = field(default_factory=dict)
 
     # ----------------------------------------------------------------- outputs
     export_shapefile_zip: bool = True
@@ -341,6 +382,39 @@ class PipelineConfig:
     def static_sieve_min_pixels(self) -> int:
         return self._sieve_min_pixels(self.static_resolution_m)
 
+    def resolved_static_windows(self) -> List[tuple]:
+        """Concrete (start, end) date pairs for this year, in preference order."""
+        import calendar
+
+        windows = self.static_priority_windows
+        if self.region and self.static_priority_windows_by_region:
+            regional = self.static_priority_windows_by_region.get(self.region.strip().lower())
+            if regional:
+                windows = regional
+            else:
+                known = sorted(self.static_priority_windows_by_region)
+                raise ValueError(
+                    f"No static windows defined for region {self.region!r} on {self.crop}. "
+                    f"Known regions: {known}."
+                )
+
+        year = int(self.year)
+        resolved = []
+        for start_md, end_md in windows:
+            start_month, start_day = (int(part) for part in start_md.split("-"))
+            end_month, end_day = (int(part) for part in end_md.split("-"))
+            # Clamp to the month's real length so "02-29" works in a non-leap year.
+            end_day = min(end_day, calendar.monthrange(year, end_month)[1])
+            resolved.append((
+                f"{year}-{start_month:02d}-{start_day:02d}",
+                f"{year}-{end_month:02d}-{end_day:02d}",
+            ))
+        return resolved
+
+    @property
+    def sentinel2_available(self) -> bool:
+        return int(self.year) >= self.sentinel2_start_year
+
     @property
     def uses_landsat_static(self) -> bool:
         """True when the static image would come from Landsat 8 rather than Sentinel-2.
@@ -386,6 +460,14 @@ class PipelineConfig:
             raise FileNotFoundError(f"AOI not found: {self.aoi_path}")
 
         ModelSource.coerce(self.ndvi_model).validate("ndvi_model")
+
+        if self.run_static_model and not self.sentinel2_available:
+            raise ValueError(
+                f"run_static_model=True for {self.year}, but the static models need a "
+                f"Sentinel-2 image and the archive starts {self.sentinel2_start_year}. "
+                "Set run_static_model=False; the NDVI-only product is the deliverable for "
+                "pre-Sentinel-2 years."
+            )
 
         if self.run_static_model and self.uses_landsat_static:
             raise ValueError(
@@ -439,14 +521,20 @@ class PipelineConfig:
         if not self.ndvi_crop_classes:
             raise ValueError("ndvi_crop_classes must be a non-empty list of class values.")
 
-        if self.ndvi_source == "gee":
-            import logging
+        import logging
 
+        if self.ndvi_source == "gee" and self.sentinel2_available:
             logging.getLogger(__name__).warning(
-                "ndvi_source='gee' is not the supported path: it was measured 2.9x slower "
-                "than STAC (99.8%% of samples below 30%% CPU, blocked on the export queue) "
-                "for a product 0.2%% different (IoU 0.947). GEE is intended for the static "
-                "image only. Use ndvi_source='stac' unless you are deliberately testing it."
+                f"ndvi_source='gee' for {self.year}, a year Sentinel-2 covers. GEE NDVI was "
+                "measured 2.9x slower than STAC (99.8% of samples below 30% CPU, blocked on "
+                "the export queue) for a product 0.2% different (IoU 0.947). It is kept as a "
+                "fallback; prefer ndvi_source='stac' when Sentinel-2 is available."
+            )
+        elif self.ndvi_source == "stac" and not self.sentinel2_available:
+            raise ValueError(
+                f"ndvi_source='stac' but Sentinel-2 does not cover {self.year} "
+                f"(archive starts {self.sentinel2_start_year}). Use ndvi_source='gee', which "
+                "falls back to Landsat 8 for pre-Sentinel-2 years."
             )
 
         for label, mode in (
@@ -550,6 +638,15 @@ def build_pipeline_config(
     for key, value in overrides.items():
         setattr(cfg, key, value)
 
+    if int(cfg.year) < cfg.sentinel2_start_year and "ndvi_source" not in overrides:
+        # STAC is Sentinel-2 only, so pre-archive years must use GEE's Landsat 8 path.
+        import logging
+
+        logging.getLogger(__name__).info(
+            f"{cfg.crop} {cfg.year}: before Sentinel-2, so NDVI comes from GEE/Landsat 8."
+        )
+        cfg.ndvi_source = "gee"
+
     if cfg.gcs_base_folder is None:
         cfg.gcs_base_folder = f"fao_{crop}_{year}"
     if cfg.gee_service_account_key is None:
@@ -562,6 +659,15 @@ def build_pipeline_config(
         # No static model exists for this crop yet (rice), so default to the NDVI-only
         # product instead of failing. An explicit run_static_model=True still errors in
         # validate(), rather than silently doing nothing.
+        cfg.run_static_model = False
+
+    if cfg.run_static_model and not cfg.sentinel2_available and "run_static_model" not in overrides:
+        import logging
+
+        logging.getLogger(__name__).warning(
+            f"{cfg.crop} {cfg.year}: no Sentinel-2 static image exists before "
+            f"{cfg.sentinel2_start_year} -- running NDVI-only."
+        )
         cfg.run_static_model = False
 
     if cfg.run_static_model and cfg.uses_landsat_static and "run_static_model" not in overrides:

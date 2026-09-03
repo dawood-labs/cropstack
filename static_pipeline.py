@@ -46,6 +46,69 @@ def _check_static_coverage(cfg: PipelineConfig, coverage_pct) -> None:
     logger.warning("LOW STATIC COVERAGE: " + message)
 
 
+def select_dates_by_priority(cfg: PipelineConfig) -> Tuple[Optional[list], dict, str]:
+    """Walks the crop's acquisition windows in preference order and takes the first that
+    yields a clean enough image.
+
+    A single wide window lets the selector pick any date in it, and a scene that looks
+    perfect by `eo:cloud_cover` can still be a swath edge covering a fraction of the AOI,
+    or hazy enough to shift the DN values the static model keys on. Narrow, ordered
+    windows encode the phenology instead: the best period is tried first and the pipeline
+    only falls back when the imagery there is genuinely unusable.
+
+    Scoring uses farmdar's own selector against a coarse grid, so a window is rejected
+    without downloading imagery. `cloud_metric="aoi"` reads the SCL band, which classes
+    cirrus (10) alongside cloud -- the closest thing available to a haze test.
+
+    Returns (dates, selection, description). `dates` is None when no window has any
+    usable imagery at all.
+    """
+    from farmdar.sentinel import select_static_dates
+
+    windows = cfg.resolved_static_windows()
+    if not windows:
+        return None, {}, "no priority windows configured"
+
+    selection_kwargs = dict(cfg.stac_static_selection)
+    floor = cfg.stac_static_min_coverage_pct or 0.0
+    best = None
+
+    for position, (start, end) in enumerate(windows, start=1):
+        label = f"window {position}/{len(windows)} ({start} to {end})"
+        try:
+            selection = select_static_dates(cfg.aoi_path, start, end, **selection_kwargs)
+        except Exception as exc:
+            logger.warning(f"{label}: could not be scored ({exc}); trying the next window.")
+            continue
+
+        coverage = selection.get("coverage_pct")
+        dates = selection.get("dates") or []
+        if not dates:
+            logger.info(f"{label}: no usable acquisition; trying the next window.")
+            continue
+
+        logger.info(f"{label}: {dates} -> {coverage:.1f}% of AOI usable"
+                    if coverage is not None else f"{label}: {dates}")
+
+        if coverage is not None and coverage >= floor:
+            logger.info(f"Accepted {label} at {coverage:.1f}% coverage (floor {floor:.0f}%).")
+            return dates, selection, label
+
+        if best is None or (coverage or 0) > (best[1].get("coverage_pct") or 0):
+            best = (dates, selection, label)
+
+    if best is None:
+        return None, {}, "no window produced a usable acquisition"
+
+    dates, selection, label = best
+    logger.warning(
+        f"No window reached the {floor:.0f}% coverage floor. Falling back to the best "
+        f"available: {label} at {selection.get('coverage_pct')}% -- the result rests on "
+        "partly cloudy or partly covered imagery."
+    )
+    return dates, selection, label + " (below floor)"
+
+
 def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[str, str]:
     """Returns (static image path, date suffix). In 'auto' mode the cloud-aware
     selector inside farmdar.sentinel picks the dates; in 'manual' mode the configured
@@ -53,9 +116,19 @@ def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[s
     from farmdar.sentinel import fetch_sentinel_static_imagery  # never modified, only called
     # from sentinel import fetch_sentinel_static_imagery
 
+    priority_label = None
     if cfg.stac_static_mode == "manual":
         requested_dates = cfg.stac_static_dates
         selection_kwargs = {}
+    elif cfg.resolved_static_windows():
+        # Score the crop's phenological windows in order and fetch only the winner.
+        requested_dates, _scored, priority_label = select_dates_by_priority(cfg)
+        selection_kwargs = {}
+        if requested_dates is None:
+            raise RuntimeError(
+                f"No usable static imagery in any configured window for {cfg.crop} "
+                f"{cfg.year} ({priority_label})."
+            )
     else:
         # dates=None is what makes farmdar.sentinel run select_static_dates -- the
         # cloud-aware selection the original notebook silently skipped.
@@ -79,8 +152,9 @@ def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[s
     )
 
     selected_dates = result.get("dates", [])
-    logger.info(f"STAC static dates ({cfg.stac_static_mode} mode): {selected_dates}")
-    if cfg.stac_static_mode == "auto":
+    logger.info(f"STAC static dates ({cfg.stac_static_mode} mode): {selected_dates}"
+                + (f" via {priority_label}" if priority_label else ""))
+    if cfg.stac_static_mode == "auto" and not priority_label:
         selection = result.get("selection", {}) or {}
         logger.info(
             f"Date selection: anchor={selection.get('anchor')}, "

@@ -79,7 +79,7 @@ def _acquire_tiles_from_stac(cfg: PipelineConfig, tiles_dir: Path) -> List[Path]
     from farmdar.sentinel import fetch_sentinel_imagery  # never modified, only called
     # from sentinel import fetch_sentinel_imagery
 
-    fetch_sentinel_imagery(
+    result = fetch_sentinel_imagery(
         aoi=cfg.aoi_path,
         start=cfg.ndvi_series_start,
         end=cfg.ndvi_series_end,
@@ -93,7 +93,28 @@ def _acquire_tiles_from_stac(cfg: PipelineConfig, tiles_dir: Path) -> List[Path]
         build_vrt_mosaic=False,   # tiles are consumed individually, no mosaic needed
         clip_to_aoi=False,
     )
-    return sorted(tiles_dir.glob("sentinel_*m_tile_*.tif"))
+    # Concurrent tile requests have been observed to drop tiles. farmdar reports each
+    # tile's fate, so check it: a silently short tile set becomes a district map with
+    # holes that still exits 0.
+    outcomes = result.get("results") or []
+    failed = [r for r in outcomes if str(r.get("status", "")).startswith("failed")]
+    expected = result.get("tiles")
+    produced = sorted(tiles_dir.glob("sentinel_*m_tile_*.tif"))
+
+    if failed:
+        raise RuntimeError(
+            f"STAC acquisition failed for {len(failed)} of {len(outcomes)} tile(s): "
+            f"{[(r.get('tile_id'), r.get('status')) for r in failed[:5]]}. "
+            "Re-run with run_mode='resume' to retry only the missing tiles."
+        )
+    if expected and len(produced) < expected:
+        raise RuntimeError(
+            f"STAC acquisition returned {len(produced)} tile file(s) but reported "
+            f"{expected} tile(s). The mosaic would have holes. Re-run with "
+            "run_mode='resume' to fetch the rest."
+        )
+
+    return produced
 
 
 def _acquire_tiles_from_gee(
