@@ -24,8 +24,8 @@ logger = logging.getLogger(__name__)
 
 
 def _acquire_tiles_from_stac(cfg: PipelineConfig, tiles_dir: Path) -> List[Path]:
-    # from farmdar.sentinel import fetch_sentinel_imagery  # never modified, only called
-    from sentinel import fetch_sentinel_imagery
+    from farmdar.sentinel import fetch_sentinel_imagery  # never modified, only called
+    # from sentinel import fetch_sentinel_imagery
 
     fetch_sentinel_imagery(
         aoi=cfg.aoi_path,
