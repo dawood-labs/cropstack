@@ -1,6 +1,7 @@
 # FAO Crop Mapping Pipeline
 
-Crop acreage mapping from Sentinel-2 / Landsat 8 imagery, with **independently
+Crop acreage mapping for sugarcane, wheat, spring maize and rice from Sentinel-2 /
+Landsat 8 imagery, with **independently
 switchable data sources**: NDVI time series and the static image can each come from
 Google Earth Engine or from an open STAC catalogue, in any combination.
 
@@ -152,9 +153,43 @@ district, in the same order (local paths or `gs://` URIs).
 | `band_utils.py` | band parsing across both naming conventions |
 | `aoi_io.py` | AOI resolution: any path form, any vector format, local or GCS |
 | `model_registry.py` | model resolution + permanent download cache |
+| `run_manager.py` | numbered run folders, new/resume per stage |
 
 This supersedes three earlier per-source notebooks (GEE-only, STAC-only, and a
 static-model-only workaround), which are not part of this repository.
+
+## Run folders: new vs resume
+
+Every stage writes into its own numbered folder under the output directory:
+
+```
+<output>/1_ndvi_run_2/      raw tiles, tile predictions, classification map, sieved map
+<output>/2_static_run_1/    static imagery, classified raster, sieved raster
+<output>/3_vector_run_2/    final GPKG / zipped Shapefile
+```
+
+`run_mode` decides which number a stage uses, so the same AOI and year can be run
+repeatedly without renaming anything by hand:
+
+| Value | Effect |
+|---|---|
+| `"resume"` (default) | Continue the latest run, reusing whatever already finished — the way to pick up after a crash |
+| `"new"` | A clean folder (`max + 1`), nothing reused |
+| `"2"` | A specific run id |
+
+`ndvi_run_mode`, `static_run_mode` and `vector_run_mode` override `run_mode` per stage —
+so you can keep an expensive NDVI result and redo only the static stage:
+
+```python
+cfg = build_pipeline_config(
+    crop="cane", year="2025", district_name="aoi_11", aoi_path=...,
+    ndvi_run_mode="resume",     # keep the NDVI work
+    static_run_mode="new",      # redo the static image from scratch
+)
+```
+
+`run_tag="cloudfix"` appends a label to new folder names. Each stage folder carries a
+`run_info.json` recording what produced it, appending to a history across attempts.
 
 ## Configuration notes
 
@@ -165,6 +200,16 @@ tiles for debugging or to avoid re-downloading.
 **Memory.** `ndvi_worker_count` (default 75% of cores), `ndvi_worker_max_tasks`
 (recycles a worker after N tiles; `1` is the most memory-safe), `static_worker_count`
 and `static_chunk_size` bound how much runs at once.
+
+**Sieve thresholds are resolution-aware.** `sieve_min_pixel_size` (20) applies at
+Sentinel's 10 m; Landsat runs at 30 m use `sieve_min_pixel_size_landsat` (1), since 20
+pixels there would discard real fields. Each stage is sized by its own source, so a
+STAC-NDVI + GEE-Landsat-static run gets 20 and 1 respectively.
+
+**Rice** has no static model yet, so `run_static_model` defaults to `False` for it and
+the pipeline delivers the NDVI-only product. Setting it `True` raises a clear error
+rather than silently doing nothing. It also uses a 5-day compositing step where the
+other crops use 8.
 
 **Class labels** live in three distinct spaces, which is easy to confuse:
 

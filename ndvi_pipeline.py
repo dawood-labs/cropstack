@@ -156,7 +156,7 @@ def run_ndvi_pipeline(
     return postprocess.apply_strict_directional_sieve(
         input_raster_path=str(classification_path),
         target_classes=cfg.ndvi_crop_classes,
-        min_pixel_size=cfg.sieve_min_pixel_size,
+        min_pixel_size=cfg.ndvi_sieve_min_pixels,
         connectivity=4,
         nodata_val=cfg.ndvi_nodata_label,
     )

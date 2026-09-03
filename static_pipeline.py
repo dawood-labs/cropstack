@@ -189,7 +189,7 @@ def run_static_pipeline(
     return postprocess.apply_strict_directional_sieve(
         input_raster_path=str(classified_path),
         target_classes=[cfg.static_crop_label],
-        min_pixel_size=cfg.sieve_min_pixel_size,
+        min_pixel_size=cfg.static_sieve_min_pixels,
         connectivity=4,
         nodata_val=cfg.static_background_label,
     )

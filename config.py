@@ -112,6 +112,7 @@ def get_crop_config(crop_name: str, year_str: str) -> dict:
             "ndvi_inference_end": f"{current_year}-11-15",
             "static_window_start": f"{current_year}-10-15",
             "static_window_end": f"{current_year}-11-15",
+            "composite_step_days": 8,
             "ndvi_model": "gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib",
             "static_model": "gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json",
         },
@@ -129,8 +130,9 @@ def get_crop_config(crop_name: str, year_str: str) -> dict:
             "ndvi_inference_end": f"{current_year}-07-15",
             "static_window_start": f"{current_year}-05-01",
             "static_window_end": f"{current_year}-05-15",
-            "ndvi_model": "/home/jovyan/FAO/spr_maize/model_files/spr_maize_rf_classifier_15072026.joblib",
-            "static_model": "/home/jovyan/FAO/spr_maize/model_files/static_image/xgb_model_20250505_075148.json",
+            "composite_step_days": 8,
+            "ndvi_model": "gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib",
+            "static_model": "gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json",
         },
         "wheat": {
             "ndvi_crop_classes": [14],
@@ -146,8 +148,31 @@ def get_crop_config(crop_name: str, year_str: str) -> dict:
             "ndvi_inference_end": f"{current_year}-06-30",
             "static_window_start": f"{current_year}-02-01",
             "static_window_end": f"{current_year}-02-25",
-            "ndvi_model": "/home/jovyan/FAO/wheat/model_files/fao_wheat_timeseries_model_v1.joblib",
-            "static_model": "/home/jovyan/FAO/wheat/model_files/static_models/xgboost_wheat_model_v1.json",
+            "composite_step_days": 8,
+            "ndvi_model": "gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib",
+            "static_model": "gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json",
+        },
+        "rice": {
+            "ndvi_crop_classes": [1],
+            "sieve_min_pixel_size": 20,
+            "min_polygon_area_acres": 0.5,
+            "static_model_positive_class": 1,
+            "static_crop_label": 1,
+            "static_background_label": 4,
+            "output_polygon_label": 1,
+            "ndvi_series_start": f"{current_year}-05-24",
+            "ndvi_series_end": f"{current_year}-12-01",
+            "ndvi_inference_start": f"{current_year}-06-01",
+            "ndvi_inference_end": f"{current_year}-11-30",
+            # Rice needs a denser series than the other crops.
+            "composite_step_days": 5,
+            # No static window: the rice static model does not exist yet, so the static
+            # stage is skipped (see PipelineConfig.validate). Fill both in alongside the
+            # model when it lands.
+            "static_window_start": "",
+            "static_window_end": "",
+            "ndvi_model": "gs://farmdar_data_catalog/fao_rice_maize_timeseries_model/fao_rice_maize_rf_model.joblib",
+            "static_model": None,
         },
     }
 
@@ -221,7 +246,11 @@ class PipelineConfig:
 
     # ------------------------------------------------ classification thresholds
     ndvi_crop_classes: List[int] = field(default_factory=list)
+    # Sieve thresholds are resolution-dependent: a 20-pixel blob at Sentinel's 10 m is
+    # ~0.5 acre, but at Landsat's 30 m it would discard real fields, so Landsat runs use
+    # a much smaller threshold. Read these through the *_sieve_min_pixels properties.
     sieve_min_pixel_size: int = 20
+    sieve_min_pixel_size_landsat: int = 1
     min_polygon_area_acres: float = 0.5
     static_model_positive_class: int = 1
     static_crop_label: int = 1
@@ -249,6 +278,20 @@ class PipelineConfig:
     delete_raw_ndvi_tiles: bool = True
     delete_raw_static_tiles: bool = True
 
+    # ------------------------------------------------------------- run control
+    # Every stage writes into its own numbered folder (`1_ndvi_run_2`, ...), so the same
+    # AOI and year can be run repeatedly without renaming anything by hand.
+    #   "new"    -> a clean folder, nothing reused
+    #   "resume" -> continue the latest run, reusing whatever finished
+    #   "3"      -> a specific run id
+    # The per-stage settings override `run_mode` when set, which is how you resume an
+    # expensive NDVI stage while forcing a fresh static stage.
+    run_mode: str = "resume"
+    ndvi_run_mode: Optional[str] = None
+    static_run_mode: Optional[str] = None
+    vector_run_mode: Optional[str] = None
+    run_tag: Optional[str] = None  # optional label appended to new folder names
+
     # ------------------------------------------------------------------ helpers
     @property
     def gee_resolution_m(self) -> int:
@@ -261,6 +304,32 @@ class PipelineConfig:
     @property
     def gee_sensor_mode(self) -> str:
         return "SENTINEL" if self.uses_sentinel else "LANDSAT"
+
+    @property
+    def ndvi_resolution_m(self) -> int:
+        return self.stac_resolution_m if self.ndvi_source == "stac" else self.gee_resolution_m
+
+    @property
+    def static_resolution_m(self) -> int:
+        return self.stac_resolution_m if self.static_source == "stac" else self.gee_resolution_m
+
+    def _sieve_min_pixels(self, resolution_m: int) -> int:
+        return self.sieve_min_pixel_size_landsat if resolution_m >= 30 else self.sieve_min_pixel_size
+
+    @property
+    def ndvi_sieve_min_pixels(self) -> int:
+        return self._sieve_min_pixels(self.ndvi_resolution_m)
+
+    @property
+    def static_sieve_min_pixels(self) -> int:
+        return self._sieve_min_pixels(self.static_resolution_m)
+
+    @property
+    def has_static_model(self) -> bool:
+        return self.static_model is not None
+
+    def stage_mode(self, stage_field: Optional[str]) -> str:
+        return stage_field if stage_field else self.run_mode
 
     @property
     def needs_gee_api(self) -> bool:
@@ -292,6 +361,16 @@ class PipelineConfig:
 
         ModelSource.coerce(self.ndvi_model).validate("ndvi_model")
         if self.run_static_model:
+            if not self.has_static_model:
+                raise ValueError(
+                    f"run_static_model=True but no static model is configured for '{self.crop}'. "
+                    "Set run_static_model=False, or point static_model at a model file."
+                )
+            if not (self.static_window_start and self.static_window_end):
+                raise ValueError(
+                    f"run_static_model=True but '{self.crop}' has no static acquisition window. "
+                    "Set static_window_start / static_window_end."
+                )
             ModelSource.coerce(self.static_model).validate("static_model")
 
         if self.run_static_model and self.static_source == "stac":
@@ -322,6 +401,20 @@ class PipelineConfig:
         if not self.ndvi_crop_classes:
             raise ValueError("ndvi_crop_classes must be a non-empty list of class values.")
 
+        for label, mode in (
+            ("run_mode", self.run_mode),
+            ("ndvi_run_mode", self.ndvi_run_mode),
+            ("static_run_mode", self.static_run_mode),
+            ("vector_run_mode", self.vector_run_mode),
+        ):
+            if mode is None:
+                continue
+            text = str(mode).strip().lower()
+            if text not in ("new", "resume", "resume_latest", "latest", "continue") and not text.isdigit():
+                raise ValueError(
+                    f"{label}={mode!r} is not valid. Use 'new', 'resume', or a run id like '3'."
+                )
+
     def summary(self) -> str:
         lines = [
             f"crop/year/district : {self.crop} / {self.year} / {self.district_name}",
@@ -335,8 +428,14 @@ class PipelineConfig:
             f"NDVI inference     : {self.ndvi_inference_start} -> {self.ndvi_inference_end}",
             f"static window      : {self.static_window_start} -> {self.static_window_end}",
             f"NDVI model         : {ModelSource.coerce(self.ndvi_model).describe()}",
-            f"static model       : {ModelSource.coerce(self.static_model).describe()}" if self.static_model else "",
+            (f"static model       : {ModelSource.coerce(self.static_model).describe()}"
+             if self.static_model else f"static model       : (none yet for {self.crop})"),
             f"model cache        : {self.model_cache_dir}",
+            f"run modes          : ndvi={self.stage_mode(self.ndvi_run_mode)}, "
+            f"static={self.stage_mode(self.static_run_mode)}, "
+            f"vector={self.stage_mode(self.vector_run_mode)}"
+            + (f", tag={self.run_tag}" if self.run_tag else ""),
+            f"sieve min pixels   : ndvi={self.ndvi_sieve_min_pixels}, static={self.static_sieve_min_pixels}",
         ]
         return "\n".join(line for line in lines if line)
 
@@ -403,5 +502,10 @@ def build_pipeline_config(
     cfg.ndvi_model = ModelSource.coerce(cfg.ndvi_model)
     if cfg.static_model is not None:
         cfg.static_model = ModelSource.coerce(cfg.static_model)
+    elif "run_static_model" not in overrides:
+        # No static model exists for this crop yet (rice), so default to the NDVI-only
+        # product instead of failing. An explicit run_static_model=True still errors in
+        # validate(), rather than silently doing nothing.
+        cfg.run_static_model = False
 
     return cfg
