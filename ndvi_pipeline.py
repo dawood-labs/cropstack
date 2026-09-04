@@ -26,6 +26,29 @@ from inference_workers import mosaic_prediction_tiles, worker_process_tile
 logger = logging.getLogger(__name__)
 
 
+def per_tile_minutes(outcomes, elapsed_minutes: float, tile_total: int,
+                     worker_count: int) -> tuple:
+    """How long a tile actually took, and on what evidence.
+
+    Wall-clock over tile count is throughput, not per-tile cost: eight workers divide it
+    by eight, so tiles genuinely taking 2.4 min each read as 0.8 and no threshold worth
+    setting could fire. farmdar reports each tile's own duration, so prefer that; when it
+    does not, divide by the number of sequential batches rather than by tiles.
+
+    Returns `(minutes_per_tile, basis)` -- the basis is logged, because a number whose
+    meaning changes with the worker count is worth naming.
+    """
+    reported = [float(outcome[key]) / 60 for outcome in outcomes or []
+                for key in ("seconds", "duration", "elapsed")
+                if isinstance(outcome.get(key), (int, float))]
+    if reported:
+        return sum(reported) / len(reported), "mean of farmdar's per-tile durations"
+
+    workers = max(1, worker_count)
+    batches = max(1, math.ceil(max(1, tile_total) / workers))
+    return elapsed_minutes / batches, f"wall-clock over {batches} batch(es) of {workers} worker(s)"
+
+
 def _stac_worker_budget(cfg: PipelineConfig) -> int:
     """Trims STAC concurrency so the in-flight tiles fit in memory.
 
@@ -109,20 +132,8 @@ def _acquire_tiles_from_stac(cfg: PipelineConfig, tiles_dir: Path) -> List[Path]
     elapsed_minutes = (time.time() - started_at) / 60
     tile_total = result.get("tiles") or len(outcomes) or 1
 
-    # Wall-clock divided by tile count is throughput, not per-tile cost: eight workers
-    # divide it by eight, so tiles genuinely taking 2.4 min each read as 0.8 and no
-    # threshold worth setting would ever fire. Prefer the durations farmdar reports, and
-    # otherwise divide by the number of sequential batches rather than by tiles.
-    reported = [float(r[key]) / 60 for r in outcomes
-                for key in ("seconds", "duration", "elapsed") if isinstance(r.get(key), (int, float))]
-    if reported:
-        minutes_per_tile = sum(reported) / len(reported)
-        basis = "mean of farmdar's per-tile durations"
-    else:
-        workers = max(1, _stac_worker_budget(cfg))
-        batches = max(1, math.ceil(tile_total / workers))
-        minutes_per_tile = elapsed_minutes / batches
-        basis = f"wall-clock over {batches} batch(es) of {workers} worker(s)"
+    minutes_per_tile, basis = per_tile_minutes(
+        outcomes, elapsed_minutes, tile_total, _stac_worker_budget(cfg))
     logger.info(f"STAC acquisition took {elapsed_minutes:.1f} min for {tile_total} tile(s) "
                 f"-- {minutes_per_tile:.1f} min/tile ({basis}).")
     if minutes_per_tile > cfg.stac_slow_tile_warning_minutes:

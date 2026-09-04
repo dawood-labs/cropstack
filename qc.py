@@ -124,10 +124,14 @@ def assess_result(
             # agronomy that this module cannot answer and should not pretend to.
             tolerance = max(0.0, degenerate_retention_tolerance_pct)
             if retention <= tolerance:
+                # Deliberately does not name a cause. A district with no crop and a static
+                # stage that produced nothing are indistinguishable from here, and the
+                # earlier wording asserted the second -- sending an operator to re-run a
+                # window over ground where the honest answer was zero.
                 warn(f"The static model kept {retention:.1f}% of the NDVI stage's crop area "
-                     "-- effectively none of it. That is a classification that produced "
-                     "nothing, not a crop boundary: check that the static image covers the "
-                     "AOI and that the model loaded.")
+                     "-- effectively none of it. Either there is no crop here, or the static "
+                     "image or model produced nothing; the two look the same from here. "
+                     "Worth confirming the image covers the AOI and the model loaded.")
             elif retention >= 100.0 - tolerance:
                 warn(f"The static model kept {retention:.1f}% of the NDVI stage's crop area "
                      "-- effectively all of it, so it removed nothing. Check that the crop "
