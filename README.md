@@ -157,10 +157,11 @@ AOI; it has been removed.
 It warns — never fails a run — only on the two outcomes that are wrong regardless of
 domain: the static model kept effectively **none** of its input mask (a classification
 that produced nothing), or effectively **all** of it (a mask that never applied, or the
-wrong model). `qc_degenerate_retention_tolerance_pct` (1.0) is how close to 0% and 100%
-counts as "none" and "all"; it is there only because the sieve runs after classification,
-and it is not a plausible-range bound. Set it to 0 to require exactly zero and exactly
-full.
+wrong model). `qc_degenerate_retention_tolerance_pct` (0.0) is how close to 0% and 100%
+counts as "none" and "all". It defaults to exact, because any other value is a number
+somebody chose rather than measured; the cost is that a near-collapse — the static model
+keeping 0.3% of its mask — is reported but not warned about. Raise it against evidence,
+not intuition.
 
 `qc_min_static_retention_pct` / `qc_max_static_retention_pct` are off (`None`) and exist
 for operators who do have the local knowledge to say what is implausible. The same goes

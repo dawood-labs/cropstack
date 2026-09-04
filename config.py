@@ -286,10 +286,12 @@ class PipelineConfig:
     # The two degenerate outcomes are true without any domain knowledge: keeping none of
     # the mask, and removing none of it. Neither is a plausible crop boundary -- the first
     # is an image or model that produced nothing, the second a mask that never applied.
-    # This is the tolerance for "none"/"all", not a plausible-range bound: it exists only
-    # because the sieve runs after classification, so the degenerate cases land a fraction
-    # off the exact 0% and 100%. Set to 0 to require exactly zero and exactly full.
-    qc_degenerate_retention_tolerance_pct: float = 1.0
+    # This is the tolerance for "none"/"all", not a plausible-range bound. 0 means exactly
+    # zero and exactly full, and is the default because any other value is a number
+    # somebody chose. The cost is real and worth knowing: a near-collapse -- the static
+    # model keeping 0.3% of its mask -- is now reported and not warned about. Raise this
+    # only against evidence, not against intuition.
+    qc_degenerate_retention_tolerance_pct: float = 0.0
     # Per-tile cost, now that the figure is real per-tile time rather than throughput.
     # Healthy tiles have been measured at ~2.4 min each; the credential-refresh and 502
     # failures reported from the field ran 15-30 min. 8 sits clear of both.
