@@ -252,6 +252,13 @@ class PipelineConfig:
     # slightly worse date. 0 makes coverage the sole criterion; 100 makes window order
     # the sole criterion.
     static_window_preference_margin_pct: float = 5.0
+    # A window the catalogue refuses to answer for is not a window without imagery.
+    # Scoring is retried, and if a higher-priority window still could not be scored the
+    # run stops rather than report the answer from a lower-priority date as if the
+    # comparison had been complete. "warn" accepts it instead.
+    static_window_score_attempts: int = 3
+    static_window_score_retry_seconds: float = 5.0
+    static_window_on_score_error: Literal["error", "warn"] = "error"
     # Re-run lever: start from window N instead of the first, for a district whose result
     # from the leading window looked wrong against local knowledge.
     static_window_start_at: int = 1
@@ -268,10 +275,15 @@ class PipelineConfig:
     # in the imagery or the model rather than a property of the district.
     qc_max_crop_share_pct: Optional[float] = None
     qc_min_crop_share_pct: Optional[float] = None
-    qc_min_static_retention_pct: Optional[float] = 5.0
+    # Provisional: six observations across one AOI put real retention at 20-44%, so 15%
+    # sits below anything yet seen while still catching a collapse. Raise it once there
+    # are enough runs per crop to know the real floor.
+    qc_min_static_retention_pct: Optional[float] = 15.0
     qc_max_static_retention_pct: Optional[float] = 99.5
-    # Above this average, tile acquisition is being retried rather than merely busy.
-    stac_slow_tile_warning_minutes: float = 5.0
+    # Per-tile cost, now that the figure is real per-tile time rather than throughput.
+    # Healthy tiles have been measured at ~2.4 min each; the credential-refresh and 502
+    # failures reported from the field ran 15-30 min. 8 sits clear of both.
+    stac_slow_tile_warning_minutes: float = 8.0
     stac_resolution_m: int = 10
     stac_tile_size_deg: float = 0.1
     stac_worker_count: int = 8

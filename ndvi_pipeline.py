@@ -8,6 +8,7 @@ GeoTIFF tiles via `inference_workers`, unchanged regardless of origin (see
 from __future__ import annotations
 
 import logging
+import math
 import time
 import multiprocessing
 import shutil
@@ -15,6 +16,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import List, Optional
 
+import rasterio
 from tqdm import tqdm
 
 import postprocess
@@ -106,9 +108,23 @@ def _acquire_tiles_from_stac(cfg: PipelineConfig, tiles_dir: Path) -> List[Path]
     # farmdar.sentinel, which we do not modify, so surfacing the rate is what we can do.
     elapsed_minutes = (time.time() - started_at) / 60
     tile_total = result.get("tiles") or len(outcomes) or 1
-    minutes_per_tile = elapsed_minutes / tile_total
+
+    # Wall-clock divided by tile count is throughput, not per-tile cost: eight workers
+    # divide it by eight, so tiles genuinely taking 2.4 min each read as 0.8 and no
+    # threshold worth setting would ever fire. Prefer the durations farmdar reports, and
+    # otherwise divide by the number of sequential batches rather than by tiles.
+    reported = [float(r[key]) / 60 for r in outcomes
+                for key in ("seconds", "duration", "elapsed") if isinstance(r.get(key), (int, float))]
+    if reported:
+        minutes_per_tile = sum(reported) / len(reported)
+        basis = "mean of farmdar's per-tile durations"
+    else:
+        workers = max(1, _stac_worker_budget(cfg))
+        batches = max(1, math.ceil(tile_total / workers))
+        minutes_per_tile = elapsed_minutes / batches
+        basis = f"wall-clock over {batches} batch(es) of {workers} worker(s)"
     logger.info(f"STAC acquisition took {elapsed_minutes:.1f} min for {tile_total} tile(s) "
-                f"({minutes_per_tile:.1f} min/tile).")
+                f"-- {minutes_per_tile:.1f} min/tile ({basis}).")
     if minutes_per_tile > cfg.stac_slow_tile_warning_minutes:
         logger.warning(
             f"Tiles averaged {minutes_per_tile:.1f} min each, well above the "
@@ -168,6 +184,28 @@ def _acquire_tiles_from_gee(
         gcs_io.download_gcs_object(uri, tiles_dir, cfg.gee_service_account_key, max_workers=5)
         for uri in stack_uris
     ]
+
+
+def _assert_classification_has_data(classification_path, cfg) -> None:
+    """Refuses a classification map that is nodata everywhere.
+
+    A year outside the archive returns tiles that carry no pixels; every stage then
+    succeeds on empty arrays and the run ends with a clean zero-acre result and no
+    warning. An absent year and a genuinely crop-free district must not produce the same
+    output, so this fails rather than reports.
+    """
+    with rasterio.open(classification_path) as src:
+        for _, window in src.block_windows(1):
+            if bool((src.read(1, window=window) != cfg.ndvi_nodata_label).any()):
+                return
+
+    raise RuntimeError(
+        f"The NDVI classification for {cfg.crop} {cfg.year} is nodata in every pixel: the "
+        f"acquisition returned no imagery over this AOI for "
+        f"{cfg.ndvi_series_start}..{cfg.ndvi_series_end}. Check the year is within the "
+        "archive and the AOI is where you think it is -- this is an acquisition failure, "
+        "not a district without crop."
+    )
 
 
 def run_ndvi_pipeline(
@@ -247,6 +285,7 @@ def run_ndvi_pipeline(
         mosaic_prediction_tiles(
             prediction_paths, classification_path, nodata_label=cfg.ndvi_nodata_label,
         )
+        _assert_classification_has_data(classification_path, cfg)
         shutil.rmtree(predictions_dir, ignore_errors=True)  # per-tile chunks are redundant once mosaicked
 
         if cfg.delete_raw_ndvi_tiles:

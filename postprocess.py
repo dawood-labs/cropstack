@@ -273,6 +273,7 @@ def vectorize_process_and_export(
         image = src.read(1)
         transform = src.transform
         raster_crs = src.crs
+        raster_nodata = src.nodata
 
     def _finish_empty(reason: str) -> str:
         path = _export_empty_layer(raster_crs, gpkg_output, zip_output, out_base_path,
@@ -282,6 +283,14 @@ def vectorize_process_and_export(
 
     target_mask = _class_membership_mask(image, target_labels)
     if not target_mask.any():
+        # An all-nodata raster is a failed acquisition wearing the same clothes as a
+        # crop-free district. Only the second deserves an empty layer.
+        if raster_nodata is not None and not (image != raster_nodata).any():
+            raise RuntimeError(
+                f"{Path(input_raster_path).name} is nodata in every pixel -- nothing was "
+                "classified here. Writing an empty result would report an acquisition "
+                "failure as a district with no crop."
+            )
         print(f"  [Warning] No pixels found for classes {target_labels}.")
         if not write_empty_outputs:
             return None

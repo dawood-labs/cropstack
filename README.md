@@ -110,6 +110,13 @@ the cleaner image is worth the worse date. Set the margin to 0 to decide purely 
 coverage, or to 100 to decide purely on window order. If nothing clears the floor the
 best available is used and the run says so loudly.
 
+A window the catalogue refuses to answer for is **not** a window without imagery. Scoring
+is retried (`static_window_score_attempts`), the score table marks such a window
+`NOT SCORED` rather than dropping it, and if one that ranks above the chosen window still
+could not be scored the run stops — a rate limit that quietly removed the leading window
+once shipped a 2.1x different acreage under a log that read like a clean comparison. Set
+`static_window_on_score_error="warn"` to accept it instead.
+
 Two levers for when a result looks wrong:
 
 - `static_window_start_at=2` re-runs from the second window, for a district whose answer
@@ -119,6 +126,15 @@ Two levers for when a result looks wrong:
   acquisition at all — the alternative there is failing the run. Each step is logged as
   a departure from the crop's phenology. Set the days to 0 to fail instead.
 
+### Staged tiles
+
+farmdar names static tiles `static_10m_tile_0001.tif` — no date. Tiles left in the
+staging directory by an earlier acquisition are therefore indistinguishable from the ones
+a resume wants, and would be mosaicked out under the new date's filename, run record and
+provenance JSON: every label consistent, every label wrong. Staging now carries a
+`.staging.json` naming the dates, AOI, resolution and tile size it belongs to, and is
+cleared whenever that disagrees with the run — including when it carries no record at all.
+
 ### Result plausibility check
 
 Nothing at run time knows the truth, so the pipeline reports the numbers that expose an
@@ -126,8 +142,14 @@ implausible answer instead of leaving them to be found later. Every run writes
 `result_check.json` beside the vectors with the AOI acreage, the crop acreage, the crop
 share of the AOI, and how much of the NDVI stage's crop area the static model kept.
 
+A raster that is nodata in every pixel is an acquisition failure, not a district without
+crop, and the two must not produce the same output: the NDVI stage refuses an all-nodata
+classification, and vectorising refuses an all-nodata input, rather than reporting a clean
+zero.
+
 It warns — never fails a run — when the static model keeps under
-`qc_min_static_retention_pct` (5%) of its input mask, the mark of a hazy image rather
+`qc_min_static_retention_pct` (15%, provisional — six observations put real retention at
+20–44%) of its input mask, the mark of a hazy image rather
 than a real crop boundary, or over `qc_max_static_retention_pct` (99.5%), meaning it
 removed nothing. Set `qc_max_crop_share_pct` / `qc_min_crop_share_pct` per district to
 catch the regional over-prediction seen in lower Sindh; they are off until you set them,
