@@ -1,0 +1,92 @@
+[
+  {
+    "stage": "resolve_models",
+    "t_start_epoch": 1788504797.81,
+    "t_end_epoch": 1788504797.81,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "sieve",
+    "t_start_epoch": 1788504797.81,
+    "t_end_epoch": 1788504797.81,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "ndvi_stage",
+    "t_start_epoch": 1788504797.81,
+    "t_end_epoch": 1788504797.81,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "static_acquire_stac",
+    "t_start_epoch": 1788504797.811,
+    "t_end_epoch": 1788504830.49,
+    "start_s": 0.0,
+    "end_s": 32.68,
+    "duration_s": 32.68,
+    "peak_rss_mb_during": 1011.5,
+    "error": null
+  },
+  {
+    "stage": "static_crop_mask",
+    "t_start_epoch": 1788504830.49,
+    "t_end_epoch": 1788504830.635,
+    "start_s": 32.68,
+    "end_s": 32.83,
+    "duration_s": 0.14,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "static_classify",
+    "t_start_epoch": 1788504830.49,
+    "t_end_epoch": 1788504861.519,
+    "start_s": 32.68,
+    "end_s": 63.71,
+    "duration_s": 31.03,
+    "peak_rss_mb_during": 26167.8,
+    "error": null
+  },
+  {
+    "stage": "sieve",
+    "t_start_epoch": 1788504861.523,
+    "t_end_epoch": 1788504861.832,
+    "start_s": 63.71,
+    "end_s": 64.02,
+    "duration_s": 0.31,
+    "peak_rss_mb_during": 988.7,
+    "error": null
+  },
+  {
+    "stage": "static_stage",
+    "t_start_epoch": 1788504797.811,
+    "t_end_epoch": 1788504861.832,
+    "start_s": 0.0,
+    "end_s": 64.02,
+    "duration_s": 64.02,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "vector_stage",
+    "t_start_epoch": 1788504861.832,
+    "t_end_epoch": 1788504862.329,
+    "start_s": 64.02,
+    "end_s": 64.52,
+    "duration_s": 0.5,
+    "peak_rss_mb_during": 989.4,
+    "error": null
+  }
+]

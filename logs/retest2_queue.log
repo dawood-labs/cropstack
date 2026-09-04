@@ -1,0 +1,40 @@
+### queue start 2026-09-04T06:51:14+00:00: T1_sprmaize_margin5 T2_sprmaize_margin0 T3_sprmaize_margin100
+### T1_sprmaize_margin5 START 2026-09-04T06:51:14+00:00
+### T1_sprmaize_margin5 END status=0 2026-09-04T06:52:23+00:00
+### T2_sprmaize_margin0 START 2026-09-04T06:52:23+00:00
+### T2_sprmaize_margin0 END status=0 2026-09-04T06:53:17+00:00
+### T3_sprmaize_margin100 START 2026-09-04T06:53:17+00:00
+### T3_sprmaize_margin100 END status=0 2026-09-04T06:54:22+00:00
+### queue done 2026-09-04T06:54:22+00:00
+### queue start 2026-09-04T06:54:24+00:00: Z2_regression_1016 Z3_cane_auto Z4_wheat_punjab Z5_wheat_sindh Z6_noimagery_2027 Z7_noimagery_2027_exp0 Z1_nocane_empty
+### Z2_regression_1016 START 2026-09-04T06:54:24+00:00
+### Z2_regression_1016 END status=0 2026-09-04T06:54:40+00:00
+### Z3_cane_auto START 2026-09-04T06:54:40+00:00
+### Z3_cane_auto END status=0 2026-09-04T06:55:16+00:00
+### Z4_wheat_punjab START 2026-09-04T06:55:16+00:00
+### Z4_wheat_punjab END status=0 2026-09-04T06:55:46+00:00
+### Z5_wheat_sindh START 2026-09-04T06:55:46+00:00
+### Z5_wheat_sindh END status=0 2026-09-04T06:56:12+00:00
+### Z6_noimagery_2027 START 2026-09-04T06:56:12+00:00
+### Z6_noimagery_2027 END status=1 2026-09-04T06:56:37+00:00
+### Z7_noimagery_2027_exp0 START 2026-09-04T06:56:37+00:00
+### Z7_noimagery_2027_exp0 END status=1 2026-09-04T06:57:00+00:00
+### Z1_nocane_empty START 2026-09-04T06:57:00+00:00
+### Z1_nocane_empty END status=0 2026-09-04T07:00:10+00:00
+### queue done 2026-09-04T07:00:10+00:00
+### queue start 2026-09-04T07:01:20+00:00: T4_sprmaize_startat3 Z9_rice2027_ndvionly
+### T4_sprmaize_startat3 START 2026-09-04T07:01:20+00:00
+### T4_sprmaize_startat3 END status=0 2026-09-04T07:02:02+00:00
+### Z9_rice2027_ndvionly START 2026-09-04T07:02:02+00:00
+### Z9_rice2027_ndvionly END status=0 2026-09-04T07:02:31+00:00
+### queue done 2026-09-04T07:02:31+00:00
+### queue start 2026-09-04T07:06:34+00:00: K4a_staging_0429_keep K4b_staging_0509_reuse
+### K4a_staging_0429_keep START 2026-09-04T07:06:34+00:00
+### K4a_staging_0429_keep END status=0 2026-09-04T07:07:18+00:00
+### K4b_staging_0509_reuse START 2026-09-04T07:07:18+00:00
+### K4b_staging_0509_reuse END status=0 2026-09-04T07:07:52+00:00
+### queue done 2026-09-04T07:07:52+00:00
+### queue start 2026-09-04T07:09:39+00:00: Z8_cane_fresh_ndvi
+### Z8_cane_fresh_ndvi START 2026-09-04T07:09:39+00:00
+### Z8_cane_fresh_ndvi END status=0 2026-09-04T07:13:28+00:00
+### queue done 2026-09-04T07:13:28+00:00

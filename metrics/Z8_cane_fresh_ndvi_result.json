@@ -1,0 +1,191 @@
+{
+  "name": "Z8_cane_fresh_ndvi",
+  "spec": {
+    "crop": "cane",
+    "year": "2025",
+    "district_name": "okara",
+    "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+    "gee_service_account_key": "/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z8_cane_fresh_ndvi",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "stac_static_mode": "manual",
+    "stac_static_dates": [
+      "2025-10-16"
+    ],
+    "run_mode": "new"
+  },
+  "status": "ok",
+  "started_utc": "2026-09-04T07:09:39Z",
+  "config_summary": "crop/year/district : cane / 2025 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp\nNDVI source        : stac\nstatic source      : stac (manual)\nNDVI series window : 2024-12-24 -> 2025-11-17\nNDVI inference     : 2025-01-01 -> 2025-11-15\nstatic window      : 2025-10-15 -> 2025-11-25\nNDVI model         : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib\nstatic model       : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=new, static=new, vector=new\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z8_cane_fresh_ndvi",
+  "outcome": {
+    "crop": "cane",
+    "year": "2025",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z8_cane_fresh_ndvi",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": "2_static_run_1",
+    "vector_run": "3_vector_run_1",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z8_cane_fresh_ndvi/1_ndvi_run_1/okara_test_data_cane_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z8_cane_fresh_ndvi/2_static_run_1/16_Oct_2025/static_mosaic_16_Oct_2025_Cls_sieved_p20.tif",
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z8_cane_fresh_ndvi/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+    "ndvi_minutes": 3.6,
+    "static_minutes": 0.2,
+    "total_minutes": 3.8,
+    "result_check": {
+      "warnings": [],
+      "aoi_acres": 51293.1,
+      "feature_count": 926,
+      "crop_acres": 2184.7,
+      "crop_share_of_aoi_pct": 4.3,
+      "ndvi_crop_pixels": 245245,
+      "static_crop_pixels": 106793,
+      "static_retention_pct": 43.5
+    }
+  },
+  "wall_s": 227.87,
+  "resources": {
+    "samples": 265,
+    "duration_s": 227.9,
+    "peak_rss_tree_mb": 7032.1,
+    "peak_rss_single_proc_mb": 6603.3,
+    "peak_outdir_mb": 646.0,
+    "final_outdir_mb": 54.3,
+    "tree_read_mb": 0.26,
+    "tree_write_mb": 957.22,
+    "sys_read_mb": 1225.82,
+    "sys_write_mb": 191.75,
+    "net_recv_mb": 2031.9,
+    "net_sent_mb": 23.28,
+    "stage_peak_rss_mb": {
+      "init": 203.0,
+      "resolve_models": 0.0,
+      "ndvi_stage": 7032.1,
+      "ndvi_acquire_stac": 6603.3,
+      "ndvi_mosaic": 0.0,
+      "sieve": 0.0,
+      "static_stage": 0.0,
+      "static_acquire_stac": 4094.3,
+      "static_classify": 6253.4,
+      "static_crop_mask": 0.0,
+      "vector_stage": 4024.0,
+      "pipeline": 4027.1
+    }
+  },
+  "events": [
+    {
+      "stage": "resolve_models",
+      "t_start_epoch": 1788505779.988,
+      "t_end_epoch": 1788505779.988,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_acquire_stac",
+      "t_start_epoch": 1788505779.988,
+      "t_end_epoch": 1788505962.407,
+      "start_s": 0.0,
+      "end_s": 182.42,
+      "duration_s": 182.42,
+      "peak_rss_mb_during": 6603.3,
+      "error": null
+    },
+    {
+      "stage": "ndvi_mosaic",
+      "t_start_epoch": 1788505994.163,
+      "t_end_epoch": 1788505994.225,
+      "start_s": 214.18,
+      "end_s": 214.24,
+      "duration_s": 0.06,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788505994.281,
+      "t_end_epoch": 1788505994.682,
+      "start_s": 214.3,
+      "end_s": 214.7,
+      "duration_s": 0.4,
+      "peak_rss_mb_during": 4012.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_stage",
+      "t_start_epoch": 1788505779.988,
+      "t_end_epoch": 1788505994.682,
+      "start_s": 0.0,
+      "end_s": 214.7,
+      "duration_s": 214.69,
+      "peak_rss_mb_during": 7032.1,
+      "error": null
+    },
+    {
+      "stage": "static_acquire_stac",
+      "t_start_epoch": 1788505994.683,
+      "t_end_epoch": 1788506002.836,
+      "start_s": 214.7,
+      "end_s": 222.85,
+      "duration_s": 8.15,
+      "peak_rss_mb_during": 4094.3,
+      "error": null
+    },
+    {
+      "stage": "static_crop_mask",
+      "t_start_epoch": 1788506002.836,
+      "t_end_epoch": 1788506002.981,
+      "start_s": 222.85,
+      "end_s": 223.0,
+      "duration_s": 0.14,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_classify",
+      "t_start_epoch": 1788506002.836,
+      "t_end_epoch": 1788506006.982,
+      "start_s": 222.85,
+      "end_s": 227.0,
+      "duration_s": 4.15,
+      "peak_rss_mb_during": 6253.4,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788506006.987,
+      "t_end_epoch": 1788506007.336,
+      "start_s": 227.0,
+      "end_s": 227.35,
+      "duration_s": 0.35,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_stage",
+      "t_start_epoch": 1788505994.683,
+      "t_end_epoch": 1788506007.336,
+      "start_s": 214.7,
+      "end_s": 227.35,
+      "duration_s": 12.65,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "vector_stage",
+      "t_start_epoch": 1788506007.336,
+      "t_end_epoch": 1788506007.803,
+      "start_s": 227.35,
+      "end_s": 227.82,
+      "duration_s": 0.47,
+      "peak_rss_mb_during": 4024.0,
+      "error": null
+    }
+  ],
+  "finished_utc": "2026-09-04T07:13:27Z"
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "band": "blue/B2",
+    "n": 3249596,
+    "stac_mean": 663.2,
+    "gee_mean": 703.7,
+    "mean_delta": -40.4,
+    "stac_median": 647.0,
+    "gee_median": 697.0,
+    "median_delta": -50.0
+  },
+  {
+    "band": "green/B3",
+    "n": 3249414,
+    "stac_mean": 1021.3,
+    "gee_mean": 1015.7,
+    "mean_delta": 5.6,
+    "stac_median": 1002.0,
+    "gee_median": 1002.0,
+    "median_delta": 0.0
+  },
+  {
+    "band": "red/B4",
+    "n": 3249566,
+    "stac_mean": 1021.8,
+    "gee_mean": 1169.4,
+    "mean_delta": -147.6,
+    "stac_median": 1011.0,
+    "gee_median": 1178.0,
+    "median_delta": -167.0
+  },
+  {
+    "band": "rededge1/B5",
+    "n": 3250000,
+    "stac_mean": 1727.9,
+    "gee_mean": 1518.4,
+    "mean_delta": 209.5,
+    "stac_median": 1708.0,
+    "gee_median": 1500.0,
+    "median_delta": 208.0
+  },
+  {
+    "band": "nir/B8",
+    "n": 3249735,
+    "stac_mean": 3096.4,
+    "gee_mean": 2372.2,
+    "mean_delta": 724.2,
+    "stac_median": 3051.0,
+    "gee_median": 2314.0,
+    "median_delta": 737.0
+  },
+  {
+    "band": "NDVI",
+    "n": 3248865,
+    "stac_mean": 4981.3,
+    "gee_mean": 3253.1,
+    "mean_delta": 1728.3,
+    "stac_median": 4631.0,
+    "gee_median": 2713.0,
+    "median_delta": 1918.0
+  }
+]

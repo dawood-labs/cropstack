@@ -1,0 +1,32 @@
+[
+  {
+    "stage": "resolve_models",
+    "t_start_epoch": 1788440365.697,
+    "t_end_epoch": 1788440365.697,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "ndvi_acquire_stac",
+    "t_start_epoch": 1788440365.697,
+    "t_end_epoch": 1788440365.774,
+    "start_s": 0.0,
+    "end_s": 0.08,
+    "duration_s": 0.08,
+    "peak_rss_mb_during": 201.1,
+    "error": "ValueError: cannot convert float NaN to integer"
+  },
+  {
+    "stage": "ndvi_stage",
+    "t_start_epoch": 1788440365.697,
+    "t_end_epoch": 1788440365.774,
+    "start_s": 0.0,
+    "end_s": 0.08,
+    "duration_s": 0.08,
+    "peak_rss_mb_during": 0.0,
+    "error": "ValueError: cannot convert float NaN to integer"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "stage": "resolve_models",
+    "t_start_epoch": 1788425953.397,
+    "t_end_epoch": 1788425953.397,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "ndvi_acquire_stac",
+    "t_start_epoch": 1788425953.397,
+    "t_end_epoch": 1788426390.385,
+    "start_s": 0.0,
+    "end_s": 436.99,
+    "duration_s": 436.99,
+    "peak_rss_mb_during": 5533.8,
+    "error": null
+  },
+  {
+    "stage": "ndvi_mosaic",
+    "t_start_epoch": 1788426428.655,
+    "t_end_epoch": 1788426428.714,
+    "start_s": 475.26,
+    "end_s": 475.32,
+    "duration_s": 0.06,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "sieve",
+    "t_start_epoch": 1788426428.812,
+    "t_end_epoch": 1788426429.474,
+    "start_s": 475.42,
+    "end_s": 476.08,
+    "duration_s": 0.66,
+    "peak_rss_mb_during": 2917.5,
+    "error": null
+  },
+  {
+    "stage": "ndvi_stage",
+    "t_start_epoch": 1788425953.397,
+    "t_end_epoch": 1788426429.474,
+    "start_s": 0.0,
+    "end_s": 476.08,
+    "duration_s": 476.08,
+    "peak_rss_mb_during": 5951.1,
+    "error": null
+  },
+  {
+    "stage": "vector_stage",
+    "t_start_epoch": 1788426429.475,
+    "t_end_epoch": 1788426430.039,
+    "start_s": 476.08,
+    "end_s": 476.65,
+    "duration_s": 0.56,
+    "peak_rss_mb_during": 2918.6,
+    "error": null
+  }
+]

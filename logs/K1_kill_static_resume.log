@@ -1,0 +1,147 @@
+==============================================================================
+crop/year/district : spr_maize / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-12-24 -> 2025-07-17
+NDVI inference     : 2025-01-01 -> 2025-07-15
+static window      : 2025-04-20 -> 2025-05-20
+NDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+==============================================================================
+2026-09-04 07:03:51,471 INFO pipeline: Pipeline configuration:
+crop/year/district : spr_maize / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-12-24 -> 2025-07-17
+NDVI inference     : 2025-01-01 -> 2025-07-15
+static window      : 2025-04-20 -> 2025-05-20
+NDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+2026-09-04 07:03:51,471 INFO run_manager: 1_ndvi: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/1_ndvi_run_1
+2026-09-04 07:03:51,471 INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/3_vector_run_1  (no previous output to reuse)
+2026-09-04 07:03:51,471 INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+2026-09-04 07:03:51,471 INFO model_registry: static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+2026-09-04 07:03:51,471 INFO ndvi_pipeline: [Checkpoint] NDVI classification map already exists: /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map.tif
+[Skipped] Sieved raster already exists at: /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+2026-09-04 07:03:51,471 INFO pipeline: NDVI stage finished in 0.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+2026-09-04 07:03:51,472 INFO run_manager: 2_static: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/2_static_run_1
+2026-09-04 07:03:51,560 INFO farmdar.sentinel: aws-creds: bootstrapped 12-hour session, expires 2026-09-04T19:03:51+00:00
+2026-09-04 07:03:54,139 INFO farmdar.sentinel: static: 4 scenes on 3 dates in [2025-05-01, 2025-05-10)
+2026-09-04 07:03:57,392 INFO farmdar.sentinel: static: dates=['2025-05-09', '2025-05-01'] (anchor=2025-05-09) -> 99.12% of AOI usable
+2026-09-04 07:03:58,510 INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-04-20, 2025-04-30)
+2026-09-04 07:04:01,054 INFO farmdar.sentinel: static: dates=['2025-04-29'] (anchor=2025-04-29) -> 100.00% of AOI usable
+2026-09-04 07:04:02,120 INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-05-11, 2025-05-20)
+2026-09-04 07:04:04,225 INFO farmdar.sentinel: static: dates=['2025-05-14'] (anchor=2025-05-14) -> 100.00% of AOI usable
+2026-09-04 07:04:04,226 INFO static_pipeline: Window scores (best-first by preference):
+2026-09-04 07:04:04,226 INFO static_pipeline:   window 1 (2025-05-01 to 2025-05-10): ['2025-05-09', '2025-05-01'] -> 99.1% of AOI usable
+2026-09-04 07:04:04,226 INFO static_pipeline:   window 2 (2025-04-20 to 2025-04-30): ['2025-04-29'] -> 100.0% of AOI usable
+2026-09-04 07:04:04,226 INFO static_pipeline:   window 3 (2025-05-11 to 2025-05-20): ['2025-05-14'] -> 100.0% of AOI usable
+2026-09-04 07:04:04,226 INFO static_pipeline: Coverage spread across windows: 99.1%-100.0%. The chosen date, not just the code, determines the acreage reported.
+2026-09-04 07:04:04,226 INFO static_pipeline: Preferring window 1 (2025-05-01 to 2025-05-10) at 99.1% over the highest-coverage 100.0%: within the 5-point margin, and it is the agronomically better date.
+2026-09-04 07:04:14,898 INFO farmdar.sentinel: layer matching: 2025-05-01 -> 2025-05-09 on 39788 px: {'blue': (1.0, 585.0), 'green': (1.0, 334.0), 'red': (1.0, 121.0), 'rededge1': (1.0, -35.0), 'nir': (1.0, -34.0)}
+2026-09-04 07:04:14,899 INFO farmdar.sentinel: AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['blue', 'green', 'red', 'rededge1', 'nir', 'ndvi'], dates=['2025-05-09', '2025-05-01'], 8 workers)
+2026-09-04 07:04:14,899 INFO farmdar.sentinel: [1/4] tile 0002: skipped_exists
+2026-09-04 07:04:14,899 INFO farmdar.sentinel: [2/4] tile 0001: skipped_exists
+2026-09-04 07:04:14,900 INFO farmdar.sentinel: [3/4] tile 0003: skipped_exists
+2026-09-04 07:04:14,900 INFO farmdar.sentinel: [4/4] tile 0004: skipped_exists
+2026-09-04 07:04:14,930 INFO farmdar.sentinel: DONE 4 tiles in 0.0 min. dates=['2025-05-09', '2025-05-01'] out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/2_static_run_1/static_staging vrt=/home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/2_static_run_1/static_staging/static.vrt
+2026-09-04 07:04:14,930 INFO static_pipeline: STAC static dates (auto mode): ['2025-05-09', '2025-05-01'] via window 1 (2025-05-01 to 2025-05-10)
+2026-09-04 07:04:14,930 WARNING static_pipeline: This static run folder already holds output for ['29_Apr_2025'] and is now adding 09_May_2025_and_01_May_2025. The folder no longer identifies one result -- use static_run_mode='new' when the static dates change.
+2026-09-04 07:04:14,930 INFO static_classify: Building crop mask | crop_classes=(1, 4, 5, 6, 7) | AOI=/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+Building crop mask:   0%|                                                                                                                                                    | 0/4 [00:00<?, ?block/s]Building crop mask:  25%|███████████████████████████████████                                                                                                         | 1/4 [00:00<00:00,  8.89block/s]Building crop mask: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 31.35block/s]
+2026-09-04 07:04:15,079 INFO static_classify: Crop mask coverage: 439,255 px (18.19% of the AOI)
+2026-09-04 07:04:15,085 INFO static_classify: Grid parity verified: crop mask is 1:1 with the static image.
+2026-09-04 07:04:15,091 INFO static_classify: Static worker pool = 4  [requested=7; windows=4]
+2026-09-04 07:04:15,091 INFO static_classify: Classifying 4 window(s) across 4 worker(s)...
+Classifying static image:   0%|                                                                                                                                              | 0/4 [00:00<?, ?block/s]Classifying static image:  25%|█████████████████████████████████▌                                                                                                    | 1/4 [00:12<00:36, 12.22s/block]Classifying static image:  50%|███████████████████████████████████████████████████████████████████                                                                   | 2/4 [00:12<00:10,  5.16s/block]Classifying static image:  75%|████████████████████████████████████████████████████████████████████████████████████████████████████▌                                 | 3/4 [00:13<00:03,  3.31s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:31<00:00,  9.10s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:31<00:00,  7.88s/block]
+Loading categorical map for strict sieving: static_mosaic_09_May_2025_and_01_May_2025_Cls.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/2_static_run_1/09_May_2025_and_01_May_2025/static_mosaic_09_May_2025_and_01_May_2025_Cls_sieved_p20.tif
+2026-09-04 07:04:47,374 INFO pipeline: Static stage finished in 0.9 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/2_static_run_1/09_May_2025_and_01_May_2025/static_mosaic_09_May_2025_and_01_May_2025_Cls_sieved_p20.tif
+1. Vectorising target classes [1]...
+  -> Extracted 2,098 raw polygon features.
+  -> Pre-filter dropped 153 sub-threshold polygons before clipping.
+2. Loading boundary for clipping...
+3. Clip to boundary, explode to singlepart...
+4. Computing area (EPSG:32642) and filtering (>= 0.5 acres)...
+   Retained 1,945 features, 8,322.02 acres, label 3015
+5. Exporting...
+2026-09-04 07:04:47,819 INFO pyogrio._io: Created 1,945 records
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg
+2026-09-04 07:04:47,835 INFO pyogrio._io: Created 1,945 records
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/3_vector_run_1/final_output/okara_spr_maize_2025.zip
+2026-09-04 07:04:47,982 INFO qc: Result: aoi_acres=51293.1, feature_count=1945, crop_acres=8322.0, crop_share_of_aoi_pct=16.2, ndvi_crop_pixels=933959, static_crop_pixels=395796, static_retention_pct=42.4
+2026-09-04 07:04:47,983 INFO pipeline: Pipeline finished in 0.9 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg
+
+=== RESULT ===
+{
+  "name": "K1_kill_static_resume",
+  "status": "ok",
+  "started_utc": "2026-09-04T07:03:50Z",
+  "config_summary": "crop/year/district : spr_maize / 2025 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp\nNDVI source        : stac\nstatic source      : stac (auto)\nNDVI series window : 2024-12-24 -> 2025-07-17\nNDVI inference     : 2025-01-01 -> 2025-07-15\nstatic window      : 2025-04-20 -> 2025-05-20\nNDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib\nstatic model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=resume, vector=resume\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static",
+  "outcome": {
+    "crop": "spr_maize",
+    "year": "2025",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": "2_static_run_1",
+    "vector_run": "3_vector_run_1",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/2_static_run_1/09_May_2025_and_01_May_2025/static_mosaic_09_May_2025_and_01_May_2025_Cls_sieved_p20.tif",
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_retest/K1_kill_static/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg",
+    "ndvi_minutes": 0.0,
+    "static_minutes": 0.9,
+    "total_minutes": 0.9,
+    "result_check": {
+      "warnings": [],
+      "aoi_acres": 51293.1,
+      "feature_count": 1945,
+      "crop_acres": 8322.0,
+      "crop_share_of_aoi_pct": 16.2,
+      "ndvi_crop_pixels": 933959,
+      "static_crop_pixels": 395796,
+      "static_retention_pct": 42.4
+    }
+  },
+  "wall_s": 56.51,
+  "resources": {
+    "samples": 112,
+    "duration_s": 56.5,
+    "peak_rss_tree_mb": 25697.6,
+    "peak_rss_single_proc_mb": 6295.0,
+    "peak_outdir_mb": 55.1,
+    "final_outdir_mb": 0.8,
+    "tree_read_mb": 0.0,
+    "tree_write_mb": 0.41,
+    "sys_read_mb": 0.13,
+    "sys_write_mb": 7.98,
+    "net_recv_mb": 23.37,
+    "net_sent_mb": 0.99,
+    "stage_peak_rss_mb": {
+      "init": 202.6,
+      "resolve_models": 0.0,
+      "ndvi_stage": 0.0,
+      "sieve": 518.6,
+      "static_stage": 0.0,
+      "static_acquire_stac": 486.6,
+      "static_classify": 25697.6,
+      "static_crop_mask": 494.7,
+      "vector_stage": 515.5
+    }
+  },
+  "finished_utc": "2026-09-04T07:04:47Z"
+}

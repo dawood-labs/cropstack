@@ -1,0 +1,32 @@
+[
+  {
+    "stage": "resolve_models",
+    "t_start_epoch": 1788440366.468,
+    "t_end_epoch": 1788440366.468,
+    "start_s": 0.01,
+    "end_s": 0.01,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "ndvi_acquire_stac",
+    "t_start_epoch": 1788440366.468,
+    "t_end_epoch": 1788440366.48,
+    "start_s": 0.01,
+    "end_s": 0.03,
+    "duration_s": 0.01,
+    "peak_rss_mb_during": 0.0,
+    "error": "GEOSException: TopologyException: side location conflict at 73.428118148070055 30.925908048229278. This can occur if the input geometry is invalid."
+  },
+  {
+    "stage": "ndvi_stage",
+    "t_start_epoch": 1788440366.468,
+    "t_end_epoch": 1788440366.48,
+    "start_s": 0.01,
+    "end_s": 0.03,
+    "duration_s": 0.01,
+    "peak_rss_mb_during": 0.0,
+    "error": "GEOSException: TopologyException: side location conflict at 73.428118148070055 30.925908048229278. This can occur if the input geometry is invalid."
+  }
+]

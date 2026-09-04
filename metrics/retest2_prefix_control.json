@@ -1,0 +1,32 @@
+[
+  {
+    "case": "PRE-FIX c2f954d (writes straight to the final path)",
+    "sigkilled": true,
+    "child_exit": -9,
+    "FINAL_PATH_EXISTS": true,
+    "final_bytes": 0,
+    "leftovers": [
+      {
+        "name": "static_mosaic_CTL_Cls.tif",
+        "bytes": 0
+      }
+    ],
+    "impl": "USING /tmp/claude-1000/-home-jovyan-FAO-optimized-code-testing/68c82c36-204c-4a0f-830b-ded51d99b1dc/scratchpad/prefix_c2f954d/static_classify.py",
+    "resume_read": "RAISED: rasterio.errors.RasterioIOError: '/tmp/claude-1000/-home-jovyan-FAO-optimized-code-testing/68c82c36-204c-4a0f-830b-ded51d99b1dc/scratchpad/ctl_old/static_mosaic_CTL_Cls.tif' not recognized as being in a supported file format."
+  },
+  {
+    "case": "POST-FIX ce37be8 (tmp + os.replace)",
+    "sigkilled": true,
+    "child_exit": -9,
+    "FINAL_PATH_EXISTS": false,
+    "final_bytes": null,
+    "leftovers": [
+      {
+        "name": "static_mosaic_CTL_Cls.tif.tmp.tif",
+        "bytes": 0
+      }
+    ],
+    "impl": "USING /home/jovyan/FAO/optimized_code_testing/cropstack/static_classify.py",
+    "resume_read": "n/a - no file at the final path, a resume recomputes"
+  }
+]

@@ -1,0 +1,2677 @@
+[
+  {
+    "scenario": "A1_cane_2016",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2016",
+    "problems": [],
+    "warnings": [
+      "NDVI map contains 6 nodata (255) pixels (0.0% of the grid) -- tiles with no usable signal in the inference window"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 108973,
+        "4": 4846097,
+        "255": 6
+      },
+      "hidden_by_mask": [
+        255
+      ]
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 39686,
+        "4": 4915390
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016/3_vector_run_1/final_output/okara_cane_2016.gpkg",
+      "features": 269,
+      "crs": "EPSG:4326",
+      "total_acres": 768.49,
+      "min_acres": 0.5088,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 1.5,
+      "source_raster_in_aoi_acres": 835.34,
+      "vector_over_raster_ratio": 0.92,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A1_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 115777,
+        "4": 4839299
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 932,
+      "crs": "EPSG:4326",
+      "total_acres": 2120.35,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 4.13,
+      "source_raster_in_aoi_acres": 2436.97,
+      "vector_over_raster_ratio": 0.87,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A1_spr_maize_2025",
+    "status": "ok",
+    "crop": "spr_maize",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "0": 4021117,
+        "4": 496773,
+        "5": 294122,
+        "6": 139531,
+        "7": 3533
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 57134,
+        "8": 4897942
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_spr_maize_2025/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg",
+      "features": 335,
+      "crs": "EPSG:4326",
+      "total_acres": 833.87,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        3015
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 1.63,
+      "source_raster_in_aoi_acres": 1202.6,
+      "vector_over_raster_ratio": 0.693,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A1_wheat_2025",
+    "status": "ok",
+    "crop": "wheat",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "4": 2065447,
+        "14": 2889629
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 759768,
+        "4": 4195308
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025/3_vector_run_1/final_output/okara_wheat_2025.gpkg",
+      "features": 2598,
+      "crs": "EPSG:4326",
+      "total_acres": 15475.72,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        14
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 30.17,
+      "source_raster_in_aoi_acres": 15992.19,
+      "vector_over_raster_ratio": 0.968,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A2_cane_2016",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2016",
+    "problems": [],
+    "warnings": [
+      "NDVI map contains 6 nodata (255) pixels (0.0% of the grid) -- tiles with no usable signal in the inference window"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 108973,
+        "4": 4846097,
+        "255": 6
+      },
+      "hidden_by_mask": [
+        255
+      ]
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 28542,
+        "4": 4926534
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016/3_vector_run_2/final_output/okara_cane_2016.gpkg",
+      "features": 184,
+      "crs": "EPSG:4326",
+      "total_acres": 488.34,
+      "min_acres": 0.5088,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 0.95,
+      "source_raster_in_aoi_acres": 600.77,
+      "vector_over_raster_ratio": 0.813,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A2_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [
+      "vector keeps only 0.49x its source raster's in-AOI crop area -- heavily fragmented classification (see the static-sieve no-op finding)"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 45280,
+        "4": 4909796
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_2/final_output/okara_cane_2025.gpkg",
+      "features": 247,
+      "crs": "EPSG:4326",
+      "total_acres": 465.5,
+      "min_acres": 0.5088,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 0.91,
+      "source_raster_in_aoi_acres": 953.09,
+      "vector_over_raster_ratio": 0.488,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A2_spr_maize_2025",
+    "status": "ok",
+    "crop": "spr_maize",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "0": 4021117,
+        "4": 496773,
+        "5": 294122,
+        "6": 139531,
+        "7": 3533
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 57956,
+        "8": 4897120
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_spr_maize_2025/3_vector_run_2/final_output/okara_spr_maize_2025.gpkg",
+      "features": 308,
+      "crs": "EPSG:4326",
+      "total_acres": 1140.05,
+      "min_acres": 0.5088,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        3015
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 2.22,
+      "source_raster_in_aoi_acres": 1219.9,
+      "vector_over_raster_ratio": 0.935,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A2_wheat_2025",
+    "status": "ok",
+    "crop": "wheat",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "4": 2065447,
+        "14": 2889629
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 759768,
+        "4": 4195308
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025/3_vector_run_2/final_output/okara_wheat_2025.gpkg",
+      "features": 2598,
+      "crs": "EPSG:4326",
+      "total_acres": 15475.72,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        14
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 30.17,
+      "source_raster_in_aoi_acres": 15992.19,
+      "vector_over_raster_ratio": 0.968,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A3_cane_2016",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2016",
+    "problems": [],
+    "warnings": [
+      "NDVI map contains 6 nodata (255) pixels (0.0% of the grid) -- tiles with no usable signal in the inference window",
+      "vector keeps only 0.27x its source raster's in-AOI crop area -- heavily fragmented classification (see the static-sieve no-op finding)"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 108973,
+        "4": 4846097,
+        "255": 6
+      },
+      "hidden_by_mask": [
+        255
+      ]
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        668,
+        542
+      ],
+      "labels": {
+        "1": 193,
+        "4": 361863
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016/3_vector_run_3/final_output/okara_cane_2016.gpkg",
+      "features": 11,
+      "crs": "EPSG:4326",
+      "total_acres": 9.93,
+      "min_acres": 0.5727,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 0.02,
+      "source_raster_in_aoi_acres": 36.56,
+      "vector_over_raster_ratio": 0.272,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A3_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 100000,
+        "4": 3150000
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_4/final_output/okara_cane_2025.gpkg",
+      "features": 788,
+      "crs": "EPSG:4326",
+      "total_acres": 1808.14,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.53,
+      "source_raster_in_aoi_acres": 2104.88,
+      "vector_over_raster_ratio": 0.859,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A3_spr_maize_2025",
+    "status": "ok",
+    "crop": "spr_maize",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "0": 4021117,
+        "4": 496773,
+        "5": 294122,
+        "6": 139531,
+        "7": 3533
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 57096,
+        "8": 3192904
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_spr_maize_2025/3_vector_run_3/final_output/okara_spr_maize_2025.gpkg",
+      "features": 336,
+      "crs": "EPSG:4326",
+      "total_acres": 833.43,
+      "min_acres": 0.5087,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        3015
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 1.62,
+      "source_raster_in_aoi_acres": 1201.8,
+      "vector_over_raster_ratio": 0.693,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A3_wheat_2025",
+    "status": "ok",
+    "crop": "wheat",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "4": 2065447,
+        "14": 2889629
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 758986,
+        "4": 2491014
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025/3_vector_run_3/final_output/okara_wheat_2025.gpkg",
+      "features": 2596,
+      "crs": "EPSG:4326",
+      "total_acres": 15456.45,
+      "min_acres": 0.5069,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        14
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 30.13,
+      "source_raster_in_aoi_acres": 15975.73,
+      "vector_over_raster_ratio": 0.967,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A4_cane_2016",
+    "status": "failed",
+    "error": "RuntimeError: 1 GEE export task(s) failed."
+  },
+  {
+    "scenario": "A4_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 100000,
+        "4": 3150000
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_5/final_output/okara_cane_2025.gpkg",
+      "features": 788,
+      "crs": "EPSG:4326",
+      "total_acres": 1808.14,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.53,
+      "source_raster_in_aoi_acres": 2104.88,
+      "vector_over_raster_ratio": 0.859,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A4_spr_maize_2025",
+    "status": "ok",
+    "crop": "spr_maize",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "0": 4021117,
+        "4": 496773,
+        "5": 294122,
+        "6": 139531,
+        "7": 3533
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 25326,
+        "8": 3224674
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_spr_maize_2025/3_vector_run_4/final_output/okara_spr_maize_2025.gpkg",
+      "features": 118,
+      "crs": "EPSG:4326",
+      "total_acres": 507.72,
+      "min_acres": 0.5088,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        3015
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 0.99,
+      "source_raster_in_aoi_acres": 533.08,
+      "vector_over_raster_ratio": 0.952,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A4_wheat_2025",
+    "status": "ok",
+    "crop": "wheat",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "4": 2065447,
+        "14": 2889629
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 857806,
+        "4": 2392194
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025/3_vector_run_4/final_output/okara_wheat_2025.gpkg",
+      "features": 2381,
+      "crs": "EPSG:4326",
+      "total_acres": 17684.22,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        14
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 34.48,
+      "source_raster_in_aoi_acres": 18055.77,
+      "vector_over_raster_ratio": 0.979,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A4b_cane_2016_landsat_dates",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2016",
+    "problems": [],
+    "warnings": [
+      "NDVI map contains 6 nodata (255) pixels (0.0% of the grid) -- tiles with no usable signal in the inference window",
+      "vector keeps only 0.27x its source raster's in-AOI crop area -- heavily fragmented classification (see the static-sieve no-op finding)"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 108973,
+        "4": 4846097,
+        "255": 6
+      },
+      "hidden_by_mask": [
+        255
+      ]
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        668,
+        542
+      ],
+      "labels": {
+        "1": 192,
+        "4": 361864
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016/3_vector_run_5/final_output/okara_cane_2016.gpkg",
+      "features": 11,
+      "crs": "EPSG:4326",
+      "total_acres": 9.93,
+      "min_acres": 0.5727,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 0.02,
+      "source_raster_in_aoi_acres": 36.37,
+      "vector_over_raster_ratio": 0.273,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "A5_cane_2025_manual_gcs",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 100000,
+        "4": 3150000
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_9/final_output/okara_cane_2025.gpkg",
+      "features": 788,
+      "crs": "EPSG:4326",
+      "total_acres": 1808.14,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.53,
+      "source_raster_in_aoi_acres": 2104.88,
+      "vector_over_raster_ratio": 0.859,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "B_rice_2025",
+    "status": "ok",
+    "crop": "rice",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 2611309,
+        "4": 2343767
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/B_rice_2025/3_vector_run_1/final_output/okara_rice_2025.gpkg",
+      "features": 1269,
+      "crs": "EPSG:4326",
+      "total_acres": 28498.8,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 55.56,
+      "source_raster_in_aoi_acres": 28365.62,
+      "vector_over_raster_ratio": 1.005,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "C2_second_resume",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [
+      "STALE vector: the vector stage reused an existing GPKG and its acreage is only 0.19x this run's own source raster (465.5 vs 2437.0 acres in AOI)"
+    ],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 115777,
+        "4": 4839299
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_2/final_output/okara_cane_2025.gpkg",
+      "features": 247,
+      "crs": "EPSG:4326",
+      "total_acres": 465.5,
+      "min_acres": 0.5088,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 0.91,
+      "source_raster_in_aoi_acres": 2436.97,
+      "vector_over_raster_ratio": 0.191,
+      "vector_stage_reused_existing_file": true
+    }
+  },
+  {
+    "scenario": "C3_new",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 115777,
+        "4": 4839299
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_6/final_output/okara_cane_2025.gpkg",
+      "features": 932,
+      "crs": "EPSG:4326",
+      "total_acres": 2120.35,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 4.13,
+      "source_raster_in_aoi_acres": 2436.97,
+      "vector_over_raster_ratio": 0.87,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "C4b_resume_after_kill",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 115777,
+        "4": 4839299
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/C_kill_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 932,
+      "crs": "EPSG:4326",
+      "total_acres": 2120.35,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 4.13,
+      "source_raster_in_aoi_acres": 2436.97,
+      "vector_over_raster_ratio": 0.87,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "C6_ndvi_resume_static_new",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 115777,
+        "4": 4839299
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_3/final_output/okara_cane_2025.gpkg",
+      "features": 932,
+      "crs": "EPSG:4326",
+      "total_acres": 2120.35,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 4.13,
+      "source_raster_in_aoi_acres": 2436.97,
+      "vector_over_raster_ratio": 0.87,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "D_geojson_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/D_geojson_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 1309,
+      "crs": "EPSG:4326",
+      "total_acres": 3134.64,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 6.11,
+      "source_raster_in_aoi_acres": 3221.37,
+      "vector_over_raster_ratio": 0.973,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "D_gpkg_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/D_gpkg_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 1309,
+      "crs": "EPSG:4326",
+      "total_acres": 3134.64,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 6.11,
+      "source_raster_in_aoi_acres": 3221.37,
+      "vector_over_raster_ratio": 0.973,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "E1_cane_2014_auto",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2014",
+    "problems": [],
+    "warnings": [
+      "NDVI map contains 35,202 nodata (255) pixels (9.7% of the grid) -- tiles with no usable signal in the inference window"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        668,
+        542
+      ],
+      "labels": {
+        "1": 21302,
+        "4": 305552,
+        "255": 35202
+      },
+      "hidden_by_mask": [
+        255
+      ]
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/E1_cane_2014_auto/3_vector_run_1/final_output/okara_cane_2014.gpkg",
+      "features": 1116,
+      "crs": "EPSG:4326",
+      "total_acres": 3193.12,
+      "min_acres": 0.5293,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 6.23,
+      "source_raster_in_aoi_acres": 3504.81,
+      "vector_over_raster_ratio": 0.911,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "E3_cane_2016_geendvi_stacstatic",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2016",
+    "problems": [],
+    "warnings": [
+      "NDVI map contains 35,202 nodata (255) pixels (9.7% of the grid) -- tiles with no usable signal in the inference window"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        668,
+        542
+      ],
+      "labels": {
+        "1": 41422,
+        "4": 285432,
+        "255": 35202
+      },
+      "hidden_by_mask": [
+        255
+      ]
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 101131,
+        "4": 4853945
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/E3_cane_2016_geendvi_stacstatic/3_vector_run_1/final_output/okara_cane_2016.gpkg",
+      "features": 778,
+      "crs": "EPSG:4326",
+      "total_acres": 2096.05,
+      "min_acres": 0.5087,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 4.09,
+      "source_raster_in_aoi_acres": 2128.68,
+      "vector_over_raster_ratio": 0.985,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "E4_cane_2016_static_gee",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2016",
+    "problems": [],
+    "warnings": [
+      "NDVI map contains 6 nodata (255) pixels (0.0% of the grid) -- tiles with no usable signal in the inference window"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 108973,
+        "4": 4846097,
+        "255": 6
+      },
+      "hidden_by_mask": [
+        255
+      ]
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/E4_cane_2016_static_gee/3_vector_run_1/final_output/okara_cane_2016.gpkg",
+      "features": 474,
+      "crs": "EPSG:4326",
+      "total_acres": 1532.25,
+      "min_acres": 0.5087,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 2.99,
+      "source_raster_in_aoi_acres": 1552.96,
+      "vector_over_raster_ratio": 0.987,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "F9_badgeedate",
+    "status": "failed",
+    "error": "ValueError: run_static_model=True with a Landsat static image (2016 < gee_landsat_cutover_year=2018). The static models are trained on Sentinel-2's real red-edge band; Landsat 8 has no red-edge, so gee_client.homogenize_landsat8 substitutes (red + NIR) / 2 and the model receives a feature that behaves nothing like the one it learned -- measured 77x below the Sentinel-2 result on the same AOI. Set run_static_model=False for Landsat years."
+  },
+  {
+    "scenario": "F9b_badgeedate_2025",
+    "status": "failed",
+    "error": "ValueError: No SENTINEL acquisition on 2025-11-11 over this AOI. (Years before cfg.gee_landsat_cutover_year use Landsat 8, whose overpass dates differ from Sentinel-2's.)"
+  },
+  {
+    "scenario": "G_gee_ndvi_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [
+      "NDVI map contains 316,470 nodata (255) pixels (9.7% of the grid) -- tiles with no usable signal in the inference window"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 179036,
+        "4": 2754494,
+        "255": 316470
+      },
+      "hidden_by_mask": [
+        255
+      ]
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 100457,
+        "4": 3149543
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/G_geendvi_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 808,
+      "crs": "EPSG:4326",
+      "total_acres": 1825.34,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.56,
+      "source_raster_in_aoi_acres": 2114.5,
+      "vector_over_raster_ratio": 0.863,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "N_empty_aoi",
+    "status": "failed",
+    "error": "ValueError: cannot convert float NaN to integer"
+  },
+  {
+    "scenario": "N_real_plus_bowtie",
+    "status": "failed",
+    "error": "GEOSException: TopologyException: side location conflict at 73.428118148070055 30.925908048229278. This can occur if the input geometry is invalid."
+  },
+  {
+    "scenario": "P1_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 90469,
+        "4": 4864607
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/P1_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 800,
+      "crs": "EPSG:4326",
+      "total_acres": 1855.54,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.62,
+      "source_raster_in_aoi_acres": 1904.26,
+      "vector_over_raster_ratio": 0.974,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "P2_wheat_punjab_2025",
+    "status": "ok",
+    "crop": "wheat",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "4": 2065447,
+        "14": 2889629
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 871772,
+        "4": 4083304
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/P2_wheat_punjab_2025/3_vector_run_1/final_output/okara_wheat_2025.gpkg",
+      "features": 2114,
+      "crs": "EPSG:4326",
+      "total_acres": 18404.35,
+      "min_acres": 0.5035,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        14
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 35.88,
+      "source_raster_in_aoi_acres": 18349.74,
+      "vector_over_raster_ratio": 1.003,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "P3_wheat_sindh_2025",
+    "status": "ok",
+    "crop": "wheat",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "4": 2065447,
+        "14": 2889629
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 747796,
+        "4": 4207280
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/P3_wheat_sindh_2025/3_vector_run_1/final_output/okara_wheat_2025.gpkg",
+      "features": 2565,
+      "crs": "EPSG:4326",
+      "total_acres": 15750.77,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        14
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 30.71,
+      "source_raster_in_aoi_acres": 15740.2,
+      "vector_over_raster_ratio": 1.001,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "P4_sprmaize_2025",
+    "status": "ok",
+    "crop": "spr_maize",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "0": 4021117,
+        "4": 496773,
+        "5": 294122,
+        "6": 139531,
+        "7": 3533
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 191028,
+        "8": 4764048
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/P4_sprmaize_2025/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg",
+      "features": 1070,
+      "crs": "EPSG:4326",
+      "total_acres": 3992.79,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        3015
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 7.78,
+      "source_raster_in_aoi_acres": 4020.91,
+      "vector_over_raster_ratio": 0.993,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "P5_cane_fallback",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 90469,
+        "4": 4864607
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/P5_cane_fallback/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 800,
+      "crs": "EPSG:4326",
+      "total_acres": 1855.54,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.62,
+      "source_raster_in_aoi_acres": 1904.26,
+      "vector_over_raster_ratio": 0.974,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "Q_parquet_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 90469,
+        "4": 4864607
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Q_parquet_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 800,
+      "crs": "EPSG:4326",
+      "total_acres": 1855.54,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.62,
+      "source_raster_in_aoi_acres": 1904.26,
+      "vector_over_raster_ratio": 0.974,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "R_cane_1016_samedate",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 106793,
+        "4": 4848283
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/R_cane_1016_samedate/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 926,
+      "crs": "EPSG:4326",
+      "total_acres": 2184.67,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 4.26,
+      "source_raster_in_aoi_acres": 2247.86,
+      "vector_over_raster_ratio": 0.972,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "S1_sprmaize_0514_old",
+    "status": "ok",
+    "crop": "spr_maize",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "0": 4021117,
+        "4": 496773,
+        "5": 294122,
+        "6": 139531,
+        "7": 3533
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 44878,
+        "8": 4910198
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/S1_sprmaize_0514_old/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg",
+      "features": 315,
+      "crs": "EPSG:4326",
+      "total_acres": 931.68,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        3015
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 1.82,
+      "source_raster_in_aoi_acres": 944.63,
+      "vector_over_raster_ratio": 0.986,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "S2_sprmaize_0429_win2",
+    "status": "ok",
+    "crop": "spr_maize",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "0": 4021117,
+        "4": 496773,
+        "5": 294122,
+        "6": 139531,
+        "7": 3533
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 395796,
+        "8": 4559280
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/S2_sprmaize_0429_win2/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg",
+      "features": 1945,
+      "crs": "EPSG:4326",
+      "total_acres": 8322.02,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        3015
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 16.22,
+      "source_raster_in_aoi_acres": 8331.03,
+      "vector_over_raster_ratio": 0.999,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "S3_sprmaize_0509_only",
+    "status": "ok",
+    "crop": "spr_maize",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "0": 4021117,
+        "4": 496773,
+        "5": 294122,
+        "6": 139531,
+        "7": 3533
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 191028,
+        "8": 4764048
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/S3_sprmaize_0509_only/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg",
+      "features": 1070,
+      "crs": "EPSG:4326",
+      "total_acres": 3992.79,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        3015
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 7.78,
+      "source_raster_in_aoi_acres": 4020.91,
+      "vector_over_raster_ratio": 0.993,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "V1_manual_dates",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [
+      "vector acreage exceeds its source raster (3.53x)"
+    ],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 24996,
+        "4": 4930080
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/V_stale_test/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 800,
+      "crs": "EPSG:4326",
+      "total_acres": 1855.54,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.62,
+      "source_raster_in_aoi_acres": 526.14,
+      "vector_over_raster_ratio": 3.527,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "V2_resume_auto",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 90469,
+        "4": 4864607
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/V_stale_test/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 800,
+      "crs": "EPSG:4326",
+      "total_acres": 1855.54,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.62,
+      "source_raster_in_aoi_acres": 1904.26,
+      "vector_over_raster_ratio": 0.974,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "W3_tiledeg02_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245228,
+        "4": 4709848
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/W3_tiledeg02_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 1309,
+      "crs": "EPSG:4326",
+      "total_acres": 3134.66,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 6.11,
+      "source_raster_in_aoi_acres": 3220.95,
+      "vector_over_raster_ratio": 0.973,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "W4_baseline_ndvionly_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/W4_baseline_ndvionly_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 1309,
+      "crs": "EPSG:4326",
+      "total_acres": 3134.64,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 6.11,
+      "source_raster_in_aoi_acres": 3221.37,
+      "vector_over_raster_ratio": 0.973,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "W5_stacworkers2_cane_2025",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/W5_stacworkers2_cane_2025/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "features": 1309,
+      "crs": "EPSG:4326",
+      "total_acres": 3134.64,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 6.11,
+      "source_raster_in_aoi_acres": 3221.37,
+      "vector_over_raster_ratio": 0.973,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "X1_stac_static_keep",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [
+      "vector keeps only 0.49x its source raster's in-AOI crop area -- heavily fragmented classification (see the static-sieve no-op finding)"
+    ],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 45280,
+        "4": 4909796
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_7/final_output/okara_cane_2025.gpkg",
+      "features": 247,
+      "crs": "EPSG:4326",
+      "total_acres": 465.5,
+      "min_acres": 0.5088,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 0.91,
+      "source_raster_in_aoi_acres": 953.09,
+      "vector_over_raster_ratio": 0.488,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "X2_gee_static_keep",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2000,
+        1625
+      ],
+      "labels": {
+        "1": 100000,
+        "4": 3150000
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_8/final_output/okara_cane_2025.gpkg",
+      "features": 788,
+      "crs": "EPSG:4326",
+      "total_acres": 1808.14,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.53,
+      "source_raster_in_aoi_acres": 2104.88,
+      "vector_over_raster_ratio": 0.859,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "X3_stac_18oct_only",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 21045,
+        "4": 4934031
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_10/final_output/okara_cane_2025.gpkg",
+      "features": 145,
+      "crs": "EPSG:4326",
+      "total_acres": 365.56,
+      "min_acres": 0.5092,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 0.71,
+      "source_raster_in_aoi_acres": 442.97,
+      "vector_over_raster_ratio": 0.825,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "X4_stac_10nov_only",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 100384,
+        "4": 4854692
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_11/final_output/okara_cane_2025.gpkg",
+      "features": 795,
+      "crs": "EPSG:4326",
+      "total_acres": 1817.94,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 3.54,
+      "source_raster_in_aoi_acres": 2112.96,
+      "vector_over_raster_ratio": 0.86,
+      "vector_stage_reused_existing_file": false
+    }
+  },
+  {
+    "scenario": "X5_stac_16oct_only",
+    "status": "ok",
+    "crop": "cane",
+    "year": "2025",
+    "problems": [],
+    "warnings": [],
+    "ndvi_raster": {
+      "nodata": 255.0,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 245245,
+        "4": 4709831
+      },
+      "hidden_by_mask": []
+    },
+    "static_raster": {
+      "nodata": null,
+      "crs": "EPSG:4326",
+      "dtype": "uint8",
+      "size": [
+        2226,
+        2226
+      ],
+      "labels": {
+        "1": 115777,
+        "4": 4839299
+      },
+      "hidden_by_mask": []
+    },
+    "vector": {
+      "path": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2025/3_vector_run_12/final_output/okara_cane_2025.gpkg",
+      "features": 932,
+      "crs": "EPSG:4326",
+      "total_acres": 2120.35,
+      "min_acres": 0.5086,
+      "invalid_geoms": 0,
+      "empty_geoms": 0,
+      "geom_types": [
+        "Polygon"
+      ],
+      "predicted": [
+        1
+      ],
+      "aoi_acres": 51293.05,
+      "pct_of_aoi": 4.13,
+      "source_raster_in_aoi_acres": 2436.97,
+      "vector_over_raster_ratio": 0.87,
+      "vector_stage_reused_existing_file": false
+    }
+  }
+]

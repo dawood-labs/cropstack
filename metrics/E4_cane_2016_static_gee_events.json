@@ -1,0 +1,42 @@
+[
+  {
+    "stage": "resolve_models",
+    "t_start_epoch": 1788441125.108,
+    "t_end_epoch": 1788441125.108,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "sieve",
+    "t_start_epoch": 1788441125.108,
+    "t_end_epoch": 1788441125.108,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "ndvi_stage",
+    "t_start_epoch": 1788441125.108,
+    "t_end_epoch": 1788441125.108,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "vector_stage",
+    "t_start_epoch": 1788441125.108,
+    "t_end_epoch": 1788441125.34,
+    "start_s": 0.0,
+    "end_s": 0.23,
+    "duration_s": 0.23,
+    "peak_rss_mb_during": 211.4,
+    "error": null
+  }
+]

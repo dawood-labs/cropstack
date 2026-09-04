@@ -1,0 +1,99 @@
+{
+  "name": "E4_cane_2016_static_gee",
+  "spec": {
+    "crop": "cane",
+    "year": "2016",
+    "district_name": "okara",
+    "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+    "gee_service_account_key": "/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/E4_cane_2016_static_gee",
+    "ndvi_source": "stac",
+    "static_source": "gee",
+    "run_mode": "resume"
+  },
+  "status": "ok",
+  "started_utc": "2026-09-03T13:12:04Z",
+  "config_summary": "crop/year/district : cane / 2016 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp\nNDVI source        : stac\nstatic source      : gee (api_auto)  [DISABLED: run_static_model=False]\nNDVI series window : 2015-12-24 -> 2016-11-17\nNDVI inference     : 2016-01-01 -> 2016-11-15\nstatic window      : 2016-10-15 -> 2016-11-25\nNDVI model         : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib\nstatic model       : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=resume, vector=resume\nsieve min pixels   : ndvi=20, static=1",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/E4_cane_2016_static_gee",
+  "outcome": {
+    "crop": "cane",
+    "year": "2016",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": null,
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/E4_cane_2016_static_gee",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": null,
+    "vector_run": "3_vector_run_1",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/E4_cane_2016_static_gee/1_ndvi_run_1/okara_test_data_cane_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": null,
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_retest/E4_cane_2016_static_gee/3_vector_run_1/final_output/okara_cane_2016.gpkg",
+    "ndvi_minutes": 0.0,
+    "static_minutes": null,
+    "total_minutes": 0.0
+  },
+  "wall_s": 0.23,
+  "resources": {
+    "samples": 1,
+    "duration_s": 0.2,
+    "peak_rss_tree_mb": 211.4,
+    "peak_rss_single_proc_mb": 211.4,
+    "peak_outdir_mb": 0.2,
+    "final_outdir_mb": 0.2,
+    "tree_read_mb": 0.0,
+    "tree_write_mb": 0.0,
+    "sys_read_mb": 0.0,
+    "sys_write_mb": 0.0,
+    "net_recv_mb": 0.0,
+    "net_sent_mb": 0.0,
+    "stage_peak_rss_mb": {
+      "resolve_models": 0.0,
+      "ndvi_stage": 0.0,
+      "sieve": 0.0,
+      "vector_stage": 211.4
+    }
+  },
+  "events": [
+    {
+      "stage": "resolve_models",
+      "t_start_epoch": 1788441125.108,
+      "t_end_epoch": 1788441125.108,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788441125.108,
+      "t_end_epoch": 1788441125.108,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_stage",
+      "t_start_epoch": 1788441125.108,
+      "t_end_epoch": 1788441125.108,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "vector_stage",
+      "t_start_epoch": 1788441125.108,
+      "t_end_epoch": 1788441125.34,
+      "start_s": 0.0,
+      "end_s": 0.23,
+      "duration_s": 0.23,
+      "peak_rss_mb_during": 211.4,
+      "error": null
+    }
+  ],
+  "finished_utc": "2026-09-03T13:12:05Z"
+}

@@ -1,0 +1,16 @@
+{
+  "empty_then_real": {
+    "status": "ok",
+    "rows": 800,
+    "types": [
+      "MultiPolygon"
+    ]
+  },
+  "real_then_empty": {
+    "status": "ok",
+    "rows": 800,
+    "types": [
+      "MultiPolygon"
+    ]
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "name": "A4b_cane_2016_landsat_dates",
+  "spec": {
+    "crop": "cane",
+    "year": "2016",
+    "district_name": "okara",
+    "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+    "gee_service_account_key": "/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016",
+    "ndvi_source": "stac",
+    "static_source": "gee",
+    "stac_static_mode": "auto",
+    "gee_static_mode": "api_manual",
+    "gee_static_bottom_date": "2016-10-17",
+    "gee_static_top_date": "2016-11-02",
+    "ndvi_run_mode": "resume",
+    "static_run_mode": "new",
+    "vector_run_mode": "new"
+  },
+  "status": "ok",
+  "started_utc": "2026-09-03T09:07:10Z",
+  "config_summary": "crop/year/district : cane / 2016 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp\nNDVI source        : stac\nstatic source      : gee (api_manual)\nNDVI series window : 2015-12-24 -> 2016-11-17\nNDVI inference     : 2016-01-01 -> 2016-11-15\nstatic window      : 2016-10-15 -> 2016-11-15\nNDVI model         : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib\nstatic model       : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=new, vector=new\nsieve min pixels   : ndvi=20, static=1",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016",
+  "outcome": {
+    "crop": "cane",
+    "year": "2016",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": "gee",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": "2_static_run_5",
+    "vector_run": "3_vector_run_5",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016/1_ndvi_run_1/okara_test_data_cane_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016/2_static_run_5/static_cleanup_okara_test_data_cane_manual_2016-11-02_over_2016-10-17/static_mosaic_static_cleanup_okara_test_data_cane_manual_2016-11-02_over_2016-10-17_Cls_sieved_p1.tif",
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs/A1_cane_2016/3_vector_run_5/final_output/okara_cane_2016.gpkg",
+    "ndvi_minutes": 0.0,
+    "static_minutes": 0.8,
+    "total_minutes": 0.9
+  },
+  "wall_s": 53.05,
+  "resources": {
+    "samples": 106,
+    "duration_s": 53.1,
+    "peak_rss_tree_mb": 878.5,
+    "peak_rss_single_proc_mb": 561.4,
+    "peak_outdir_mb": 1.3,
+    "final_outdir_mb": 1.3,
+    "tree_read_mb": 0.0,
+    "tree_write_mb": 4.79,
+    "sys_read_mb": 0.0,
+    "sys_write_mb": 70.42,
+    "net_recv_mb": 5.36,
+    "net_sent_mb": 0.94,
+    "stage_peak_rss_mb": {
+      "resolve_models": 0.0,
+      "pipeline": 257.9,
+      "ndvi_stage": 0.0,
+      "sieve": 0.0,
+      "static_stage": 0.0,
+      "static_acquire_gee": 278.0,
+      "static_classify": 878.5,
+      "static_crop_mask": 0.0,
+      "vector_stage": 0.0
+    }
+  },
+  "events": [
+    {
+      "stage": "resolve_models",
+      "t_start_epoch": 1788426431.207,
+      "t_end_epoch": 1788426431.207,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788426435.667,
+      "t_end_epoch": 1788426435.667,
+      "start_s": 4.46,
+      "end_s": 4.46,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_stage",
+      "t_start_epoch": 1788426435.667,
+      "t_end_epoch": 1788426435.667,
+      "start_s": 4.46,
+      "end_s": 4.46,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_acquire_gee",
+      "t_start_epoch": 1788426435.667,
+      "t_end_epoch": 1788426482.03,
+      "start_s": 4.46,
+      "end_s": 50.82,
+      "duration_s": 46.36,
+      "peak_rss_mb_during": 278.0,
+      "error": null
+    },
+    {
+      "stage": "static_crop_mask",
+      "t_start_epoch": 1788426482.03,
+      "t_end_epoch": 1788426482.062,
+      "start_s": 50.82,
+      "end_s": 50.86,
+      "duration_s": 0.03,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_classify",
+      "t_start_epoch": 1788426482.03,
+      "t_end_epoch": 1788426483.987,
+      "start_s": 50.82,
+      "end_s": 52.78,
+      "duration_s": 1.96,
+      "peak_rss_mb_during": 878.5,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788426483.988,
+      "t_end_epoch": 1788426484.115,
+      "start_s": 52.78,
+      "end_s": 52.91,
+      "duration_s": 0.13,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_stage",
+      "t_start_epoch": 1788426435.667,
+      "t_end_epoch": 1788426484.115,
+      "start_s": 4.46,
+      "end_s": 52.91,
+      "duration_s": 48.45,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "vector_stage",
+      "t_start_epoch": 1788426484.115,
+      "t_end_epoch": 1788426484.255,
+      "start_s": 52.91,
+      "end_s": 53.05,
+      "duration_s": 0.14,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    }
+  ],
+  "finished_utc": "2026-09-03T09:08:04Z"
+}

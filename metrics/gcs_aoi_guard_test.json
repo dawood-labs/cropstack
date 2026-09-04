@@ -1,0 +1,27 @@
+[
+  {
+    "name": "gs:// AOI (aoi_source is gs://, aoi_path in cache)",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/D_gcs_base/cane/okara/cane_2025",
+    "inside_aoi_cache": false,
+    "verdict": "PASS"
+  },
+  {
+    "name": "AOI physically inside the cache, no gs:// source",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/D_gcs_base/cane/okara/cane_2025",
+    "inside_aoi_cache": false,
+    "verdict": "PASS"
+  },
+  {
+    "name": "local AOI (expected: alongside the AOI)",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/cane_2025",
+    "inside_aoi_cache": false,
+    "verdict": "PASS",
+    "matches_alongside_aoi": true
+  },
+  {
+    "name": "explicit output_dir overrides the gs:// branch",
+    "output_dir": "/tmp/explicit_override",
+    "inside_aoi_cache": false,
+    "verdict": "PASS"
+  }
+]

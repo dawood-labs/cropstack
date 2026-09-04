@@ -1,0 +1,132 @@
+==============================================================================
+crop/year/district : rice / 2027 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp
+NDVI source        : stac
+static source      : stac (auto)  [DISABLED: run_static_model=False]
+NDVI series window : 2027-05-24 -> 2027-12-01
+NDVI inference     : 2027-06-01 -> 2027-11-30
+static window      :  -> 
+NDVI model         : gs://farmdar_data_catalog/fao_rice_maize_timeseries_model/fao_rice_maize_rf_model.joblib
+static model       : (none yet for rice)
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+==============================================================================
+2026-09-04 07:02:02,724 INFO pipeline: Pipeline configuration:
+crop/year/district : rice / 2027 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp
+NDVI source        : stac
+static source      : stac (auto)  [DISABLED: run_static_model=False]
+NDVI series window : 2027-05-24 -> 2027-12-01
+NDVI inference     : 2027-06-01 -> 2027-11-30
+static window      :  -> 
+NDVI model         : gs://farmdar_data_catalog/fao_rice_maize_timeseries_model/fao_rice_maize_rf_model.joblib
+static model       : (none yet for rice)
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+2026-09-04 07:02:02,725 INFO run_manager: 1_ndvi: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/1_ndvi_run_1  (no previous output to reuse)
+2026-09-04 07:02:02,725 INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/3_vector_run_1  (no previous output to reuse)
+2026-09-04 07:02:02,726 INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/fao_rice_maize_timeseries_model/fao_rice_maize_rf_model.joblib
+2026-09-04 07:02:02,744 INFO ndvi_pipeline: STAC acquisition: ~4 tile(s), 4 in flight, estimated peak 5.8 GiB of 32.6 GiB budget
+2026-09-04 07:02:02,820 INFO farmdar.sentinel: aws-creds: bootstrapped 12-hour session, expires 2026-09-04T19:02:02+00:00
+2026-09-04 07:02:02,882 INFO farmdar.sentinel: AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['red', 'nir'], 8 workers)
+2026-09-04 07:02:17,371 INFO farmdar.sentinel: [1/4] tile 0002: written (13.0s)
+2026-09-04 07:02:20,548 INFO farmdar.sentinel: [2/4] tile 0004: written (16.1s)
+2026-09-04 07:02:24,211 INFO farmdar.sentinel: [3/4] tile 0003: written (19.8s)
+2026-09-04 07:02:27,400 INFO farmdar.sentinel: [4/4] tile 0001: written (23.3s)
+2026-09-04 07:02:27,401 INFO farmdar.sentinel: DONE 4 tiles in 0.4 min. out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/1_ndvi_run_1/raw_ndvi_tiles vrt=None
+2026-09-04 07:02:27,402 INFO ndvi_pipeline: STAC acquisition took 0.4 min for 4 tile(s) (0.1 min/tile).
+2026-09-04 07:02:27,402 INFO ndvi_pipeline: Running RF inference over 4 tile(s) on 4 worker(s)...
+NDVI tiles:   0%|                                                                                                                                                               | 0/4 [00:00<?, ?it/s]NDVI tiles:  25%|█████████████████████████████████████▊                                                                                                                 | 1/4 [00:02<00:07,  2.56s/it]NDVI tiles:  75%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                     | 3/4 [00:02<00:00,  1.32it/s]NDVI tiles: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:02<00:00,  1.40it/s]
+2026-09-04 07:02:30,532 INFO raster_io: Mosaicking 4 raster(s) -> okara_test_data_rice_rf_classification_map.tif
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+ERROR 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Loading categorical map for strict sieving: okara_test_data_rice_rf_classification_map.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/1_ndvi_run_1/okara_test_data_rice_rf_classification_map_sieved_p20.tif
+2026-09-04 07:02:30,869 INFO pipeline: NDVI stage finished in 0.5 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/1_ndvi_run_1/okara_test_data_rice_rf_classification_map_sieved_p20.tif
+1. Vectorising target classes [1]...
+  [Warning] No pixels found for classes [1].
+  -> Writing an empty layer with the full schema (no pixels of classes [1]).
+2026-09-04 07:02:30,899 INFO pyogrio._io: Created 0 records
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/3_vector_run_1/final_output/okara_rice_2027.gpkg
+2026-09-04 07:02:30,902 INFO pyogrio._io: Created 0 records
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/3_vector_run_1/final_output/okara_rice_2027.zip
+2026-09-04 07:02:30,907 INFO qc: Result: aoi_acres=51293.1, feature_count=0, crop_acres=0.0, crop_share_of_aoi_pct=0.0
+2026-09-04 07:02:30,908 INFO pipeline: Pipeline finished in 0.5 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/3_vector_run_1/final_output/okara_rice_2027.gpkg
+
+=== RESULT ===
+{
+  "name": "Z9_rice2027_ndvionly",
+  "status": "ok",
+  "started_utc": "2026-09-04T07:02:02Z",
+  "config_summary": "crop/year/district : rice / 2027 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp\nNDVI source        : stac\nstatic source      : stac (auto)  [DISABLED: run_static_model=False]\nNDVI series window : 2027-05-24 -> 2027-12-01\nNDVI inference     : 2027-06-01 -> 2027-11-30\nstatic window      :  -> \nNDVI model         : gs://farmdar_data_catalog/fao_rice_maize_timeseries_model/fao_rice_maize_rf_model.joblib\nstatic model       : (none yet for rice)\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=resume, vector=resume\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly",
+  "outcome": {
+    "crop": "rice",
+    "year": "2027",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": null,
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": null,
+    "vector_run": "3_vector_run_1",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/1_ndvi_run_1/okara_test_data_rice_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": null,
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/3_vector_run_1/final_output/okara_rice_2027.gpkg",
+    "ndvi_minutes": 0.5,
+    "static_minutes": null,
+    "total_minutes": 0.5,
+    "result_check": {
+      "warnings": [],
+      "aoi_acres": 51293.1,
+      "feature_count": 0,
+      "crop_acres": 0.0,
+      "crop_share_of_aoi_pct": 0.0
+    }
+  },
+  "wall_s": 28.18,
+  "resources": {
+    "samples": 34,
+    "duration_s": 28.2,
+    "peak_rss_tree_mb": 3214.5,
+    "peak_rss_single_proc_mb": 3214.5,
+    "peak_outdir_mb": 1.7,
+    "final_outdir_mb": 1.7,
+    "tree_read_mb": 28.15,
+    "tree_write_mb": 2.36,
+    "sys_read_mb": 61.8,
+    "sys_write_mb": 7.93,
+    "net_recv_mb": 0.39,
+    "net_sent_mb": 1.06,
+    "stage_peak_rss_mb": {
+      "resolve_models": 202.8,
+      "ndvi_stage": 2432.8,
+      "ndvi_acquire_stac": 3214.5,
+      "ndvi_mosaic": 0.0,
+      "sieve": 0.0,
+      "vector_stage": 0.0
+    }
+  },
+  "finished_utc": "2026-09-04T07:02:30Z"
+}

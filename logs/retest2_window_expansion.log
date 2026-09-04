@@ -1,0 +1,123 @@
+
+==============================================================================
+### spr_maize 2014 (no imagery) expansion=5d x3 DEFAULT
+==============================================================================
+WARNING config: spr_maize 2014: no Sentinel-2 static image exists before 2016 -- running NDVI-only.
+INFO farmdar.sentinel: aws-creds: bootstrapped 12-hour session, expires 2026-09-04T18:50:56+00:00
+WARNING static_pipeline: window 1 (2014-05-01 to 2014-05-10): could not be scored (No Sentinel-2 scenes over the AOI in [2014-05-01, 2014-05-10) with cloud < 80%.).
+WARNING static_pipeline: window 2 (2014-04-20 to 2014-04-30): could not be scored (No Sentinel-2 scenes over the AOI in [2014-04-20, 2014-04-30) with cloud < 80%.).
+WARNING static_pipeline: window 3 (2014-05-11 to 2014-05-20): could not be scored (No Sentinel-2 scenes over the AOI in [2014-05-11, 2014-05-20) with cloud < 80%.).
+WARNING static_pipeline: No configured window had usable imagery; widening the leading window to 2014-04-26..2014-05-15. This date is outside the phenology the windows encode.
+WARNING static_pipeline: expanded window +5d (2014-04-26 to 2014-05-15): could not be scored (No Sentinel-2 scenes over the AOI in [2014-04-26, 2014-05-15) with cloud < 80%.).
+WARNING static_pipeline: No configured window had usable imagery; widening the leading window to 2014-04-21..2014-05-20. This date is outside the phenology the windows encode.
+WARNING static_pipeline: expanded window +10d (2014-04-21 to 2014-05-20): could not be scored (No Sentinel-2 scenes over the AOI in [2014-04-21, 2014-05-20) with cloud < 80%.).
+WARNING static_pipeline: No configured window had usable imagery; widening the leading window to 2014-04-16..2014-05-25. This date is outside the phenology the windows encode.
+WARNING static_pipeline: expanded window +15d (2014-04-16 to 2014-05-25): could not be scored (No Sentinel-2 scenes over the AOI in [2014-04-16, 2014-05-25) with cloud < 80%.).
+
+--- probe result ---
+{
+  "label": "spr_maize 2014 (no imagery) expansion=5d x3 DEFAULT",
+  "crop": "spr_maize",
+  "year": "2014",
+  "overrides": {},
+  "configured_windows": [
+    [
+      "2014-05-01",
+      "2014-05-10"
+    ],
+    [
+      "2014-04-20",
+      "2014-04-30"
+    ],
+    [
+      "2014-05-11",
+      "2014-05-20"
+    ]
+  ],
+  "status": "ok",
+  "dates": null,
+  "description": "no window produced a usable acquisition",
+  "coverage_pct": null,
+  "window_scores": null,
+  "seconds": 6.3
+}
+
+==============================================================================
+### spr_maize 2014 expansion DISABLED (=0)
+==============================================================================
+WARNING config: spr_maize 2014: no Sentinel-2 static image exists before 2016 -- running NDVI-only.
+WARNING static_pipeline: window 1 (2014-05-01 to 2014-05-10): could not be scored (No Sentinel-2 scenes over the AOI in [2014-05-01, 2014-05-10) with cloud < 80%.).
+WARNING static_pipeline: window 2 (2014-04-20 to 2014-04-30): could not be scored (No Sentinel-2 scenes over the AOI in [2014-04-20, 2014-04-30) with cloud < 80%.).
+WARNING static_pipeline: window 3 (2014-05-11 to 2014-05-20): could not be scored (No Sentinel-2 scenes over the AOI in [2014-05-11, 2014-05-20) with cloud < 80%.).
+
+--- probe result ---
+{
+  "label": "spr_maize 2014 expansion DISABLED (=0)",
+  "crop": "spr_maize",
+  "year": "2014",
+  "overrides": {
+    "static_window_expansion_days": 0
+  },
+  "configured_windows": [
+    [
+      "2014-05-01",
+      "2014-05-10"
+    ],
+    [
+      "2014-04-20",
+      "2014-04-30"
+    ],
+    [
+      "2014-05-11",
+      "2014-05-20"
+    ]
+  ],
+  "status": "ok",
+  "dates": null,
+  "description": "no window produced a usable acquisition",
+  "coverage_pct": null,
+  "window_scores": null,
+  "seconds": 2.8
+}
+
+==============================================================================
+### spr_maize 2014 expansion=5d x1
+==============================================================================
+WARNING config: spr_maize 2014: no Sentinel-2 static image exists before 2016 -- running NDVI-only.
+WARNING static_pipeline: window 1 (2014-05-01 to 2014-05-10): could not be scored (No Sentinel-2 scenes over the AOI in [2014-05-01, 2014-05-10) with cloud < 80%.).
+WARNING static_pipeline: window 2 (2014-04-20 to 2014-04-30): could not be scored (No Sentinel-2 scenes over the AOI in [2014-04-20, 2014-04-30) with cloud < 80%.).
+WARNING static_pipeline: window 3 (2014-05-11 to 2014-05-20): could not be scored (No Sentinel-2 scenes over the AOI in [2014-05-11, 2014-05-20) with cloud < 80%.).
+WARNING static_pipeline: No configured window had usable imagery; widening the leading window to 2014-04-26..2014-05-15. This date is outside the phenology the windows encode.
+WARNING static_pipeline: expanded window +5d (2014-04-26 to 2014-05-15): could not be scored (No Sentinel-2 scenes over the AOI in [2014-04-26, 2014-05-15) with cloud < 80%.).
+
+--- probe result ---
+{
+  "label": "spr_maize 2014 expansion=5d x1",
+  "crop": "spr_maize",
+  "year": "2014",
+  "overrides": {
+    "static_window_max_expansions": 1
+  },
+  "configured_windows": [
+    [
+      "2014-05-01",
+      "2014-05-10"
+    ],
+    [
+      "2014-04-20",
+      "2014-04-30"
+    ],
+    [
+      "2014-05-11",
+      "2014-05-20"
+    ]
+  ],
+  "status": "ok",
+  "dates": null,
+  "description": "no window produced a usable acquisition",
+  "coverage_pct": null,
+  "window_scores": null,
+  "seconds": 3.6
+}
+
+wrote metrics/retest2_window_probe_expansion.json

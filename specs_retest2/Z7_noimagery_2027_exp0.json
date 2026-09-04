@@ -1,0 +1,3 @@
+{ "crop":"spr_maize","year":"2027","district_name":"okara","aoi_path":"/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp",
+  "output_dir":"/home/jovyan/FAO/optimized_code_testing/runs_retest/Z7_noimagery_2027_exp0", "gee_service_account_key":"/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json","ndvi_source":"stac","static_source":"stac","run_mode":"resume", "stac_static_mode":"auto",
+  "static_window_expansion_days":0 }

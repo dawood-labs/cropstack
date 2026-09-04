@@ -1,0 +1,92 @@
+[
+  {
+    "stage": "resolve_models",
+    "t_start_epoch": 1788425875.943,
+    "t_end_epoch": 1788425875.943,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "sieve",
+    "t_start_epoch": 1788425877.672,
+    "t_end_epoch": 1788425877.672,
+    "start_s": 1.73,
+    "end_s": 1.73,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "ndvi_stage",
+    "t_start_epoch": 1788425877.672,
+    "t_end_epoch": 1788425877.672,
+    "start_s": 1.73,
+    "end_s": 1.73,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "static_acquire_gee",
+    "t_start_epoch": 1788425877.672,
+    "t_end_epoch": 1788425923.713,
+    "start_s": 1.73,
+    "end_s": 47.77,
+    "duration_s": 46.04,
+    "peak_rss_mb_during": 277.4,
+    "error": null
+  },
+  {
+    "stage": "static_crop_mask",
+    "t_start_epoch": 1788425923.713,
+    "t_end_epoch": 1788425923.753,
+    "start_s": 47.77,
+    "end_s": 47.81,
+    "duration_s": 0.04,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "static_classify",
+    "t_start_epoch": 1788425923.713,
+    "t_end_epoch": 1788425925.73,
+    "start_s": 47.77,
+    "end_s": 49.79,
+    "duration_s": 2.02,
+    "peak_rss_mb_during": 876.8,
+    "error": null
+  },
+  {
+    "stage": "sieve",
+    "t_start_epoch": 1788425925.731,
+    "t_end_epoch": 1788425925.855,
+    "start_s": 49.79,
+    "end_s": 49.91,
+    "duration_s": 0.12,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "static_stage",
+    "t_start_epoch": 1788425877.672,
+    "t_end_epoch": 1788425925.855,
+    "start_s": 1.73,
+    "end_s": 49.91,
+    "duration_s": 48.18,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "vector_stage",
+    "t_start_epoch": 1788425925.856,
+    "t_end_epoch": 1788425926.034,
+    "start_s": 49.92,
+    "end_s": 50.09,
+    "duration_s": 0.18,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  }
+]

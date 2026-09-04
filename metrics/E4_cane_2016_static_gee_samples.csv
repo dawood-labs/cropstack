@@ -1,0 +1,2 @@
+t_epoch,elapsed_s,stage,n_procs,rss_tree_mb,rss_max_proc_mb,cpu_tree_pct,cpu_system_pct,mem_system_used_mb,mem_system_available_mb,tree_read_mb,tree_write_mb,sys_read_mb,sys_write_mb,net_recv_mb,net_sent_mb,outdir_mb,fs_used_gb,fs_free_gb
+1788441125.107,0.0,vector_stage,1,211.4,211.4,0.0,0.0,10042.2,55509.5,0.0,0.0,0.0,0.0,0.0,0.0,0.2,67.78,37.69

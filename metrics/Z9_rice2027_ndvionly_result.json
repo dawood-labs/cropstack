@@ -1,0 +1,129 @@
+{
+  "name": "Z9_rice2027_ndvionly",
+  "spec": {
+    "crop": "rice",
+    "year": "2027",
+    "district_name": "okara",
+    "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp",
+    "gee_service_account_key": "/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "stac_static_mode": "auto",
+    "run_mode": "resume"
+  },
+  "status": "ok",
+  "started_utc": "2026-09-04T07:02:02Z",
+  "config_summary": "crop/year/district : rice / 2027 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp\nNDVI source        : stac\nstatic source      : stac (auto)  [DISABLED: run_static_model=False]\nNDVI series window : 2027-05-24 -> 2027-12-01\nNDVI inference     : 2027-06-01 -> 2027-11-30\nstatic window      :  -> \nNDVI model         : gs://farmdar_data_catalog/fao_rice_maize_timeseries_model/fao_rice_maize_rf_model.joblib\nstatic model       : (none yet for rice)\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=resume, vector=resume\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly",
+  "outcome": {
+    "crop": "rice",
+    "year": "2027",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": null,
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": null,
+    "vector_run": "3_vector_run_1",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/1_ndvi_run_1/okara_test_data_rice_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": null,
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z9_rice2027_ndvionly/3_vector_run_1/final_output/okara_rice_2027.gpkg",
+    "ndvi_minutes": 0.5,
+    "static_minutes": null,
+    "total_minutes": 0.5,
+    "result_check": {
+      "warnings": [],
+      "aoi_acres": 51293.1,
+      "feature_count": 0,
+      "crop_acres": 0.0,
+      "crop_share_of_aoi_pct": 0.0
+    }
+  },
+  "wall_s": 28.18,
+  "resources": {
+    "samples": 34,
+    "duration_s": 28.2,
+    "peak_rss_tree_mb": 3214.5,
+    "peak_rss_single_proc_mb": 3214.5,
+    "peak_outdir_mb": 1.7,
+    "final_outdir_mb": 1.7,
+    "tree_read_mb": 28.15,
+    "tree_write_mb": 2.36,
+    "sys_read_mb": 61.8,
+    "sys_write_mb": 7.93,
+    "net_recv_mb": 0.39,
+    "net_sent_mb": 1.06,
+    "stage_peak_rss_mb": {
+      "resolve_models": 202.8,
+      "ndvi_stage": 2432.8,
+      "ndvi_acquire_stac": 3214.5,
+      "ndvi_mosaic": 0.0,
+      "sieve": 0.0,
+      "vector_stage": 0.0
+    }
+  },
+  "events": [
+    {
+      "stage": "resolve_models",
+      "t_start_epoch": 1788505322.725,
+      "t_end_epoch": 1788505322.726,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 202.8,
+      "error": null
+    },
+    {
+      "stage": "ndvi_acquire_stac",
+      "t_start_epoch": 1788505322.726,
+      "t_end_epoch": 1788505347.402,
+      "start_s": 0.0,
+      "end_s": 24.68,
+      "duration_s": 24.68,
+      "peak_rss_mb_during": 3214.5,
+      "error": null
+    },
+    {
+      "stage": "ndvi_mosaic",
+      "t_start_epoch": 1788505350.525,
+      "t_end_epoch": 1788505350.588,
+      "start_s": 27.8,
+      "end_s": 27.86,
+      "duration_s": 0.06,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788505350.589,
+      "t_end_epoch": 1788505350.869,
+      "start_s": 27.87,
+      "end_s": 28.15,
+      "duration_s": 0.28,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_stage",
+      "t_start_epoch": 1788505322.726,
+      "t_end_epoch": 1788505350.869,
+      "start_s": 0.0,
+      "end_s": 28.15,
+      "duration_s": 28.14,
+      "peak_rss_mb_during": 2432.8,
+      "error": null
+    },
+    {
+      "stage": "vector_stage",
+      "t_start_epoch": 1788505350.869,
+      "t_end_epoch": 1788505350.903,
+      "start_s": 28.15,
+      "end_s": 28.18,
+      "duration_s": 0.03,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    }
+  ],
+  "finished_utc": "2026-09-04T07:02:30Z"
+}

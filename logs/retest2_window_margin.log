@@ -1,0 +1,320 @@
+
+==============================================================================
+### spr_maize 2025 margin=5 (DEFAULT)
+==============================================================================
+INFO farmdar.sentinel: aws-creds: bootstrapped 12-hour session, expires 2026-09-04T18:50:17+00:00
+INFO farmdar.sentinel: static: 4 scenes on 3 dates in [2025-05-01, 2025-05-10)
+INFO farmdar.sentinel: static: dates=['2025-05-09', '2025-05-01'] (anchor=2025-05-09) -> 99.12% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-04-20, 2025-04-30)
+INFO farmdar.sentinel: static: dates=['2025-04-29'] (anchor=2025-04-29) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-05-11, 2025-05-20)
+INFO farmdar.sentinel: static: dates=['2025-05-14'] (anchor=2025-05-14) -> 100.00% of AOI usable
+INFO static_pipeline: Window scores (best-first by preference):
+INFO static_pipeline:   window 1 (2025-05-01 to 2025-05-10): ['2025-05-09', '2025-05-01'] -> 99.1% of AOI usable
+INFO static_pipeline:   window 2 (2025-04-20 to 2025-04-30): ['2025-04-29'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 3 (2025-05-11 to 2025-05-20): ['2025-05-14'] -> 100.0% of AOI usable
+INFO static_pipeline: Coverage spread across windows: 99.1%-100.0%. The chosen date, not just the code, determines the acreage reported.
+INFO static_pipeline: Preferring window 1 (2025-05-01 to 2025-05-10) at 99.1% over the highest-coverage 100.0%: within the 5-point margin, and it is the agronomically better date.
+
+--- probe result ---
+{
+  "label": "spr_maize 2025 margin=5 (DEFAULT)",
+  "crop": "spr_maize",
+  "year": "2025",
+  "overrides": {},
+  "configured_windows": [
+    [
+      "2025-05-01",
+      "2025-05-10"
+    ],
+    [
+      "2025-04-20",
+      "2025-04-30"
+    ],
+    [
+      "2025-05-11",
+      "2025-05-20"
+    ]
+  ],
+  "status": "ok",
+  "dates": [
+    "2025-05-09",
+    "2025-05-01"
+  ],
+  "description": "window 1 (2025-05-01 to 2025-05-10)",
+  "coverage_pct": 99.12,
+  "window_scores": [
+    {
+      "label": "window 1 (2025-05-01 to 2025-05-10)",
+      "window": [
+        "2025-05-01",
+        "2025-05-10"
+      ],
+      "dates": [
+        "2025-05-09",
+        "2025-05-01"
+      ],
+      "coverage_pct": 99.12
+    },
+    {
+      "label": "window 2 (2025-04-20 to 2025-04-30)",
+      "window": [
+        "2025-04-20",
+        "2025-04-30"
+      ],
+      "dates": [
+        "2025-04-29"
+      ],
+      "coverage_pct": 100.0
+    },
+    {
+      "label": "window 3 (2025-05-11 to 2025-05-20)",
+      "window": [
+        "2025-05-11",
+        "2025-05-20"
+      ],
+      "dates": [
+        "2025-05-14"
+      ],
+      "coverage_pct": 100.0
+    }
+  ],
+  "seconds": 11.8
+}
+
+==============================================================================
+### spr_maize 2025 margin=0
+==============================================================================
+INFO farmdar.sentinel: static: 4 scenes on 3 dates in [2025-05-01, 2025-05-10)
+INFO farmdar.sentinel: static: dates=['2025-05-09', '2025-05-01'] (anchor=2025-05-09) -> 99.12% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-04-20, 2025-04-30)
+INFO farmdar.sentinel: static: dates=['2025-04-29'] (anchor=2025-04-29) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-05-11, 2025-05-20)
+INFO farmdar.sentinel: static: dates=['2025-05-14'] (anchor=2025-05-14) -> 100.00% of AOI usable
+INFO static_pipeline: Window scores (best-first by preference):
+INFO static_pipeline:   window 1 (2025-05-01 to 2025-05-10): ['2025-05-09', '2025-05-01'] -> 99.1% of AOI usable
+INFO static_pipeline:   window 2 (2025-04-20 to 2025-04-30): ['2025-04-29'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 3 (2025-05-11 to 2025-05-20): ['2025-05-14'] -> 100.0% of AOI usable
+INFO static_pipeline: Coverage spread across windows: 99.1%-100.0%. The chosen date, not just the code, determines the acreage reported.
+INFO static_pipeline: Chose window 2 (2025-04-20 to 2025-04-30) at 100.0% (floor 80%).
+
+--- probe result ---
+{
+  "label": "spr_maize 2025 margin=0",
+  "crop": "spr_maize",
+  "year": "2025",
+  "overrides": {
+    "static_window_preference_margin_pct": 0
+  },
+  "configured_windows": [
+    [
+      "2025-05-01",
+      "2025-05-10"
+    ],
+    [
+      "2025-04-20",
+      "2025-04-30"
+    ],
+    [
+      "2025-05-11",
+      "2025-05-20"
+    ]
+  ],
+  "status": "ok",
+  "dates": [
+    "2025-04-29"
+  ],
+  "description": "window 2 (2025-04-20 to 2025-04-30)",
+  "coverage_pct": 100.0,
+  "window_scores": [
+    {
+      "label": "window 1 (2025-05-01 to 2025-05-10)",
+      "window": [
+        "2025-05-01",
+        "2025-05-10"
+      ],
+      "dates": [
+        "2025-05-09",
+        "2025-05-01"
+      ],
+      "coverage_pct": 99.12
+    },
+    {
+      "label": "window 2 (2025-04-20 to 2025-04-30)",
+      "window": [
+        "2025-04-20",
+        "2025-04-30"
+      ],
+      "dates": [
+        "2025-04-29"
+      ],
+      "coverage_pct": 100.0
+    },
+    {
+      "label": "window 3 (2025-05-11 to 2025-05-20)",
+      "window": [
+        "2025-05-11",
+        "2025-05-20"
+      ],
+      "dates": [
+        "2025-05-14"
+      ],
+      "coverage_pct": 100.0
+    }
+  ],
+  "seconds": 3.3
+}
+
+==============================================================================
+### spr_maize 2025 margin=100
+==============================================================================
+INFO farmdar.sentinel: static: 4 scenes on 3 dates in [2025-05-01, 2025-05-10)
+INFO farmdar.sentinel: static: dates=['2025-05-09', '2025-05-01'] (anchor=2025-05-09) -> 99.12% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-04-20, 2025-04-30)
+INFO farmdar.sentinel: static: dates=['2025-04-29'] (anchor=2025-04-29) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-05-11, 2025-05-20)
+INFO farmdar.sentinel: static: dates=['2025-05-14'] (anchor=2025-05-14) -> 100.00% of AOI usable
+INFO static_pipeline: Window scores (best-first by preference):
+INFO static_pipeline:   window 1 (2025-05-01 to 2025-05-10): ['2025-05-09', '2025-05-01'] -> 99.1% of AOI usable
+INFO static_pipeline:   window 2 (2025-04-20 to 2025-04-30): ['2025-04-29'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 3 (2025-05-11 to 2025-05-20): ['2025-05-14'] -> 100.0% of AOI usable
+INFO static_pipeline: Coverage spread across windows: 99.1%-100.0%. The chosen date, not just the code, determines the acreage reported.
+INFO static_pipeline: Preferring window 1 (2025-05-01 to 2025-05-10) at 99.1% over the highest-coverage 100.0%: within the 100-point margin, and it is the agronomically better date.
+
+--- probe result ---
+{
+  "label": "spr_maize 2025 margin=100",
+  "crop": "spr_maize",
+  "year": "2025",
+  "overrides": {
+    "static_window_preference_margin_pct": 100
+  },
+  "configured_windows": [
+    [
+      "2025-05-01",
+      "2025-05-10"
+    ],
+    [
+      "2025-04-20",
+      "2025-04-30"
+    ],
+    [
+      "2025-05-11",
+      "2025-05-20"
+    ]
+  ],
+  "status": "ok",
+  "dates": [
+    "2025-05-09",
+    "2025-05-01"
+  ],
+  "description": "window 1 (2025-05-01 to 2025-05-10)",
+  "coverage_pct": 99.12,
+  "window_scores": [
+    {
+      "label": "window 1 (2025-05-01 to 2025-05-10)",
+      "window": [
+        "2025-05-01",
+        "2025-05-10"
+      ],
+      "dates": [
+        "2025-05-09",
+        "2025-05-01"
+      ],
+      "coverage_pct": 99.12
+    },
+    {
+      "label": "window 2 (2025-04-20 to 2025-04-30)",
+      "window": [
+        "2025-04-20",
+        "2025-04-30"
+      ],
+      "dates": [
+        "2025-04-29"
+      ],
+      "coverage_pct": 100.0
+    },
+    {
+      "label": "window 3 (2025-05-11 to 2025-05-20)",
+      "window": [
+        "2025-05-11",
+        "2025-05-20"
+      ],
+      "dates": [
+        "2025-05-14"
+      ],
+      "coverage_pct": 100.0
+    }
+  ],
+  "seconds": 3.5
+}
+
+==============================================================================
+### spr_maize 2025 start_at=2
+==============================================================================
+WARNING static_pipeline: Skipping the first 1 window(s) at the operator's request.
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-04-20, 2025-04-30)
+INFO farmdar.sentinel: static: dates=['2025-04-29'] (anchor=2025-04-29) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-05-11, 2025-05-20)
+INFO farmdar.sentinel: static: dates=['2025-05-14'] (anchor=2025-05-14) -> 100.00% of AOI usable
+INFO static_pipeline: Window scores (best-first by preference):
+INFO static_pipeline:   window 2 (2025-04-20 to 2025-04-30): ['2025-04-29'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 3 (2025-05-11 to 2025-05-20): ['2025-05-14'] -> 100.0% of AOI usable
+INFO static_pipeline: Chose window 2 (2025-04-20 to 2025-04-30) at 100.0% (floor 80%).
+
+--- probe result ---
+{
+  "label": "spr_maize 2025 start_at=2",
+  "crop": "spr_maize",
+  "year": "2025",
+  "overrides": {
+    "static_window_start_at": 2
+  },
+  "configured_windows": [
+    [
+      "2025-05-01",
+      "2025-05-10"
+    ],
+    [
+      "2025-04-20",
+      "2025-04-30"
+    ],
+    [
+      "2025-05-11",
+      "2025-05-20"
+    ]
+  ],
+  "status": "ok",
+  "dates": [
+    "2025-04-29"
+  ],
+  "description": "window 2 (2025-04-20 to 2025-04-30)",
+  "coverage_pct": 100.0,
+  "window_scores": [
+    {
+      "label": "window 2 (2025-04-20 to 2025-04-30)",
+      "window": [
+        "2025-04-20",
+        "2025-04-30"
+      ],
+      "dates": [
+        "2025-04-29"
+      ],
+      "coverage_pct": 100.0
+    },
+    {
+      "label": "window 3 (2025-05-11 to 2025-05-20)",
+      "window": [
+        "2025-05-11",
+        "2025-05-20"
+      ],
+      "dates": [
+        "2025-05-14"
+      ],
+      "coverage_pct": 100.0
+    }
+  ],
+  "seconds": 2.6
+}
+
+wrote metrics/retest2_window_probe_margin.json

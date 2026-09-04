@@ -1,0 +1,160 @@
+{
+  "name": "A2_wheat_2025",
+  "spec": {
+    "crop": "wheat",
+    "year": "2025",
+    "district_name": "okara",
+    "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_wheat.shp",
+    "gee_service_account_key": "/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "stac_static_mode": "manual",
+    "stac_static_dates": [
+      "2025-02-03",
+      "2025-02-23"
+    ],
+    "ndvi_run_mode": "resume",
+    "static_run_mode": "new",
+    "vector_run_mode": "new"
+  },
+  "status": "ok",
+  "started_utc": "2026-09-03T08:13:22Z",
+  "config_summary": "crop/year/district : wheat / 2025 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_wheat.shp\nNDVI source        : stac\nstatic source      : stac (manual)\nNDVI series window : 2024-08-24 -> 2025-07-01\nNDVI inference     : 2024-09-01 -> 2025-06-30\nstatic window      : 2025-02-01 -> 2025-02-25\nNDVI model         : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib\nstatic model       : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=new, vector=new\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025",
+  "outcome": {
+    "crop": "wheat",
+    "year": "2025",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": "2_static_run_2",
+    "vector_run": "3_vector_run_2",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025/1_ndvi_run_1/okara_test_data_wheat_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025/2_static_run_2/03_Feb_2025_and_23_Feb_2025/static_mosaic_03_Feb_2025_and_23_Feb_2025_Cls_sieved_p20.tif",
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs/A1_wheat_2025/3_vector_run_2/final_output/okara_wheat_2025.gpkg",
+    "ndvi_minutes": 0.0,
+    "static_minutes": 1.5,
+    "total_minutes": 1.5
+  },
+  "wall_s": 91.67,
+  "resources": {
+    "samples": 173,
+    "duration_s": 91.7,
+    "peak_rss_tree_mb": 2604.1,
+    "peak_rss_single_proc_mb": 1272.1,
+    "peak_outdir_mb": 46.0,
+    "final_outdir_mb": 5.7,
+    "tree_read_mb": 0.0,
+    "tree_write_mb": 61.75,
+    "sys_read_mb": 0.0,
+    "sys_write_mb": 78.46,
+    "net_recv_mb": 2647.24,
+    "net_sent_mb": 2536.05,
+    "stage_peak_rss_mb": {
+      "resolve_models": 0.0,
+      "ndvi_stage": 0.0,
+      "sieve": 0.0,
+      "static_stage": 0.0,
+      "static_acquire_stac": 1272.1,
+      "static_classify": 2604.1,
+      "static_crop_mask": 0.0,
+      "vector_stage": 1260.9
+    }
+  },
+  "events": [
+    {
+      "stage": "resolve_models",
+      "t_start_epoch": 1788423203.017,
+      "t_end_epoch": 1788423203.017,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788423203.017,
+      "t_end_epoch": 1788423203.017,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_stage",
+      "t_start_epoch": 1788423203.017,
+      "t_end_epoch": 1788423203.017,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_acquire_stac",
+      "t_start_epoch": 1788423203.018,
+      "t_end_epoch": 1788423288.938,
+      "start_s": 0.0,
+      "end_s": 85.92,
+      "duration_s": 85.92,
+      "peak_rss_mb_during": 1272.1,
+      "error": null
+    },
+    {
+      "stage": "static_crop_mask",
+      "t_start_epoch": 1788423288.938,
+      "t_end_epoch": 1788423289.08,
+      "start_s": 85.92,
+      "end_s": 86.06,
+      "duration_s": 0.14,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_classify",
+      "t_start_epoch": 1788423288.938,
+      "t_end_epoch": 1788423293.118,
+      "start_s": 85.92,
+      "end_s": 90.1,
+      "duration_s": 4.18,
+      "peak_rss_mb_during": 2604.1,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788423293.125,
+      "t_end_epoch": 1788423293.517,
+      "start_s": 90.11,
+      "end_s": 90.5,
+      "duration_s": 0.39,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_stage",
+      "t_start_epoch": 1788423203.018,
+      "t_end_epoch": 1788423293.517,
+      "start_s": 0.0,
+      "end_s": 90.5,
+      "duration_s": 90.5,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "vector_stage",
+      "t_start_epoch": 1788423293.518,
+      "t_end_epoch": 1788423294.684,
+      "start_s": 90.5,
+      "end_s": 91.67,
+      "duration_s": 1.17,
+      "peak_rss_mb_during": 1260.9,
+      "error": null
+    }
+  ],
+  "finished_utc": "2026-09-03T08:14:54Z"
+}

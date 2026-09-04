@@ -1,0 +1,138 @@
+==============================================================================
+crop/year/district : spr_maize / 2027 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2026-12-24 -> 2027-07-17
+NDVI inference     : 2027-01-01 -> 2027-07-15
+static window      : 2027-04-20 -> 2027-05-20
+NDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+==============================================================================
+2026-09-04 06:56:13,172 INFO pipeline: Pipeline configuration:
+crop/year/district : spr_maize / 2027 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2026-12-24 -> 2027-07-17
+NDVI inference     : 2027-01-01 -> 2027-07-15
+static window      : 2027-04-20 -> 2027-05-20
+NDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+2026-09-04 06:56:13,172 INFO run_manager: 1_ndvi: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/Z6_noimagery_2027/1_ndvi_run_1  (no previous output to reuse)
+2026-09-04 06:56:13,172 INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/Z6_noimagery_2027/3_vector_run_1  (no previous output to reuse)
+2026-09-04 06:56:13,172 INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+2026-09-04 06:56:13,172 INFO model_registry: static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+2026-09-04 06:56:13,191 INFO ndvi_pipeline: STAC acquisition: ~4 tile(s), 4 in flight, estimated peak 5.8 GiB of 33.3 GiB budget
+2026-09-04 06:56:13,270 INFO farmdar.sentinel: aws-creds: bootstrapped 12-hour session, expires 2026-09-04T18:56:13+00:00
+2026-09-04 06:56:13,335 INFO farmdar.sentinel: AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['red', 'nir'], 8 workers)
+2026-09-04 06:56:22,998 INFO farmdar.sentinel: [1/4] tile 0001: written (8.2s)
+2026-09-04 06:56:24,941 INFO farmdar.sentinel: [2/4] tile 0002: written (10.1s)
+2026-09-04 06:56:26,829 INFO farmdar.sentinel: [3/4] tile 0004: written (12.0s)
+2026-09-04 06:56:29,205 INFO farmdar.sentinel: [4/4] tile 0003: written (14.4s)
+2026-09-04 06:56:29,206 INFO farmdar.sentinel: DONE 4 tiles in 0.3 min. out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/Z6_noimagery_2027/1_ndvi_run_1/raw_ndvi_tiles vrt=None
+2026-09-04 06:56:29,207 INFO ndvi_pipeline: STAC acquisition took 0.3 min for 4 tile(s) (0.1 min/tile).
+2026-09-04 06:56:29,207 INFO ndvi_pipeline: Running RF inference over 4 tile(s) on 4 worker(s)...
+NDVI tiles:   0%|                                                                                                                                                               | 0/4 [00:00<?, ?it/s]NDVI tiles:  25%|█████████████████████████████████████▊                                                                                                                 | 1/4 [00:02<00:06,  2.03s/it]NDVI tiles: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:02<00:00,  1.89it/s]
+2026-09-04 06:56:31,535 INFO raster_io: Mosaicking 4 raster(s) -> okara_test_data_spr_maize_rf_classification_map.tif
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+ERROR 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Loading categorical map for strict sieving: okara_test_data_spr_maize_rf_classification_map.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/Z6_noimagery_2027/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+2026-09-04 06:56:31,828 INFO pipeline: NDVI stage finished in 0.3 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/Z6_noimagery_2027/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+2026-09-04 06:56:31,828 INFO run_manager: 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/Z6_noimagery_2027/2_static_run_1  (no previous output to reuse)
+2026-09-04 06:56:32,826 WARNING static_pipeline: window 1 (2027-05-01 to 2027-05-10): could not be scored (No Sentinel-2 scenes over the AOI in [2027-05-01, 2027-05-10) with cloud < 80%.).
+2026-09-04 06:56:33,442 WARNING static_pipeline: window 2 (2027-04-20 to 2027-04-30): could not be scored (No Sentinel-2 scenes over the AOI in [2027-04-20, 2027-04-30) with cloud < 80%.).
+2026-09-04 06:56:34,554 WARNING static_pipeline: window 3 (2027-05-11 to 2027-05-20): could not be scored (No Sentinel-2 scenes over the AOI in [2027-05-11, 2027-05-20) with cloud < 80%.).
+2026-09-04 06:56:34,554 WARNING static_pipeline: No configured window had usable imagery; widening the leading window to 2027-04-26..2027-05-15. This date is outside the phenology the windows encode.
+2026-09-04 06:56:35,498 WARNING static_pipeline: expanded window +5d (2027-04-26 to 2027-05-15): could not be scored (No Sentinel-2 scenes over the AOI in [2027-04-26, 2027-05-15) with cloud < 80%.).
+2026-09-04 06:56:35,498 WARNING static_pipeline: No configured window had usable imagery; widening the leading window to 2027-04-21..2027-05-20. This date is outside the phenology the windows encode.
+2026-09-04 06:56:36,345 WARNING static_pipeline: expanded window +10d (2027-04-21 to 2027-05-20): could not be scored (No Sentinel-2 scenes over the AOI in [2027-04-21, 2027-05-20) with cloud < 80%.).
+2026-09-04 06:56:36,345 WARNING static_pipeline: No configured window had usable imagery; widening the leading window to 2027-04-16..2027-05-25. This date is outside the phenology the windows encode.
+2026-09-04 06:56:37,365 WARNING static_pipeline: expanded window +15d (2027-04-16 to 2027-05-25): could not be scored (No Sentinel-2 scenes over the AOI in [2027-04-16, 2027-05-25) with cloud < 80%.).
+Traceback (most recent call last):
+  File "/home/jovyan/FAO/optimized_code_testing/harness/run_scenario.py", line 86, in main
+    outcome = pipeline_module.run_pipeline(cfg)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/FAO/optimized_code_testing/cropstack/pipeline.py", line 107, in run_pipeline
+    sieved_static_path = run_static_pipeline(
+                         ^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/FAO/optimized_code_testing/harness/instrument.py", line 251, in wrapper
+    return self._timed(label, original, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/FAO/optimized_code_testing/harness/instrument.py", line 264, in _timed
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/FAO/optimized_code_testing/cropstack/static_pipeline.py", line 355, in run_static_pipeline
+    static_image_path, date_suffix = _acquire_static_from_stac(cfg, staging_dir)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/FAO/optimized_code_testing/harness/instrument.py", line 251, in wrapper
+    return self._timed(label, original, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/FAO/optimized_code_testing/harness/instrument.py", line 264, in _timed
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/home/jovyan/FAO/optimized_code_testing/cropstack/static_pipeline.py", line 217, in _acquire_static_from_stac
+    raise RuntimeError(
+RuntimeError: No usable static imagery in any configured window for spr_maize 2027 (no window produced a usable acquisition).
+
+
+=== RESULT ===
+{
+  "name": "Z6_noimagery_2027",
+  "status": "failed",
+  "started_utc": "2026-09-04T06:56:12Z",
+  "config_summary": "crop/year/district : spr_maize / 2027 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp\nNDVI source        : stac\nstatic source      : stac (auto)\nNDVI series window : 2026-12-24 -> 2027-07-17\nNDVI inference     : 2027-01-01 -> 2027-07-15\nstatic window      : 2027-04-20 -> 2027-05-20\nNDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib\nstatic model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=resume, vector=resume\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z6_noimagery_2027",
+  "error": "RuntimeError: No usable static imagery in any configured window for spr_maize 2027 (no window produced a usable acquisition).",
+  "resources": {
+    "samples": 36,
+    "duration_s": 24.2,
+    "peak_rss_tree_mb": 2317.3,
+    "peak_rss_single_proc_mb": 2101.7,
+    "peak_outdir_mb": 1.1,
+    "final_outdir_mb": 0.1,
+    "tree_read_mb": 183.11,
+    "tree_write_mb": 1.64,
+    "sys_read_mb": 91.91,
+    "sys_write_mb": 11.61,
+    "net_recv_mb": 0.37,
+    "net_sent_mb": 0.6,
+    "stage_peak_rss_mb": {
+      "init": 202.5,
+      "resolve_models": 0.0,
+      "ndvi_stage": 2317.3,
+      "ndvi_acquire_stac": 2101.7,
+      "ndvi_mosaic": 0.0,
+      "sieve": 431.5,
+      "static_stage": 0.0,
+      "static_acquire_stac": 431.6
+    }
+  },
+  "finished_utc": "2026-09-04T06:56:37Z"
+}

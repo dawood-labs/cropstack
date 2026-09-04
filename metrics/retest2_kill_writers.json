@@ -1,0 +1,49 @@
+[
+  {
+    "case": "mosaic_geotiffs interrupted mid-write",
+    "marker": "Mosaicking",
+    "marker_seen": true,
+    "sigkilled": true,
+    "child_exit": -9,
+    "final_path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/K_writer_probe/probe_mosaic.tif",
+    "FINAL_PATH_EXISTS": false,
+    "final_bytes": null,
+    "leftovers_at_dir": [
+      {
+        "name": "probe_mosaic.tif.tmp.mosaic.vrt",
+        "bytes": 158954
+      },
+      {
+        "name": "probe_mosaic.tif.tmp.tif",
+        "bytes": 27920521
+      }
+    ],
+    "tail": [
+      "raster_io: Mosaicking 48 raster(s) -> probe_mosaic.tif"
+    ],
+    "verdict": "PASS - nothing at the final path"
+  },
+  {
+    "case": "apply_strict_directional_sieve interrupted mid-write",
+    "marker": "Writing topologically-enforced output",
+    "marker_seen": true,
+    "sigkilled": true,
+    "child_exit": -9,
+    "final_path": "/home/jovyan/FAO/optimized_code_testing/runs_retest/K_writer_probe/probe_big_sieved_p20.tif",
+    "FINAL_PATH_EXISTS": false,
+    "final_bytes": null,
+    "leftovers_at_dir": [
+      {
+        "name": "probe_big_sieved_p20.tif.tmp.tif",
+        "bytes": 402528
+      }
+    ],
+    "tail": [
+      "Loading categorical map for strict sieving: probe_big.tif",
+      "Phase 1: base sieve filter (removing blobs < 20 px)...",
+      "Phase 2: enforcing strict topological encapsulation...",
+      "Writing topologically-enforced output to disk..."
+    ],
+    "verdict": "PASS - nothing at the final path"
+  }
+]

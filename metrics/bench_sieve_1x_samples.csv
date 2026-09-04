@@ -1,0 +1,4 @@
+t_epoch,elapsed_s,stage,n_procs,rss_tree_mb,rss_max_proc_mb,cpu_tree_pct,cpu_system_pct,mem_system_used_mb,mem_system_available_mb,tree_read_mb,tree_write_mb,sys_read_mb,sys_write_mb,net_recv_mb,net_sent_mb,outdir_mb,fs_used_gb,fs_free_gb
+1788422908.855,0.0,init,1,189.0,189.0,0.0,0.0,10737.2,54816.7,0.0,0.15,0.0,0.0,0.0,0.0,0.0,64.39,41.09
+1788422909.356,0.5,init,1,189.1,189.1,0.0,59.1,10758.6,54795.4,0.0,0.16,0.0,0.43,10.52,0.08,0.0,64.39,41.09
+1788422909.859,1.0,sieve,1,190.1,190.1,0.0,47.1,10686.1,54867.8,0.0,0.16,0.0,0.74,10.52,0.08,0.0,64.39,41.09
