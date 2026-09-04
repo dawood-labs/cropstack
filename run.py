@@ -21,6 +21,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import resources  # noqa: E402
 from config import build_pipeline_config  # noqa: E402
 from pipeline import run_pipeline  # noqa: E402
 
@@ -55,6 +56,11 @@ def main(argv=None) -> int:
     parser.add_argument("--set", dest="overrides", action="append", type=_parse_override,
                         default=[], metavar="NAME=VALUE",
                         help="override any PipelineConfig field; repeatable")
+    parser.add_argument("--districts", type=int, default=1, metavar="N",
+                        help="how many districts you intend to run in total; sizes this "
+                             "run's share of the machine (default 1)")
+    parser.add_argument("--no-auto-resources", action="store_true",
+                        help="do not size workers for this machine; use the built-in defaults")
     parser.add_argument("--log-level", default="INFO")
     parser.add_argument("--print-config", action="store_true",
                         help="build and print the config, then stop without running")
@@ -72,6 +78,11 @@ def main(argv=None) -> int:
         kwargs["output_dir"] = args.out
     if args.region:
         kwargs["region"] = args.region
+    if not args.no_auto_resources:
+        # Fills only what the operator did not state: --set always wins.
+        for name, value in resources.plan_resources(
+                district_count=args.districts).config_overrides().items():
+            kwargs.setdefault(name, value)
     kwargs.update(dict(args.overrides))
 
     cfg = build_pipeline_config(args.crop, args.year, args.district, **kwargs)

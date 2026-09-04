@@ -67,24 +67,46 @@ def available_memory_bytes() -> Optional[int]:
             return None
 
 
+#: Working copies of a window a worker holds at once: the raw read, the float view the
+#: model needs, the crop mask, and the prediction buffer. Measured against the Kasur run
+#: rather than assumed -- see `window_working_bytes`.
+WINDOW_COPIES_IN_FLIGHT = 4
+
+
+def window_working_bytes(chunk_size: int, band_count: int, dtype_size: int) -> int:
+    """Bytes one worker needs for one window.
+
+    This, not the model, is what a district run actually spends. Kasur peaked at 8.8 GiB
+    on a **648 KB** wheat model: at chunk_size 2048 with 6 bands each window is
+    2048 x 2048 x 6 x 2 = 48 MiB raw, and a worker holds several working copies of it.
+    Sizing the pool from the model alone read that as "memory is free, use every core".
+    """
+    return max(1, chunk_size) ** 2 * max(1, band_count) * max(1, dtype_size) * WINDOW_COPIES_IN_FLIGHT
+
+
 def resolve_worker_count(
     requested: Optional[int],
     window_count: int,
     model_path: str,
     memory_fraction: float = 0.5,
     model_memory_expansion: float = 12.0,
+    per_worker_window_bytes: int = 0,
+    memory_budget_bytes: Optional[int] = None,
 ) -> int:
-    """Chooses a pool size bounded by cores, by work, and by the model's memory cost.
+    """Chooses a pool size bounded by cores, by work, and by memory.
 
-    Every worker holds its own copy of the model, so the pool's floor is
-    `workers x resident model size` before a single pixel is read. A gradient-boosted
-    model can expand roughly an order of magnitude from its JSON on disk -- one 563 MB
-    model measured at 5.2 GiB resident -- so a pool sized purely from `cpu_count()`
-    reserves tens of GiB of identical copies and OOMs on a large machine, which is the
-    opposite of what more cores should buy.
+    A worker's resident cost is the sum of two independent terms, and sizing from either
+    one alone gets a real case wrong:
 
-    Also capped by `window_count`: spawning more workers than there are windows spends
-    memory on parallelism that cannot be used.
+    * **the model** -- every worker holds its own copy, and a gradient-boosted model can
+      expand roughly an order of magnitude from its JSON (one 563 MB model measured at
+      5.2 GiB resident), so a pool sized purely from `cpu_count()` OOMs on a big machine;
+    * **the window** -- `chunk_size^2 x bands x dtype`, several copies in flight. Kasur's
+      wheat model is 648 KB, so the model term said "use every core" while the windows
+      were the entire 8.8 GiB.
+
+    `memory_budget_bytes` lets a caller reserve a share of RAM -- the district planner
+    uses it so several districts running at once do not each size against the whole box.
     """
     ceiling = requested if requested else max(1, multiprocessing.cpu_count() - 1)
     reasons = [f"requested={ceiling}"]
@@ -95,19 +117,23 @@ def resolve_worker_count(
 
     try:
         model_bytes = os.path.getsize(model_path) * model_memory_expansion
-        available = available_memory_bytes()
-        if available and model_bytes > 0:
-            budget = int(available * memory_fraction)
-            memory_cap = max(1, int(budget // model_bytes))
-            if memory_cap < ceiling:
-                reasons.append(
-                    f"memory={memory_cap} "
-                    f"({available / 2**30:.1f} GiB free x {memory_fraction:g} / "
-                    f"~{model_bytes / 2**30:.1f} GiB per worker)"
-                )
-                ceiling = memory_cap
     except OSError:
-        pass  # cannot stat the model; fall back to the core/window bounds
+        model_bytes = 0  # cannot stat the model; the window term still applies
+
+    per_worker_bytes = model_bytes + max(0, per_worker_window_bytes)
+    available = memory_budget_bytes if memory_budget_bytes is not None else available_memory_bytes()
+    if available and per_worker_bytes > 0:
+        budget = int(available * memory_fraction)
+        memory_cap = max(1, int(budget // per_worker_bytes))
+        if memory_cap < ceiling:
+            reasons.append(
+                f"memory={memory_cap} "
+                f"({available / 2**30:.1f} GiB x {memory_fraction:g} / "
+                f"{per_worker_bytes / 2**30:.2f} GiB per worker "
+                f"= {model_bytes / 2**30:.2f} model + "
+                f"{per_worker_window_bytes / 2**30:.2f} window)"
+            )
+            ceiling = memory_cap
 
     if len(reasons) > 1:
         logger.info(f"Static worker pool = {ceiling}  [{'; '.join(reasons)}]")
@@ -344,6 +370,7 @@ def classify_static_image(
     output_nodata: Optional[int] = None,
     memory_fraction: float = 0.5,
     model_memory_expansion: float = 12.0,
+    memory_budget_bytes: Optional[int] = None,
 ) -> Optional[str]:
     """Windowed, multiprocess XGBoost inference over the static image.
 
@@ -373,6 +400,8 @@ def classify_static_image(
     with rasterio.open(static_image_path) as src:
         output_profile = src.profile
         image_width, image_height = src.width, src.height
+        source_band_count = src.count
+        source_dtype_size = np.dtype(src.dtypes[0]).itemsize
         for row_off in range(0, image_height, chunk_size):
             for col_off in range(0, image_width, chunk_size):
                 windows.append(Window(col_off, row_off,
@@ -394,6 +423,9 @@ def classify_static_image(
     worker_count = resolve_worker_count(
         requested=worker_count, window_count=len(windows), model_path=model_path,
         memory_fraction=memory_fraction, model_memory_expansion=model_memory_expansion,
+        per_worker_window_bytes=window_working_bytes(
+            chunk_size, source_band_count, source_dtype_size),
+        memory_budget_bytes=memory_budget_bytes,
     )
     logger.info(f"Classifying {len(windows)} window(s) across {worker_count} worker(s)...")
     spawn_context = multiprocessing.get_context("spawn")

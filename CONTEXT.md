@@ -107,8 +107,16 @@ Abhi ka hal (config, koi code change nahi):
 `--set static_chunk_size=1024` (per-worker array 1/4), zaroorat ho to
 `--set static_worker_count=4` bhi.
 
-Asli fix (karna baqi): pool ko window bytes se size karo, model size se nahi.
-User ki ijazat ka intezar — abhi maine sirf tashkhees di hai, fix nahi kiya.
+**FIX HO GAYA:** `window_working_bytes()` + `resolve_worker_count(per_worker_window_bytes=,
+memory_budget_bytes=)`. Log ab dono terms dikhata hai. Naya `resources.py` bhi —
+`plan_resources()` cores + free RAM + district count se decide karta hai.
+
+**LEKIN saaf baat: Kasur ka 8.8 GiB is fix se kam NAHI hoga.** Wahan pool pehle hi
+window count se 4 par capped tha. Stage peaks:
+  static_acquire_stac 3.8 GiB · static_crop_mask 3.8 GiB · static_classify 8.6 GiB
+Yani ~3.8 GiB parent-side hai (crop mask 25.9M px + acquisition), workers uske upar.
+**Agla kaam: crop mask ko windowed banana** — abhi poora AOI ek saath banta hai.
+Ye maine nahi kiya (user ke paas waqt nahi tha).
 
 ---
 
