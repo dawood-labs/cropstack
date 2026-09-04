@@ -63,9 +63,12 @@ Baqi (static staging ~1.2 GiB, mosaics/sieved ~0.5 GiB, vectors) ke saath total
 spec `specs_retest2/D1_kasur_wheat_2025.json`, output `runs_district/D1_kasur_wheat_2025`,
 log `logs/D1_kasur_wheat_2025.log`, `run_mode=new`.
 Asli tile count **57** (88 sirf bbox tha) → peak raw NDVI **8.2 GiB**.
-**Chal raha hai (09:14):** NDVI acquisition 21/57 tiles, free 41G, run 3.4G.
-Per-tile 235-330s (~4-5.5 min) — Okara ke 2.6 min se zyada, magar 8 min threshold
-se neeche. Andaza: acquisition ~55 min, total 1.5-2.5 ghante.
+**NDVI acquisition MUKAMMAL (09:36):** `42.7 min for 57 tile(s) -- 5.7 min/tile
+(mean of farmdar's per-tile durations)`. Warning nahi aayi (5.7 < 8.0).
+**AHEM:** asli district par healthy = **5.7 min/tile**, Okara ke 2.6 se do guna.
+8 min threshold ab sirf **1.4x** door hai — pehle main ne 3.1x bataya tha, wo
+chhote AOI ka number tha. Ye user ko batana hai.
+Ab RF inference 57 tiles par. free 36G.
 **Agar instance yahan mari:** log parho, `run_mode="resume"` se dobara chalao —
 NDVI tiles resume ho jayenge.
 
