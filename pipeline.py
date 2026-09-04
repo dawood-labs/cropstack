@@ -14,6 +14,7 @@ from typing import Any, Dict, Optional
 
 import model_registry
 import postprocess
+import qc
 import run_manager
 from config import PipelineConfig
 from ndvi_pipeline import run_ndvi_pipeline
@@ -137,12 +138,26 @@ def run_pipeline(
         dissolve_polygons=cfg.dissolve_polygons,
     )
 
+    quality = qc.assess_result(
+        vector_path=vector_path,
+        aoi_path=cfg.aoi_path,
+        ndvi_raster=sieved_ndvi_path,
+        ndvi_crop_classes=cfg.ndvi_crop_classes,
+        static_raster=sieved_static_path,
+        static_crop_label=cfg.static_crop_label,
+        max_crop_share_pct=cfg.qc_max_crop_share_pct,
+        min_crop_share_pct=cfg.qc_min_crop_share_pct,
+        min_static_retention_pct=cfg.qc_min_static_retention_pct,
+        max_static_retention_pct=cfg.qc_max_static_retention_pct,
+        report_path=Path(vector_dir) / "result_check.json",
+    )
+
     total_minutes = (time.time() - started_at) / 60
     logger.info(f"Pipeline finished in {total_minutes:.1f} min -> {vector_path}")
     run_manager.write_run_info(vector_dir, {
         "stage": "vector", "run_id": vector_run_id, "crop": cfg.crop, "year": cfg.year,
         "source_raster": str(source_raster), "output": str(vector_path),
-        "total_minutes": round(total_minutes, 1),
+        "total_minutes": round(total_minutes, 1), "result_check": quality,
     })
 
     return {
@@ -161,4 +176,5 @@ def run_pipeline(
         "ndvi_minutes": round(ndvi_minutes, 1),
         "static_minutes": round(static_minutes, 1) if sieved_static_path else None,
         "total_minutes": round(total_minutes, 1),
+        "result_check": quality,
     }

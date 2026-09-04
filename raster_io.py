@@ -146,8 +146,17 @@ def mosaic_geotiffs(
         tags = first.tags()
 
     logger.info(f"Mosaicking {len(paths)} raster(s) -> {output_path.name}")
-    if not _mosaic_with_gdal(paths, output_path, nodata, resampling):
-        _mosaic_with_rasterio(paths, output_path, nodata)
+    # Build under a temporary name and rename once complete: a mosaic interrupted
+    # part-way through must not be left at the final path, where a resume would take it
+    # for finished work.
+    staging_path = output_path.with_name(output_path.name + ".tmp.tif")
+    try:
+        if not _mosaic_with_gdal(paths, staging_path, nodata, resampling):
+            _mosaic_with_rasterio(paths, staging_path, nodata)
+        _apply_band_metadata(staging_path, descriptions, band_name, tags)
+    except BaseException:
+        staging_path.unlink(missing_ok=True)
+        raise
 
-    _apply_band_metadata(output_path, descriptions, band_name, tags)
+    os.replace(staging_path, output_path)
     return output_path

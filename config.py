@@ -244,6 +244,34 @@ class PipelineConfig:
     # share of usable AOI the run warns loudly; set "error" to refuse the result.
     stac_static_min_coverage_pct: Optional[float] = 80.0
     stac_static_on_low_coverage: Literal["warn", "error"] = "warn"
+
+    # ------------------------------------------- priority acquisition windows
+    # Every configured window is scored, then the earliest (agronomically best) one that
+    # clears the coverage floor wins -- unless a later window beats it by more than this
+    # many percentage points of AOI coverage, where the cleaner image is worth the
+    # slightly worse date. 0 makes coverage the sole criterion; 100 makes window order
+    # the sole criterion.
+    static_window_preference_margin_pct: float = 5.0
+    # Re-run lever: start from window N instead of the first, for a district whose result
+    # from the leading window looked wrong against local knowledge.
+    static_window_start_at: int = 1
+    # Last resort only, when NO configured window has any usable acquisition: widen the
+    # leading window by this many days on each side, up to this many times. Each step is
+    # logged as a departure from the crop's phenology. 0 disables it (fail instead).
+    static_window_expansion_days: int = 5
+    static_window_max_expansions: int = 3
+
+    # ------------------------------------------------- result plausibility check
+    # Advisory only -- a run is never failed on these. Crop-share bounds are per-district
+    # local knowledge, so they are off until set; the retention bounds catch a static
+    # model that either removed nothing or removed almost everything, which is a defect
+    # in the imagery or the model rather than a property of the district.
+    qc_max_crop_share_pct: Optional[float] = None
+    qc_min_crop_share_pct: Optional[float] = None
+    qc_min_static_retention_pct: Optional[float] = 5.0
+    qc_max_static_retention_pct: Optional[float] = 99.5
+    # Above this average, tile acquisition is being retried rather than merely busy.
+    stac_slow_tile_warning_minutes: float = 5.0
     stac_resolution_m: int = 10
     stac_tile_size_deg: float = 0.1
     stac_worker_count: int = 8
