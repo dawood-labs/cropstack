@@ -29,20 +29,26 @@ poochna hai, khud nahi karna.
   sirf degenerate (0% / 100%) warnings; README theek; `tests/` suite bani — 27 checks.
 - `harness/unit_tests.py` ka parquet test theek kiya (test ka apna bug tha,
   `resolve_aoi` parquet ko gpkg banata hai) — ab 15/15.
+- **R2-1 verify (7/7 PASS)** — `harness/verify_r2_1_score_failure.py`,
+  `logs/verify_r2_1.log`, `metrics/verify_r2_1.json`. Window 1 ki scoring fail karayi
+  (RateLimited patch), windows 2/3 asli catalogue se.
+- **R2-2 verify (8/8 PASS)** — `harness/verify_r2_2_staging.py`, `logs/verify_r2_2.log`,
+  `metrics/verify_r2_2.json`. Purane tiles discard hote hain, same-date resume reuse
+  karta hai (manual aur auto dono).
 
 ---
 
 ## 3. Abhi kis cheez par kaam chal raha hai — bilkul is waqt
 
-Task 1 **HO GAYA**. Ab Task 2 shuru: R2-1..R2-5 ki asli-data verification.
-Sabse pehle R2-1 (rate-limit retry / NOT SCORED / run rukna).
+Task 2 chal raha hai. R2-1 aur R2-2 **verify ho gaye asli data par**.
+Ab R2-3 (2027 acquisition failure vs Z1 empty district).
 
 ---
 
 ## 4. Agla qadam
 
-1. Task 2: R2-1 (rate-limit retry / NOT SCORED / run rukna), R2-2 (staging tiles),
-   R2-3 (2027 vs Z1), R2-4 (chaar crops ka retention), R2-5 (min/tile basis).
+1. Task 2 baqi: R2-3 (2027 vs Z1), R2-4 (chaar crops ka retention),
+   R2-5 (min/tile basis + 8 min threshold).
 2. Regression: pinned-date 2,184.7 acres → delta 0.0% hona chahiye.
 3. `specs/` + `specs_retest/` — 269 checks har commit se pehle.
 

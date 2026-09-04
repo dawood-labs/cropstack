@@ -1,0 +1,319 @@
+
+==============================================================================
+### D control - no injected failure
+==============================================================================
+INFO pipeline: Pipeline configuration:
+crop/year/district : spr_maize / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-12-24 -> 2025-07-17
+NDVI inference     : 2025-01-01 -> 2025-07-15
+static window      : 2025-04-20 -> 2025-05-20
+NDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+INFO run_manager: 1_ndvi: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/1_ndvi_run_1
+INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/3_vector_run_1  (no previous output to reuse)
+INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+INFO model_registry: static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+INFO ndvi_pipeline: [Checkpoint] NDVI classification map already exists: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map.tif
+[Skipped] Sieved raster already exists at: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+INFO pipeline: NDVI stage finished in 0.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+INFO run_manager: 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/2_static_run_1  (no previous output to reuse)
+INFO farmdar.sentinel: aws-creds: bootstrapped 12-hour session, expires 2026-09-04T19:53:39+00:00
+INFO farmdar.sentinel: static: 4 scenes on 3 dates in [2025-05-01, 2025-05-10)
+INFO farmdar.sentinel: static: dates=['2025-05-09', '2025-05-01'] (anchor=2025-05-09) -> 99.12% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-04-20, 2025-04-30)
+INFO farmdar.sentinel: static: dates=['2025-04-29'] (anchor=2025-04-29) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-05-11, 2025-05-20)
+INFO farmdar.sentinel: static: dates=['2025-05-14'] (anchor=2025-05-14) -> 100.00% of AOI usable
+INFO static_pipeline: Window scores (3 of 3 window(s) scored):
+INFO static_pipeline:   window 1 (2025-05-01 to 2025-05-10): ['2025-05-09', '2025-05-01'] -> 99.1% of AOI usable
+INFO static_pipeline:   window 2 (2025-04-20 to 2025-04-30): ['2025-04-29'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 3 (2025-05-11 to 2025-05-20): ['2025-05-14'] -> 100.0% of AOI usable
+INFO static_pipeline: Coverage spread across the scored windows: 99.1%-100.0%. The chosen date, not just the code, determines the acreage reported.
+INFO static_pipeline: Preferring window 1 (2025-05-01 to 2025-05-10) at 99.1% over the highest-coverage 100.0%: within the 5-point margin, and it is the agronomically better date.
+INFO farmdar.sentinel: layer matching: 2025-05-01 -> 2025-05-09 on 39788 px: {'blue': (1.0, 585.0), 'green': (1.0, 334.0), 'red': (1.0, 121.0), 'rededge1': (1.0, -35.0), 'nir': (1.0, -34.0)}
+INFO farmdar.sentinel: AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['blue', 'green', 'red', 'rededge1', 'nir', 'ndvi'], dates=['2025-05-09', '2025-05-01'], 8 workers)
+INFO farmdar.sentinel: [1/4] tile 0002: written (4.6s, 100.0% filled)
+INFO farmdar.sentinel: [2/4] tile 0001: written (6.0s, 100.0% filled)
+INFO farmdar.sentinel: [3/4] tile 0004: written (8.9s, 100.0% filled)
+INFO farmdar.sentinel: [4/4] tile 0003: written (10.3s, 100.0% filled)
+INFO farmdar.sentinel: DONE 4 tiles in 0.2 min. dates=['2025-05-09', '2025-05-01'] out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/2_static_run_1/static_staging vrt=/home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/2_static_run_1/static_staging/static.vrt
+INFO static_pipeline: STAC static dates (auto mode): ['2025-05-09', '2025-05-01'] via window 1 (2025-05-01 to 2025-05-10)
+INFO static_classify: Building crop mask | crop_classes=(1, 4, 5, 6, 7) | AOI=/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+Building crop mask:   0%|                                                                                                                                                    | 0/4 [00:00<?, ?block/s]Building crop mask:  25%|███████████████████████████████████                                                                                                         | 1/4 [00:00<00:00,  8.98block/s]Building crop mask: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 31.62block/s]
+INFO static_classify: Crop mask coverage: 439,255 px (18.19% of the AOI)
+INFO static_classify: Grid parity verified: crop mask is 1:1 with the static image.
+INFO static_classify: Static worker pool = 4  [requested=7; windows=4]
+INFO static_classify: Classifying 4 window(s) across 4 worker(s)...
+Classifying static image:   0%|                                                                                                                                              | 0/4 [00:00<?, ?block/s]Classifying static image:  25%|█████████████████████████████████▌                                                                                                    | 1/4 [00:12<00:36, 12.10s/block]Classifying static image:  50%|███████████████████████████████████████████████████████████████████                                                                   | 2/4 [00:12<00:10,  5.06s/block]Classifying static image:  75%|████████████████████████████████████████████████████████████████████████████████████████████████████▌                                 | 3/4 [00:13<00:03,  3.37s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:34<00:00, 10.38s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:34<00:00,  8.68s/block]
+Loading categorical map for strict sieving: static_mosaic_09_May_2025_and_01_May_2025_Cls.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/2_static_run_1/09_May_2025_and_01_May_2025/static_mosaic_09_May_2025_and_01_May_2025_Cls_sieved_p20.tif
+INFO pipeline: Static stage finished in 1.1 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/2_static_run_1/09_May_2025_and_01_May_2025/static_mosaic_09_May_2025_and_01_May_2025_Cls_sieved_p20.tif
+1. Vectorising target classes [1]...
+  -> Extracted 1,196 raw polygon features.
+  -> Pre-filter dropped 126 sub-threshold polygons before clipping.
+2. Loading boundary for clipping...
+3. Clip to boundary, explode to singlepart...
+4. Computing area (EPSG:32642) and filtering (>= 0.5 acres)...
+   Retained 1,070 features, 3,992.79 acres, label 3015
+5. Exporting...
+INFO pyogrio._io: Created 1,070 records
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg
+INFO pyogrio._io: Created 1,070 records
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/3_vector_run_1/final_output/okara_spr_maize_2025.zip
+INFO qc: Result: aoi_acres=51293.1, feature_count=1070, crop_acres=3992.8, crop_share_of_aoi_pct=7.8, ndvi_crop_pixels=933959, static_crop_pixels=191028, static_retention_pct=20.5
+INFO pipeline: Pipeline finished in 1.1 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_D_control/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg
+
+--- case result ---
+{
+  "case": "D control - no injected failure",
+  "run": "V1_D_control",
+  "status": "completed",
+  "static_dates": "09_May_2025_and_01_May_2025",
+  "acres": 3992.8,
+  "features": 1070,
+  "retention_pct": 20.5,
+  "window_1_scoring_attempts": 1,
+  "seconds": 67.6
+}
+
+==============================================================================
+### A window 1 always fails, on_score_error=error (default)
+==============================================================================
+INFO pipeline: Pipeline configuration:
+crop/year/district : spr_maize / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-12-24 -> 2025-07-17
+NDVI inference     : 2025-01-01 -> 2025-07-15
+static window      : 2025-04-20 -> 2025-05-20
+NDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+INFO run_manager: 1_ndvi: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_A_error/1_ndvi_run_1
+INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_A_error/3_vector_run_1  (no previous output to reuse)
+INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+INFO model_registry: static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+INFO ndvi_pipeline: [Checkpoint] NDVI classification map already exists: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_A_error/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map.tif
+[Skipped] Sieved raster already exists at: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_A_error/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+INFO pipeline: NDVI stage finished in 0.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_A_error/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+INFO run_manager: 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_A_error/2_static_run_1  (no previous output to reuse)
+WARNING static_pipeline: window 1 (2025-05-01 to 2025-05-10): scoring failed (RateLimited: You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.); retrying in 5.0s (1/3).
+WARNING static_pipeline: window 1 (2025-05-01 to 2025-05-10): scoring failed (RateLimited: You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.); retrying in 10.0s (2/3).
+ERROR static_pipeline: window 1 (2025-05-01 to 2025-05-10): could not be scored after 3 attempts (You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.).
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-04-20, 2025-04-30)
+INFO farmdar.sentinel: static: dates=['2025-04-29'] (anchor=2025-04-29) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-05-11, 2025-05-20)
+INFO farmdar.sentinel: static: dates=['2025-05-14'] (anchor=2025-05-14) -> 100.00% of AOI usable
+INFO static_pipeline: Window scores (2 of 3 window(s) scored):
+INFO static_pipeline:   window 1 (2025-05-01 to 2025-05-10): NOT SCORED -- RateLimited: You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.
+INFO static_pipeline:   window 2 (2025-04-20 to 2025-04-30): ['2025-04-29'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 3 (2025-05-11 to 2025-05-20): ['2025-05-14'] -> 100.0% of AOI usable
+INFO static_pipeline: Coverage spread across the scored windows: 100.0%-100.0%. The chosen date, not just the code, determines the acreage reported.
+INFO static_pipeline: Chose window 2 (2025-04-20 to 2025-04-30) at 100.0% (floor 80%).
+
+--- case result ---
+{
+  "case": "A window 1 always fails, on_score_error=error (default)",
+  "run": "V1_A_error",
+  "status": "stopped",
+  "error_type": "RuntimeError",
+  "error": "Chose window 2 (2025-04-20 to 2025-04-30), but ['window 1 (2025-05-01 to 2025-05-10)'] could not be scored and rank higher. The result may differ substantially from what a complete comparison would give. Retry, or set static_window_on_score_error='warn' to accept this.",
+  "window_1_scoring_attempts": 3,
+  "seconds": 20.8
+}
+
+==============================================================================
+### B window 1 always fails, on_score_error=warn
+==============================================================================
+INFO pipeline: Pipeline configuration:
+crop/year/district : spr_maize / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-12-24 -> 2025-07-17
+NDVI inference     : 2025-01-01 -> 2025-07-15
+static window      : 2025-04-20 -> 2025-05-20
+NDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+INFO run_manager: 1_ndvi: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/1_ndvi_run_1
+INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/3_vector_run_1  (no previous output to reuse)
+INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+INFO model_registry: static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+INFO ndvi_pipeline: [Checkpoint] NDVI classification map already exists: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map.tif
+[Skipped] Sieved raster already exists at: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+INFO pipeline: NDVI stage finished in 0.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+INFO run_manager: 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/2_static_run_1  (no previous output to reuse)
+WARNING static_pipeline: window 1 (2025-05-01 to 2025-05-10): scoring failed (RateLimited: You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.); retrying in 5.0s (1/3).
+WARNING static_pipeline: window 1 (2025-05-01 to 2025-05-10): scoring failed (RateLimited: You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.); retrying in 10.0s (2/3).
+ERROR static_pipeline: window 1 (2025-05-01 to 2025-05-10): could not be scored after 3 attempts (You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.).
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-04-20, 2025-04-30)
+INFO farmdar.sentinel: static: dates=['2025-04-29'] (anchor=2025-04-29) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-05-11, 2025-05-20)
+INFO farmdar.sentinel: static: dates=['2025-05-14'] (anchor=2025-05-14) -> 100.00% of AOI usable
+INFO static_pipeline: Window scores (2 of 3 window(s) scored):
+INFO static_pipeline:   window 1 (2025-05-01 to 2025-05-10): NOT SCORED -- RateLimited: You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.
+INFO static_pipeline:   window 2 (2025-04-20 to 2025-04-30): ['2025-04-29'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 3 (2025-05-11 to 2025-05-20): ['2025-05-14'] -> 100.0% of AOI usable
+INFO static_pipeline: Coverage spread across the scored windows: 100.0%-100.0%. The chosen date, not just the code, determines the acreage reported.
+INFO static_pipeline: Chose window 2 (2025-04-20 to 2025-04-30) at 100.0% (floor 80%).
+WARNING static_pipeline: INCOMPLETE WINDOW COMPARISON: Chose window 2 (2025-04-20 to 2025-04-30), but ['window 1 (2025-05-01 to 2025-05-10)'] could not be scored and rank higher. The result may differ substantially from what a complete comparison would give. Retry, or set static_window_on_score_error='warn' to accept this.
+INFO farmdar.sentinel: AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['blue', 'green', 'red', 'rededge1', 'nir', 'ndvi'], dates=['2025-04-29'], 8 workers)
+INFO farmdar.sentinel: [1/4] tile 0002: written (4.2s, 100.0% filled)
+INFO farmdar.sentinel: [2/4] tile 0004: written (5.5s, 100.0% filled)
+INFO farmdar.sentinel: [3/4] tile 0003: written (6.7s, 100.0% filled)
+INFO farmdar.sentinel: [4/4] tile 0001: written (7.8s, 100.0% filled)
+INFO farmdar.sentinel: DONE 4 tiles in 0.1 min. dates=['2025-04-29'] out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/2_static_run_1/static_staging vrt=/home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/2_static_run_1/static_staging/static.vrt
+INFO static_pipeline: STAC static dates (auto mode): ['2025-04-29'] via window 2 (2025-04-20 to 2025-04-30)
+INFO static_classify: Building crop mask | crop_classes=(1, 4, 5, 6, 7) | AOI=/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+Building crop mask:   0%|                                                                                                                                                    | 0/4 [00:00<?, ?block/s]Building crop mask:  25%|███████████████████████████████████                                                                                                         | 1/4 [00:00<00:00,  9.65block/s]Building crop mask: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 33.40block/s]
+INFO static_classify: Crop mask coverage: 439,255 px (18.19% of the AOI)
+INFO static_classify: Grid parity verified: crop mask is 1:1 with the static image.
+INFO static_classify: Static worker pool = 4  [requested=7; windows=4]
+INFO static_classify: Classifying 4 window(s) across 4 worker(s)...
+Classifying static image:   0%|                                                                                                                                              | 0/4 [00:00<?, ?block/s]Classifying static image:  25%|█████████████████████████████████▌                                                                                                    | 1/4 [00:12<00:36, 12.07s/block]Classifying static image:  75%|████████████████████████████████████████████████████████████████████████████████████████████████████▌                                 | 3/4 [00:13<00:03,  3.67s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:32<00:00,  9.03s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:32<00:00,  8.17s/block]
+Loading categorical map for strict sieving: static_mosaic_29_Apr_2025_Cls.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/2_static_run_1/29_Apr_2025/static_mosaic_29_Apr_2025_Cls_sieved_p20.tif
+INFO pipeline: Static stage finished in 1.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/2_static_run_1/29_Apr_2025/static_mosaic_29_Apr_2025_Cls_sieved_p20.tif
+1. Vectorising target classes [1]...
+  -> Extracted 2,098 raw polygon features.
+  -> Pre-filter dropped 153 sub-threshold polygons before clipping.
+2. Loading boundary for clipping...
+3. Clip to boundary, explode to singlepart...
+4. Computing area (EPSG:32642) and filtering (>= 0.5 acres)...
+   Retained 1,945 features, 8,322.02 acres, label 3015
+5. Exporting...
+INFO pyogrio._io: Created 1,945 records
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg
+INFO pyogrio._io: Created 1,945 records
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/3_vector_run_1/final_output/okara_spr_maize_2025.zip
+INFO qc: Result: aoi_acres=51293.1, feature_count=1945, crop_acres=8322.0, crop_share_of_aoi_pct=16.2, ndvi_crop_pixels=933959, static_crop_pixels=395796, static_retention_pct=42.4
+INFO pipeline: Pipeline finished in 1.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_B_warn/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg
+
+--- case result ---
+{
+  "case": "B window 1 always fails, on_score_error=warn",
+  "run": "V1_B_warn",
+  "status": "completed",
+  "static_dates": "29_Apr_2025",
+  "acres": 8322.0,
+  "features": 1945,
+  "retention_pct": 42.4,
+  "window_1_scoring_attempts": 3,
+  "seconds": 59.8
+}
+
+==============================================================================
+### C window 1 fails twice then succeeds
+==============================================================================
+INFO pipeline: Pipeline configuration:
+crop/year/district : spr_maize / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-12-24 -> 2025-07-17
+NDVI inference     : 2025-01-01 -> 2025-07-15
+static window      : 2025-04-20 -> 2025-05-20
+NDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+INFO run_manager: 1_ndvi: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/1_ndvi_run_1
+INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/3_vector_run_1  (no previous output to reuse)
+INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+INFO model_registry: static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+INFO ndvi_pipeline: [Checkpoint] NDVI classification map already exists: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map.tif
+[Skipped] Sieved raster already exists at: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+INFO pipeline: NDVI stage finished in 0.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/1_ndvi_run_1/okara_test_data_spr_maize_rf_classification_map_sieved_p20.tif
+INFO run_manager: 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/2_static_run_1  (no previous output to reuse)
+WARNING static_pipeline: window 1 (2025-05-01 to 2025-05-10): scoring failed (RateLimited: You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.); retrying in 5.0s (1/3).
+WARNING static_pipeline: window 1 (2025-05-01 to 2025-05-10): scoring failed (RateLimited: You have exceeded a rate limit. Contact planetarycomputer@microsoft.com.); retrying in 10.0s (2/3).
+INFO farmdar.sentinel: static: 4 scenes on 3 dates in [2025-05-01, 2025-05-10)
+INFO farmdar.sentinel: static: dates=['2025-05-09', '2025-05-01'] (anchor=2025-05-09) -> 99.12% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-04-20, 2025-04-30)
+INFO farmdar.sentinel: static: dates=['2025-04-29'] (anchor=2025-04-29) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-05-11, 2025-05-20)
+INFO farmdar.sentinel: static: dates=['2025-05-14'] (anchor=2025-05-14) -> 100.00% of AOI usable
+INFO static_pipeline: Window scores (3 of 3 window(s) scored):
+INFO static_pipeline:   window 1 (2025-05-01 to 2025-05-10): ['2025-05-09', '2025-05-01'] -> 99.1% of AOI usable
+INFO static_pipeline:   window 2 (2025-04-20 to 2025-04-30): ['2025-04-29'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 3 (2025-05-11 to 2025-05-20): ['2025-05-14'] -> 100.0% of AOI usable
+INFO static_pipeline: Coverage spread across the scored windows: 99.1%-100.0%. The chosen date, not just the code, determines the acreage reported.
+INFO static_pipeline: Preferring window 1 (2025-05-01 to 2025-05-10) at 99.1% over the highest-coverage 100.0%: within the 5-point margin, and it is the agronomically better date.
+INFO farmdar.sentinel: layer matching: 2025-05-01 -> 2025-05-09 on 39788 px: {'blue': (1.0, 585.0), 'green': (1.0, 334.0), 'red': (1.0, 121.0), 'rededge1': (1.0, -35.0), 'nir': (1.0, -34.0)}
+INFO farmdar.sentinel: AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['blue', 'green', 'red', 'rededge1', 'nir', 'ndvi'], dates=['2025-05-09', '2025-05-01'], 8 workers)
+INFO farmdar.sentinel: [1/4] tile 0002: written (4.2s, 100.0% filled)
+INFO farmdar.sentinel: [2/4] tile 0001: written (5.3s, 100.0% filled)
+INFO farmdar.sentinel: [3/4] tile 0004: written (8.4s, 100.0% filled)
+INFO farmdar.sentinel: [4/4] tile 0003: written (9.3s, 100.0% filled)
+INFO farmdar.sentinel: DONE 4 tiles in 0.2 min. dates=['2025-05-09', '2025-05-01'] out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/2_static_run_1/static_staging vrt=/home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/2_static_run_1/static_staging/static.vrt
+INFO static_pipeline: STAC static dates (auto mode): ['2025-05-09', '2025-05-01'] via window 1 (2025-05-01 to 2025-05-10)
+INFO static_classify: Building crop mask | crop_classes=(1, 4, 5, 6, 7) | AOI=/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+Building crop mask:   0%|                                                                                                                                                    | 0/4 [00:00<?, ?block/s]Building crop mask:  25%|███████████████████████████████████                                                                                                         | 1/4 [00:00<00:00,  9.33block/s]Building crop mask: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 32.61block/s]
+INFO static_classify: Crop mask coverage: 439,255 px (18.19% of the AOI)
+INFO static_classify: Grid parity verified: crop mask is 1:1 with the static image.
+INFO static_classify: Static worker pool = 4  [requested=7; windows=4]
+INFO static_classify: Classifying 4 window(s) across 4 worker(s)...
+Classifying static image:   0%|                                                                                                                                              | 0/4 [00:00<?, ?block/s]Classifying static image:  25%|█████████████████████████████████▌                                                                                                    | 1/4 [00:12<00:36, 12.03s/block]Classifying static image:  75%|████████████████████████████████████████████████████████████████████████████████████████████████████▌                                 | 3/4 [00:13<00:03,  3.73s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:33<00:00,  9.27s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:33<00:00,  8.35s/block]
+Loading categorical map for strict sieving: static_mosaic_09_May_2025_and_01_May_2025_Cls.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/2_static_run_1/09_May_2025_and_01_May_2025/static_mosaic_09_May_2025_and_01_May_2025_Cls_sieved_p20.tif
+INFO pipeline: Static stage finished in 1.2 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/2_static_run_1/09_May_2025_and_01_May_2025/static_mosaic_09_May_2025_and_01_May_2025_Cls_sieved_p20.tif
+1. Vectorising target classes [1]...
+  -> Extracted 1,196 raw polygon features.
+  -> Pre-filter dropped 126 sub-threshold polygons before clipping.
+2. Loading boundary for clipping...
+3. Clip to boundary, explode to singlepart...
+4. Computing area (EPSG:32642) and filtering (>= 0.5 acres)...
+   Retained 1,070 features, 3,992.79 acres, label 3015
+5. Exporting...
+INFO pyogrio._io: Created 1,070 records
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg
+INFO pyogrio._io: Created 1,070 records
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/3_vector_run_1/final_output/okara_spr_maize_2025.zip
+INFO qc: Result: aoi_acres=51293.1, feature_count=1070, crop_acres=3992.8, crop_share_of_aoi_pct=7.8, ndvi_crop_pixels=933959, static_crop_pixels=191028, static_retention_pct=20.5
+INFO pipeline: Pipeline finished in 1.2 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V1_C_retry_recovers/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg
+
+--- case result ---
+{
+  "case": "C window 1 fails twice then succeeds",
+  "run": "V1_C_retry_recovers",
+  "status": "completed",
+  "static_dates": "09_May_2025_and_01_May_2025",
+  "acres": 3992.8,
+  "features": 1070,
+  "retention_pct": 20.5,
+  "window_1_scoring_attempts": 3,
+  "seconds": 74.8
+}
+
+wrote metrics/verify_r2_1.json
+
+=== verdict ===
+[PASS] A: run STOPS instead of shipping window 2's acreage -- stopped Chose window 2 (2025-04-20 to 2025-04-30), but ['window 1 (2025-05-01 to 2025-05
+[PASS] A: it stopped because a higher-ranked window was NOT SCORED -- Chose window 2 (2025-04-20 to 2025-04-30), but ['window 1 (2025-05-01 to 2025-05-10)'] could not be scored and
+[PASS] A: 3 scoring attempts were made for window 1 -- 3 attempts
+[PASS] B: on_score_error='warn' proceeds -- completed
+[PASS] B: proceeding gives window 2's answer, as expected -- warn=8322.0 control=3992.8
+[PASS] C: a failure that recovers on retry does not change the decision -- retry=3992.8 @ 09_May_2025_and_01_May_2025 | control=3992.8 @ 09_May_2025_and_01_May_2025
+[PASS] C: it really did retry (3 attempts: 2 failures + 1 success) -- 3 attempts
