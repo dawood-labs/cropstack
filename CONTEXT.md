@@ -94,6 +94,24 @@ Koi fix nahi chahiye tha.
 
 ---
 
+### Khula kaam: static classify ki RAM (user ne poocha, abhi tak fix nahi)
+Kasur par peak **8.8 GiB**. Wheat static model sirf **648 KB** ka hai — to ye model
+copies se NAHI aa raha, **raster windows** se aa raha hai
+(`workers x static_chunk_size^2 x 6 bands x dtype`, plus 25.9M px crop mask).
+
+**Bug:** `static_memory_fraction` + `static_model_memory_expansion=12` pool ko
+**model size** se size karte hain. 648 KB model par heuristic kehta hai "memory free hai,
+poore cores lo" — jabke asli kharcha window bytes hai. **Sizing galat term naap rahi hai.**
+
+Abhi ka hal (config, koi code change nahi):
+`--set static_chunk_size=1024` (per-worker array 1/4), zaroorat ho to
+`--set static_worker_count=4` bhi.
+
+Asli fix (karna baqi): pool ko window bytes se size karo, model size se nahi.
+User ki ijazat ka intezar — abhi maine sirf tashkhees di hai, fix nahi kiya.
+
+---
+
 ## 6. Jo maine mana kiya / jispe razi nahi hua
 
 - **Push ab CHALTA HAI.** Remote SSH par hai (`git@github.com:dawood-labs/cropstack.git`),
