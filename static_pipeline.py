@@ -4,8 +4,10 @@ sieve. Skipped entirely when `cfg.run_static_model` is False.
 """
 from __future__ import annotations
 
+import json
 import logging
 import shutil
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional, Tuple
@@ -46,26 +48,44 @@ def _check_static_coverage(cfg: PipelineConfig, coverage_pct) -> None:
     logger.warning("LOW STATIC COVERAGE: " + message)
 
 
-def _score_window(cfg: PipelineConfig, start: str, end: str, label: str) -> Optional[dict]:
+def _score_window(cfg: PipelineConfig, start: str, end: str, label: str) -> dict:
     """Scores one window without downloading imagery: farmdar's selector reads metadata
     and the coarse SCL overview only (~1 MB per window against ~2.5 GB for a real
-    acquisition). Returns None when the window has no usable acquisition at all."""
+    acquisition).
+
+    Always returns a record. `status` is "scored" (usable dates found), "empty" (the
+    window genuinely has no usable acquisition) or "unscored" (the catalogue could not
+    be asked). The three are not interchangeable: a transient rate limit that silently
+    became "empty" once removed the leading window from the comparison and shipped a
+    2.1x different acreage, under a log that read like a clean two-window decision.
+    """
     from farmdar.sentinel import select_static_dates
 
-    try:
-        selection = select_static_dates(cfg.aoi_path, start, end, **dict(cfg.stac_static_selection))
-    except Exception as exc:
-        logger.warning(f"{label}: could not be scored ({exc}).")
-        return None
+    for attempt in range(1, cfg.static_window_score_attempts + 1):
+        try:
+            selection = select_static_dates(cfg.aoi_path, start, end,
+                                            **dict(cfg.stac_static_selection))
+        except Exception as exc:
+            if attempt < cfg.static_window_score_attempts:
+                delay = cfg.static_window_score_retry_seconds * attempt
+                logger.warning(f"{label}: scoring failed ({type(exc).__name__}: {exc}); "
+                               f"retrying in {delay}s "
+                               f"({attempt}/{cfg.static_window_score_attempts}).")
+                time.sleep(delay)
+                continue
+            logger.error(f"{label}: could not be scored after "
+                         f"{cfg.static_window_score_attempts} attempts ({exc}).")
+            return {"window": (start, end), "label": label, "status": "unscored",
+                    "dates": [], "coverage_pct": None,
+                    "error": f"{type(exc).__name__}: {exc}"}
 
-    dates = selection.get("dates") or []
-    if not dates:
-        logger.info(f"{label}: no usable acquisition.")
-        return None
-
-    selection["window"] = (start, end)
-    selection["label"] = label
-    return selection
+        dates = selection.get("dates") or []
+        selection["window"] = (start, end)
+        selection["label"] = label
+        selection["status"] = "scored" if dates else "empty"
+        if not dates:
+            logger.info(f"{label}: no usable acquisition.")
+        return selection
 
 
 def _expanded_windows(cfg: PipelineConfig, windows) -> list:
@@ -125,12 +145,10 @@ def select_dates_by_priority(cfg: PipelineConfig) -> Tuple[Optional[list], dict,
         windows = windows[skip:]
 
     floor = cfg.stac_static_min_coverage_pct or 0.0
-    scored = []
-    for position, (start, end) in enumerate(windows, start=skip + 1):
-        label = f"window {position} ({start} to {end})"
-        selection = _score_window(cfg, start, end, label)
-        if selection:
-            scored.append(selection)
+    attempted = [_score_window(cfg, start, end, f"window {position} ({start} to {end})")
+                 for position, (start, end) in enumerate(windows, start=skip + 1)]
+    scored = [record for record in attempted if record["status"] == "scored"]
+    unscored = [record for record in attempted if record["status"] == "unscored"]
 
     if not scored:
         fallback = _expanded_windows(cfg, windows)
@@ -141,32 +159,51 @@ def select_dates_by_priority(cfg: PipelineConfig) -> Tuple[Optional[list], dict,
                 f"to {start}..{end}. This date is outside the phenology the windows encode."
             )
             selection = _score_window(cfg, start, end, label)
-            if selection:
+            attempted.append(selection)
+            if selection["status"] == "scored":
                 scored.append(selection)
                 break
+            if selection["status"] == "unscored":
+                unscored.append(selection)
 
     if not scored:
+        if unscored:
+            raise RuntimeError(
+                f"No window could be scored: {[u['label'] for u in unscored]} failed to reach "
+                f"the catalogue ({unscored[0].get('error')}). That is a catalogue or network "
+                "failure, not an absence of imagery -- retry rather than accept an empty result."
+            )
         return None, {}, "no window produced a usable acquisition"
 
     def coverage_of(selection) -> float:
         value = selection.get("coverage_pct")
         return -1.0 if value is None else float(value)
 
+    # Every window that was tried appears here, including the ones that could not be
+    # reached -- a table listing only the survivors reads like the whole comparison.
     summary = [
-        {"label": s["label"], "window": s["window"], "dates": s.get("dates"),
-         "coverage_pct": s.get("coverage_pct")}
-        for s in scored
+        {"label": record["label"], "window": record["window"], "dates": record.get("dates"),
+         "coverage_pct": record.get("coverage_pct"), "status": record["status"],
+         "error": record.get("error")}
+        for record in attempted
     ]
-    logger.info("Window scores (best-first by preference):")
+    logger.info(f"Window scores ({len(scored)} of {len(attempted)} window(s) scored):")
     for row in summary:
         coverage = row["coverage_pct"]
-        logger.info(f"  {row['label']}: {row['dates']} -> "
-                    + (f"{coverage:.1f}% of AOI usable" if coverage is not None else "coverage unknown"))
+        if row["status"] == "scored":
+            detail = f"{row['dates']} -> " + (f"{coverage:.1f}% of AOI usable"
+                                              if coverage is not None else "coverage unknown")
+        elif row["status"] == "empty":
+            detail = "no usable acquisition"
+        else:
+            detail = f"NOT SCORED -- {row['error']}"
+        logger.info(f"  {row['label']}: {detail}")
 
-    spread = [c for c in (coverage_of(s) for s in scored) if c >= 0]
-    if spread and (max(spread) - min(spread)) > 0:
-        logger.info(f"Coverage spread across windows: {min(spread):.1f}%-{max(spread):.1f}%. "
-                    "The chosen date, not just the code, determines the acreage reported.")
+    spread = [c for c in (coverage_of(record) for record in scored) if c >= 0]
+    if spread:
+        logger.info(f"Coverage spread across the scored windows: "
+                    f"{min(spread):.1f}%-{max(spread):.1f}%. The chosen date, not just the "
+                    "code, determines the acreage reported.")
 
     eligible = [s for s in scored if coverage_of(s) >= floor]
     if eligible:
@@ -192,9 +229,90 @@ def select_dates_by_priority(cfg: PipelineConfig) -> Tuple[Optional[list], dict,
         chosen = dict(chosen)
         chosen["label"] += " (below floor)"
 
+    # A window that could not be scored is not a window without imagery. If one ranks
+    # above the choice, the comparison behind this answer was incomplete -- and that gap
+    # has been worth 2.1x in acreage.
+    chosen_label = chosen["label"].replace(" (below floor)", "")
+    chosen_position = next(index for index, record in enumerate(attempted)
+                           if record["label"] == chosen_label)
+    blocking = [record["label"] for record in attempted[:chosen_position]
+                if record["status"] == "unscored"]
+    if blocking:
+        message = (
+            f"Chose {chosen['label']}, but {blocking} could not be scored and rank higher. "
+            "The result may differ substantially from what a complete comparison would "
+            "give. Retry, or set static_window_on_score_error='warn' to accept this."
+        )
+        if cfg.static_window_on_score_error == "error":
+            raise RuntimeError(message)
+        logger.warning("INCOMPLETE WINDOW COMPARISON: " + message)
+
     chosen = dict(chosen)
     chosen["window_scores"] = summary
+    chosen["unscored_windows"] = [record["label"] for record in unscored]
     return chosen.get("dates"), chosen, chosen["label"]
+
+
+STAGING_RECORD = ".staging.json"
+
+
+def _gee_staging_dates(cfg: PipelineConfig):
+    """Whatever pins the GEE download's identity: the manual date(s), the manual GCS
+    URI, or nothing at all when GEE picks the composite itself."""
+    dates = [d for d in (cfg.gee_static_single_date, cfg.gee_static_top_date,
+                         cfg.gee_static_bottom_date) if d]
+    if dates:
+        return dates
+    if cfg.gee_static_gcs_uri:
+        return [cfg.gee_static_gcs_uri]
+    return None
+
+
+def _staging_identity(cfg: PipelineConfig, dates) -> dict:
+    """What the tiles in the staging directory are tiles *of*."""
+    return {
+        "source": cfg.static_source,
+        "dates": list(dates) if dates else None,
+        "aoi": str(cfg.aoi_path),
+        "bands": list(STATIC_BAND_ORDER_STAC),
+        "resolution_m": cfg.stac_resolution_m,
+        "tile_deg": cfg.stac_tile_size_deg,
+    }
+
+
+def _prepare_staging(staging_dir: Path, identity: dict) -> None:
+    """Clears the staging directory unless its contents provably belong to `identity`.
+
+    farmdar names static tiles `static_10m_tile_0001.tif` -- no date in the name. Tiles
+    left behind by an earlier acquisition are therefore indistinguishable from the ones
+    this run wants, and get mosaicked and written out under the new date's filename, its
+    run record and its provenance JSON: every label consistent, every label wrong. It is
+    silent, so it must be prevented rather than detected.
+    """
+    record_path = staging_dir / STAGING_RECORD
+    existing_tiles = [path for path in staging_dir.glob("*.tif")] if staging_dir.exists() else []
+    if not existing_tiles:
+        staging_dir.mkdir(parents=True, exist_ok=True)
+        return
+
+    try:
+        recorded = json.loads(record_path.read_text(encoding="utf-8"))
+    except Exception:
+        recorded = None
+
+    if recorded == identity:
+        logger.info(f"Reusing {len(existing_tiles)} staged tile(s) for {identity['dates']}.")
+        return
+
+    reason = ("they carry no provenance record" if recorded is None
+              else f"they belong to {recorded.get('dates')}, not {identity['dates']}")
+    logger.warning(f"Discarding {len(existing_tiles)} staged tile(s): {reason}.")
+    shutil.rmtree(staging_dir, ignore_errors=True)
+    staging_dir.mkdir(parents=True, exist_ok=True)
+
+
+def _record_staging(staging_dir: Path, identity: dict) -> None:
+    (staging_dir / STAGING_RECORD).write_text(json.dumps(identity, indent=2), encoding="utf-8")
 
 
 def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[str, str]:
@@ -224,6 +342,10 @@ def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[s
         requested_dates = None
         selection_kwargs = dict(cfg.stac_static_selection)
 
+    # Staged tiles are anonymous on disk, so prove they belong to the dates being
+    # requested before farmdar is allowed to reuse them.
+    _prepare_staging(staging_dir, _staging_identity(cfg, requested_dates))
+
     result = fetch_sentinel_static_imagery(
         aoi=cfg.aoi_path,
         start=cfg.static_window_start,
@@ -241,6 +363,10 @@ def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[s
     )
 
     selected_dates = result.get("dates", [])
+    # In the modes where farmdar picks the dates itself, the identity is only knowable
+    # now -- record the dates it actually returned.
+    _record_staging(staging_dir, _staging_identity(cfg, selected_dates))
+
     logger.info(f"STAC static dates ({cfg.stac_static_mode} mode): {selected_dates}"
                 + (f" via {priority_label}" if priority_label else ""))
     if priority_label:
@@ -354,7 +480,9 @@ def run_static_pipeline(
     if cfg.static_source == "stac":
         static_image_path, date_suffix = _acquire_static_from_stac(cfg, staging_dir)
     else:
+        _prepare_staging(staging_dir, _staging_identity(cfg, _gee_staging_dates(cfg)))
         static_image_path, date_suffix = _acquire_static_from_gee(cfg, staging_dir)
+        _record_staging(staging_dir, _staging_identity(cfg, _gee_staging_dates(cfg)))
 
     # A resumed static run whose config now selects different dates would leave two
     # unrelated date folders side by side, and which one downstream reads depends only on
