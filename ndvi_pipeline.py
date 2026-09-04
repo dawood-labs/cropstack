@@ -8,6 +8,7 @@ GeoTIFF tiles via `inference_workers`, unchanged regardless of origin (see
 from __future__ import annotations
 
 import logging
+import time
 import multiprocessing
 import shutil
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -79,6 +80,7 @@ def _acquire_tiles_from_stac(cfg: PipelineConfig, tiles_dir: Path) -> List[Path]
     from farmdar.sentinel import fetch_sentinel_imagery  # never modified, only called
     # from sentinel import fetch_sentinel_imagery
 
+    started_at = time.time()
     result = fetch_sentinel_imagery(
         aoi=cfg.aoi_path,
         start=cfg.ndvi_series_start,
@@ -97,6 +99,26 @@ def _acquire_tiles_from_stac(cfg: PipelineConfig, tiles_dir: Path) -> List[Path]
     # tile's fate, so check it: a silently short tile set becomes a district map with
     # holes that still exits 0.
     outcomes = result.get("results") or []
+
+    # Tile throughput is the one number that distinguishes "this AOI is large" from
+    # "every request is being retried". Expired temporary credentials and Azure 502s both
+    # show up here as minutes per tile; the retries themselves happen inside
+    # farmdar.sentinel, which we do not modify, so surfacing the rate is what we can do.
+    elapsed_minutes = (time.time() - started_at) / 60
+    tile_total = result.get("tiles") or len(outcomes) or 1
+    minutes_per_tile = elapsed_minutes / tile_total
+    logger.info(f"STAC acquisition took {elapsed_minutes:.1f} min for {tile_total} tile(s) "
+                f"({minutes_per_tile:.1f} min/tile).")
+    if minutes_per_tile > cfg.stac_slow_tile_warning_minutes:
+        logger.warning(
+            f"Tiles averaged {minutes_per_tile:.1f} min each, well above the "
+            f"{cfg.stac_slow_tile_warning_minutes:.0f} min expected. The usual causes are "
+            "expired temporary credentials (ResponseParserError on an empty response) and "
+            "upstream 502s from the catalogue, both of which are retried internally and so "
+            "only appear as slowness. Refresh credentials and re-run with "
+            "run_mode='resume' rather than waiting it out."
+        )
+
     failed = [r for r in outcomes if str(r.get("status", "")).startswith("failed")]
     expected = result.get("tiles")
     produced = sorted(tiles_dir.glob("sentinel_*m_tile_*.tif"))

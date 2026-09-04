@@ -398,22 +398,35 @@ def classify_static_image(
     logger.info(f"Classifying {len(windows)} window(s) across {worker_count} worker(s)...")
     spawn_context = multiprocessing.get_context("spawn")
 
-    with rasterio.open(output_path, "w", **output_profile) as dst:
-        with ProcessPoolExecutor(max_workers=worker_count, mp_context=spawn_context) as pool:
-            futures = {
-                pool.submit(classify_window, static_image_path, crop_mask_path, window, model_path,
-                            use_mask, model_positive_class, crop_label, background_label): window
-                for window in windows
-            }
-            with tqdm(total=len(windows), desc="Classifying static image", unit="block") as progress:
-                for future in as_completed(futures):
-                    try:
-                        window, labels = future.result()
-                        dst.write(labels, 1, window=window)
-                    except Exception:
-                        logger.error(f"Window failed at {futures[future]}", exc_info=True)
-                        raise
-                    finally:
-                        progress.update(1)
+    # Classify into a temporary file and rename only once every window has been written,
+    # the same discipline the NDVI tile workers use. Writing straight to `output_path`
+    # means an interrupted run (a kill, an OOM, a dropped session) leaves a truncated or
+    # zero-byte raster at the final path, which a later resume then treats as finished
+    # work and reads -- failing far from the cause.
+    temporary_path = f"{output_path}.tmp.tif"
+    try:
+        with rasterio.open(temporary_path, "w", **output_profile) as dst:
+            with ProcessPoolExecutor(max_workers=worker_count, mp_context=spawn_context) as pool:
+                futures = {
+                    pool.submit(classify_window, static_image_path, crop_mask_path, window, model_path,
+                                use_mask, model_positive_class, crop_label, background_label): window
+                    for window in windows
+                }
+                with tqdm(total=len(windows), desc="Classifying static image", unit="block") as progress:
+                    for future in as_completed(futures):
+                        try:
+                            window, labels = future.result()
+                            dst.write(labels, 1, window=window)
+                        except Exception:
+                            logger.error(f"Window failed at {futures[future]}", exc_info=True)
+                            raise
+                        finally:
+                            progress.update(1)
+    except BaseException:
+        # BaseException, not Exception: KeyboardInterrupt is exactly the case that leaves
+        # the half-written file behind.
+        Path(temporary_path).unlink(missing_ok=True)
+        raise
 
+    os.replace(temporary_path, output_path)
     return crop_mask_path

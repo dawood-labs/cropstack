@@ -87,7 +87,8 @@ A single wide date range lets the selector pick anything inside it, and a scene 
 looks perfect by `eo:cloud_cover` can still be a swath edge covering 15% of the AOI, or
 hazy enough to shift the DN values the static model keys on. Each crop therefore defines
 **windows in preference order**, scored against farmdar's selector (a coarse scan, no
-imagery downloaded) until one clears `stac_static_min_coverage_pct`:
+imagery downloaded — ~1 MB and a few seconds per window, against ~2.5 GB for a real
+acquisition):
 
 | Crop | Windows, best first |
 |---|---|
@@ -97,8 +98,40 @@ imagery downloaded) until one clears `stac_static_min_coverage_pct`:
 | spr_maize | 1–10 May · 20–30 Apr · 11–20 May |
 
 Pass `region="punjab"` / `region="sindh"` for wheat; without it the Punjab schedule is
-used. February end dates are leap-year aware. If no window clears the floor the best
-one is used and the run says so loudly. `stac_static_mode="manual"` bypasses all of it.
+used. February end dates are leap-year aware. `stac_static_mode="manual"` bypasses all
+of it.
+
+**Every** window is scored before one is chosen, and all the scores are logged, because
+the date drives the answer as hard as the code does: one crop's three windows have
+produced acreages 8.9× apart. Among the windows clearing `stac_static_min_coverage_pct`
+(80% by default), the earliest — agronomically the best date — wins unless a later one
+has more than `static_window_preference_margin_pct` (5 points) more usable AOI, where
+the cleaner image is worth the worse date. Set the margin to 0 to decide purely on
+coverage, or to 100 to decide purely on window order. If nothing clears the floor the
+best available is used and the run says so loudly.
+
+Two levers for when a result looks wrong:
+
+- `static_window_start_at=2` re-runs from the second window, for a district whose answer
+  from the leading window contradicts local knowledge.
+- `static_window_expansion_days` / `static_window_max_expansions` widen the leading
+  window (5 days a side, 3 times) **only** when no configured window has any usable
+  acquisition at all — the alternative there is failing the run. Each step is logged as
+  a departure from the crop's phenology. Set the days to 0 to fail instead.
+
+### Result plausibility check
+
+Nothing at run time knows the truth, so the pipeline reports the numbers that expose an
+implausible answer instead of leaving them to be found later. Every run writes
+`result_check.json` beside the vectors with the AOI acreage, the crop acreage, the crop
+share of the AOI, and how much of the NDVI stage's crop area the static model kept.
+
+It warns — never fails a run — when the static model keeps under
+`qc_min_static_retention_pct` (5%) of its input mask, the mark of a hazy image rather
+than a real crop boundary, or over `qc_max_static_retention_pct` (99.5%), meaning it
+removed nothing. Set `qc_max_crop_share_pct` / `qc_min_crop_share_pct` per district to
+catch the regional over-prediction seen in lower Sindh; they are off until you set them,
+since a plausible share is local knowledge.
 
 Haze defence is `cloud_metric="aoi"` (the default): it scores against the SCL band,
 which classes cirrus alongside cloud, rather than trusting scene-level `eo:cloud_cover`.

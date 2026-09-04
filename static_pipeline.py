@@ -46,67 +46,155 @@ def _check_static_coverage(cfg: PipelineConfig, coverage_pct) -> None:
     logger.warning("LOW STATIC COVERAGE: " + message)
 
 
+def _score_window(cfg: PipelineConfig, start: str, end: str, label: str) -> Optional[dict]:
+    """Scores one window without downloading imagery: farmdar's selector reads metadata
+    and the coarse SCL overview only (~1 MB per window against ~2.5 GB for a real
+    acquisition). Returns None when the window has no usable acquisition at all."""
+    from farmdar.sentinel import select_static_dates
+
+    try:
+        selection = select_static_dates(cfg.aoi_path, start, end, **dict(cfg.stac_static_selection))
+    except Exception as exc:
+        logger.warning(f"{label}: could not be scored ({exc}).")
+        return None
+
+    dates = selection.get("dates") or []
+    if not dates:
+        logger.info(f"{label}: no usable acquisition.")
+        return None
+
+    selection["window"] = (start, end)
+    selection["label"] = label
+    return selection
+
+
+def _expanded_windows(cfg: PipelineConfig, windows) -> list:
+    """Last resort when no configured window has any imagery: widens the best window
+    symmetrically, `static_window_expansion_days` at a time. This only ever runs when the
+    alternative is failing the run outright, and each step is logged, because every day
+    of expansion moves the acquisition further from the phenology the windows encode."""
+    if not windows or cfg.static_window_expansion_days <= 0:
+        return []
+
+    anchor_start, anchor_end = windows[0]
+    step = timedelta(days=cfg.static_window_expansion_days)
+    lower = datetime.strptime(anchor_start, "%Y-%m-%d")
+    upper = datetime.strptime(anchor_end, "%Y-%m-%d")
+
+    expanded = []
+    for _ in range(cfg.static_window_max_expansions):
+        lower -= step
+        upper += step
+        expanded.append((lower.strftime("%Y-%m-%d"), upper.strftime("%Y-%m-%d")))
+    return expanded
+
+
 def select_dates_by_priority(cfg: PipelineConfig) -> Tuple[Optional[list], dict, str]:
-    """Walks the crop's acquisition windows in preference order and takes the first that
-    yields a clean enough image.
+    """Scores the crop's acquisition windows and returns the dates from the one to use.
 
     A single wide window lets the selector pick any date in it, and a scene that looks
     perfect by `eo:cloud_cover` can still be a swath edge covering a fraction of the AOI,
     or hazy enough to shift the DN values the static model keys on. Narrow, ordered
-    windows encode the phenology instead: the best period is tried first and the pipeline
-    only falls back when the imagery there is genuinely unusable.
+    windows encode the phenology instead: earlier windows are agronomically better dates.
 
-    Scoring uses farmdar's own selector against a coarse grid, so a window is rejected
-    without downloading imagery. `cloud_metric="aoi"` reads the SCL band, which classes
-    cirrus (10) alongside cloud -- the closest thing available to a haze test.
+    Every window is scored before one is chosen, and all the scores are logged. Taking
+    the first window merely past the coverage floor hides how much the answer depends on
+    the date -- one crop's three windows have produced acreages 8.9x apart, with the
+    first accepted at 99.1% while a later one sat at 100%. So: among the windows that
+    clear the floor, the earliest (agronomically best) wins unless a later one is better
+    by more than `static_window_preference_margin_pct`, in which case coverage decides.
 
-    Returns (dates, selection, description). `dates` is None when no window has any
-    usable imagery at all.
+    `cfg.static_window_start_at` skips ahead, for re-running a district whose result from
+    the leading window looked wrong.
+
+    Returns (dates, selection, description). `dates` is None when nothing is usable.
+    `selection["window_scores"]` carries every window's score for the run record.
     """
-    from farmdar.sentinel import select_static_dates
-
     windows = cfg.resolved_static_windows()
     if not windows:
         return None, {}, "no priority windows configured"
 
-    selection_kwargs = dict(cfg.stac_static_selection)
+    skip = max(0, int(cfg.static_window_start_at) - 1)
+    if skip:
+        if skip >= len(windows):
+            raise ValueError(
+                f"static_window_start_at={cfg.static_window_start_at} but {cfg.crop} has "
+                f"only {len(windows)} window(s)."
+            )
+        logger.warning(f"Skipping the first {skip} window(s) at the operator's request.")
+        windows = windows[skip:]
+
     floor = cfg.stac_static_min_coverage_pct or 0.0
-    best = None
+    scored = []
+    for position, (start, end) in enumerate(windows, start=skip + 1):
+        label = f"window {position} ({start} to {end})"
+        selection = _score_window(cfg, start, end, label)
+        if selection:
+            scored.append(selection)
 
-    for position, (start, end) in enumerate(windows, start=1):
-        label = f"window {position}/{len(windows)} ({start} to {end})"
-        try:
-            selection = select_static_dates(cfg.aoi_path, start, end, **selection_kwargs)
-        except Exception as exc:
-            logger.warning(f"{label}: could not be scored ({exc}); trying the next window.")
-            continue
+    if not scored:
+        fallback = _expanded_windows(cfg, windows)
+        for position, (start, end) in enumerate(fallback, start=1):
+            label = f"expanded window +{position * cfg.static_window_expansion_days}d ({start} to {end})"
+            logger.warning(
+                f"No configured window had usable imagery; widening the leading window "
+                f"to {start}..{end}. This date is outside the phenology the windows encode."
+            )
+            selection = _score_window(cfg, start, end, label)
+            if selection:
+                scored.append(selection)
+                break
 
-        coverage = selection.get("coverage_pct")
-        dates = selection.get("dates") or []
-        if not dates:
-            logger.info(f"{label}: no usable acquisition; trying the next window.")
-            continue
-
-        logger.info(f"{label}: {dates} -> {coverage:.1f}% of AOI usable"
-                    if coverage is not None else f"{label}: {dates}")
-
-        if coverage is not None and coverage >= floor:
-            logger.info(f"Accepted {label} at {coverage:.1f}% coverage (floor {floor:.0f}%).")
-            return dates, selection, label
-
-        if best is None or (coverage or 0) > (best[1].get("coverage_pct") or 0):
-            best = (dates, selection, label)
-
-    if best is None:
+    if not scored:
         return None, {}, "no window produced a usable acquisition"
 
-    dates, selection, label = best
-    logger.warning(
-        f"No window reached the {floor:.0f}% coverage floor. Falling back to the best "
-        f"available: {label} at {selection.get('coverage_pct')}% -- the result rests on "
-        "partly cloudy or partly covered imagery."
-    )
-    return dates, selection, label + " (below floor)"
+    def coverage_of(selection) -> float:
+        value = selection.get("coverage_pct")
+        return -1.0 if value is None else float(value)
+
+    summary = [
+        {"label": s["label"], "window": s["window"], "dates": s.get("dates"),
+         "coverage_pct": s.get("coverage_pct")}
+        for s in scored
+    ]
+    logger.info("Window scores (best-first by preference):")
+    for row in summary:
+        coverage = row["coverage_pct"]
+        logger.info(f"  {row['label']}: {row['dates']} -> "
+                    + (f"{coverage:.1f}% of AOI usable" if coverage is not None else "coverage unknown"))
+
+    spread = [c for c in (coverage_of(s) for s in scored) if c >= 0]
+    if spread and (max(spread) - min(spread)) > 0:
+        logger.info(f"Coverage spread across windows: {min(spread):.1f}%-{max(spread):.1f}%. "
+                    "The chosen date, not just the code, determines the acreage reported.")
+
+    eligible = [s for s in scored if coverage_of(s) >= floor]
+    if eligible:
+        best_coverage = max(coverage_of(s) for s in eligible)
+        margin = cfg.static_window_preference_margin_pct
+        chosen = next(s for s in eligible if coverage_of(s) >= best_coverage - margin)
+        if coverage_of(chosen) < best_coverage:
+            logger.info(
+                f"Preferring {chosen['label']} at {coverage_of(chosen):.1f}% over the "
+                f"highest-coverage {best_coverage:.1f}%: within the {margin:.0f}-point "
+                "margin, and it is the agronomically better date."
+            )
+        else:
+            logger.info(f"Chose {chosen['label']} at {coverage_of(chosen):.1f}% "
+                        f"(floor {floor:.0f}%).")
+    else:
+        chosen = max(scored, key=coverage_of)
+        logger.warning(
+            f"No window reached the {floor:.0f}% coverage floor. Falling back to the best "
+            f"available: {chosen['label']} at {chosen.get('coverage_pct')}% -- the result "
+            "rests on partly cloudy or partly covered imagery."
+        )
+        chosen = dict(chosen)
+        chosen["label"] += " (below floor)"
+
+    chosen = dict(chosen)
+    chosen["window_scores"] = summary
+    return chosen.get("dates"), chosen, chosen["label"]
 
 
 def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[str, str]:
@@ -117,12 +205,13 @@ def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[s
     # from sentinel import fetch_sentinel_static_imagery
 
     priority_label = None
+    priority_selection: dict = {}
     if cfg.stac_static_mode == "manual":
         requested_dates = cfg.stac_static_dates
         selection_kwargs = {}
     elif cfg.resolved_static_windows():
-        # Score the crop's phenological windows in order and fetch only the winner.
-        requested_dates, _scored, priority_label = select_dates_by_priority(cfg)
+        # Score the crop's phenological windows and fetch only the winner.
+        requested_dates, priority_selection, priority_label = select_dates_by_priority(cfg)
         selection_kwargs = {}
         if requested_dates is None:
             raise RuntimeError(
@@ -154,7 +243,11 @@ def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[s
     selected_dates = result.get("dates", [])
     logger.info(f"STAC static dates ({cfg.stac_static_mode} mode): {selected_dates}"
                 + (f" via {priority_label}" if priority_label else ""))
-    if cfg.stac_static_mode == "auto" and not priority_label:
+    if priority_label:
+        # The winning window was scored before download; hold its coverage to the same
+        # floor the single-window path enforces.
+        _check_static_coverage(cfg, priority_selection.get("coverage_pct"))
+    elif cfg.stac_static_mode == "auto":
         selection = result.get("selection", {}) or {}
         logger.info(
             f"Date selection: anchor={selection.get('anchor')}, "

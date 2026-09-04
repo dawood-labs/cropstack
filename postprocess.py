@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import gc
 import json
+import os
 import shutil
 import tempfile
 from pathlib import Path
@@ -24,10 +25,11 @@ from typing import List, Optional, Sequence, Union
 
 import geopandas as gpd
 import numpy as np
+import pandas as pd
 import rasterio
 from rasterio.features import shapes, sieve
 from scipy.ndimage import binary_dilation, generate_binary_structure, label
-from shapely.geometry import shape
+from shapely.geometry import MultiPolygon, shape
 
 ACRES_PER_SQ_METRE = 0.000247105
 # Pakistan-wide AOIs; matches the original notebooks' hardcoded area CRS.
@@ -169,13 +171,56 @@ def apply_strict_directional_sieve(
     # format that cannot be written through.
     profile.update(driver="GTiff", compress="lzw", tiled=True,
                    blockxsize=256, blockysize=256, bigtiff="YES")
-    with rasterio.open(out_path, "w", **profile) as dst:
-        dst.write(sieved, 1)
+    staging_path = Path(str(out_path) + ".tmp.tif")
+    try:
+        with rasterio.open(staging_path, "w", **profile) as dst:
+            dst.write(sieved, 1)
+    except BaseException:
+        staging_path.unlink(missing_ok=True)
+        raise
+    os.replace(staging_path, out_path)
     del sieved
     gc.collect()
 
     print(f"SUCCESS: sieved raster saved to: {out_path}")
     return str(out_path)
+
+
+def _export_vector_layer(gdf, gpkg_output, zip_output, out_base_path, output_basename,
+                         save_shp_zip: bool) -> None:
+    """Writes the GPKG (and optional zipped Shapefile). Geometries are cast to
+    MultiPolygon: a layer holding a mix of Polygon and MultiPolygon is rejected on
+    append, and mixed-type layers confuse some GIS clients even on a fresh write."""
+    gdf = gdf.copy()
+    if not gdf.empty:
+        gdf["geometry"] = [
+            geom if geom is None or geom.geom_type == "MultiPolygon" else MultiPolygon([geom])
+            for geom in gdf.geometry
+        ]
+    gdf.to_file(gpkg_output, driver="GPKG")
+    print(f"   -> Saved GPKG: {gpkg_output}")
+
+    if save_shp_zip:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            gdf.to_file(Path(tmpdir) / f"{output_basename}.shp", driver="ESRI Shapefile")
+            shutil.make_archive(base_name=str(out_base_path), format="zip", root_dir=tmpdir)
+        print(f"   -> Saved ZIP (Shapefile): {zip_output}")
+
+
+def _export_empty_layer(crs, gpkg_output, zip_output, out_base_path, output_basename,
+                        save_shp_zip: bool, reason: str) -> str:
+    """A district with genuinely no crop is a valid answer, not a failure. Returning None
+    made every caller -- above all batch runs -- treat it as a crash. Write the layer with
+    the real schema and no rows, so downstream stages read it like any other."""
+    print(f"  -> Writing an empty layer with the full schema ({reason}).")
+    empty = gpd.GeoDataFrame(
+        {"predicted": pd.Series(dtype="int64"),
+         "area_acres": pd.Series(dtype="float64"),
+         "geometry": gpd.GeoSeries([], crs=crs)},
+        geometry="geometry", crs=crs,
+    )
+    _export_vector_layer(empty, gpkg_output, zip_output, out_base_path, output_basename, save_shp_zip)
+    return gpkg_output
 
 
 def vectorize_process_and_export(
@@ -188,6 +233,7 @@ def vectorize_process_and_export(
     min_area_acres: float = 0.5,
     save_shp_zip: bool = True,
     dissolve_polygons: bool = False,
+    write_empty_outputs: bool = True,
 ) -> Optional[str]:
     """Vectorise -> clip to AOI boundary -> explode to singlepart -> filter by area ->
     relabel -> export GPKG (+ optional zipped Shapefile).
@@ -228,10 +274,18 @@ def vectorize_process_and_export(
         transform = src.transform
         raster_crs = src.crs
 
+    def _finish_empty(reason: str) -> str:
+        path = _export_empty_layer(raster_crs, gpkg_output, zip_output, out_base_path,
+                                   output_basename, save_shp_zip, reason)
+        _write_source_record(source_record_path, current_source)
+        return path
+
     target_mask = _class_membership_mask(image, target_labels)
     if not target_mask.any():
-        print(f"  [Warning] No pixels found for classes {target_labels}. Aborting.")
-        return None
+        print(f"  [Warning] No pixels found for classes {target_labels}.")
+        if not write_empty_outputs:
+            return None
+        return _finish_empty(f"no pixels of classes {target_labels}")
 
     geometries = [shape(geom) for geom, _ in shapes(image, mask=target_mask, transform=transform)]
     del image, target_mask
@@ -258,8 +312,10 @@ def vectorize_process_and_export(
         gdf = gdf[pre_clip_acres >= min_area_acres]
         print(f"  -> Pre-filter dropped {before - len(gdf):,} sub-threshold polygons before clipping.")
         if gdf.empty:
-            print("  [Warning] No features above the area threshold. Aborting.")
-            return None
+            print("  [Warning] No features above the area threshold.")
+            if not write_empty_outputs:
+                return None
+            return _finish_empty("no features above the area threshold")
 
     print("2. Loading boundary for clipping...")
     boundary_gdf = gpd.read_file(boundary_shp_path)
@@ -272,8 +328,10 @@ def vectorize_process_and_export(
     del gdf
     gc.collect()
     if clipped_gdf.empty:
-        print("  [Warning] No features intersect the boundary. Aborting.")
-        return None
+        print("  [Warning] No features intersect the boundary.")
+        if not write_empty_outputs:
+            return None
+        return _finish_empty("no features intersect the boundary")
 
     if dissolve_polygons:
         clipped_gdf = clipped_gdf.dissolve()
@@ -290,8 +348,10 @@ def vectorize_process_and_export(
     )
     singlepart_gdf = singlepart_gdf[singlepart_gdf["area_acres"] >= min_area_acres]
     if singlepart_gdf.empty:
-        print("  [Warning] No features remained after area filtering. Aborting.")
-        return None
+        print("  [Warning] No features remained after area filtering.")
+        if not write_empty_outputs:
+            return None
+        return _finish_empty("no features above the area threshold after clipping")
 
     singlepart_gdf["predicted"] = relabel_as
     singlepart_gdf = singlepart_gdf[["predicted", "area_acres", "geometry"]]
@@ -299,14 +359,8 @@ def vectorize_process_and_export(
           f"{singlepart_gdf['area_acres'].sum():,.2f} acres, label {relabel_as}")
 
     print("5. Exporting...")
-    singlepart_gdf.to_file(gpkg_output, driver="GPKG")
-    print(f"   -> Saved GPKG: {gpkg_output}")
-
-    if save_shp_zip:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            singlepart_gdf.to_file(Path(tmpdir) / f"{output_basename}.shp", driver="ESRI Shapefile")
-            shutil.make_archive(base_name=str(out_base_path), format="zip", root_dir=tmpdir)
-        print(f"   -> Saved ZIP (Shapefile): {zip_output}")
+    _export_vector_layer(singlepart_gdf, gpkg_output, zip_output, out_base_path,
+                         output_basename, save_shp_zip)
 
     _write_source_record(source_record_path, current_source)
 
