@@ -338,6 +338,9 @@ class PipelineConfig:
     # Recycle each NDVI worker process after this many tiles: bounds the GDAL/numpy
     # memory a long-lived worker can accumulate, while still amortising the (slow)
     # RandomForest load across several tiles. Set 1 for maximum memory safety.
+    # Implemented by running inference in batches of workers x this, each batch in a
+    # fresh pool -- NOT by ProcessPoolExecutor's max_tasks_per_child, which deadlocks
+    # on this Python at exactly that many completed tasks. See run_tile_inference.
     ndvi_worker_max_tasks: int = 8
     static_worker_count: Optional[int] = None  # default: CPU cores - 1
     static_chunk_size: int = 2048
@@ -347,6 +350,8 @@ class PipelineConfig:
     # resident, so sizing purely from cpu_count() reserves tens of GiB of copies.
     static_memory_fraction: float = 0.5
     static_model_memory_expansion: float = 12.0
+    # Per-tile budget. Applied to the batch as a whole (max_tasks x this), on
+    # as_completed -- the thing that actually blocks when a pool dies.
     ndvi_tile_timeout_s: int = 900
 
     # ------------------------------------------------ classification thresholds
