@@ -85,7 +85,18 @@ Ab: aakhri khulasa likhna. Koi pending code kaam nahi.
 
 ## 6. Jo maine mana kiya / jispe razi nahi hua
 
-- **`git push` BLOCKED hai** permission classifier se. Commits chal rahe hain, push nahi.
-  Sab kuch local commit ho raha hai. User ko push khud karna hoga ya permission deni
-  hogi. **Ye har session mein dobara check karo.**
+- **`git push` KAAM NAHI KARTA — is box par GitHub credentials hain hi nahi.**
+  `fatal: could not read Username for 'https://github.com'`. Na `gh` installed hai,
+  na credential helper, na `GH_TOKEN`. Pull isliye chalta hai ke repo public hai.
+  **Sab kuch sirf LOCAL commit hai.** Agar ye instance mar gayi to kaam zaaya.
+  User ko ya to token dena hoga ya khud push karna hoga:
+  `! cd ~/FAO/optimized_code_testing/cropstack && git push origin main`
+  **Har session ke shuru mein ye dobara check karo.**
 - Threshold khud nahi banana. 15% wali galti dobara nahi.
+- `qc_degenerate_retention_tolerance_pct = 1.0` maine chuna — 0% aur 100% ke "qareeb"
+  ka matlab. Ye fitted nahi hai (sieve ki wajah se degenerate case bilkul 0/100 par
+  nahi girta), magar number phir bhi maine chuna. **User se confirm karana hai** —
+  0 karna hai to `PipelineConfig` mein set kar dein.
+- **"269 checks" wali test suite repo mein maujood nahi thi.** 7dd73a5 ke commit message
+  mein likha hai magar wo files kabhi commit nahi hui. Ab `tests/` bani hai — 41 checks
+  + `harness/unit_tests.py` ke 15.
