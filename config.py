@@ -275,11 +275,21 @@ class PipelineConfig:
     # in the imagery or the model rather than a property of the district.
     qc_max_crop_share_pct: Optional[float] = None
     qc_min_crop_share_pct: Optional[float] = None
-    # Provisional: six observations across one AOI put real retention at 20-44%, so 15%
-    # sits below anything yet seen while still catching a collapse. Raise it once there
-    # are enough runs per crop to know the real floor.
-    qc_min_static_retention_pct: Optional[float] = 15.0
-    qc_max_static_retention_pct: Optional[float] = 99.5
+    # Off by default, and deliberately so. These were once 15.0 / 99.5, fitted to six
+    # observations on a single AOI -- a number with no agronomic or published basis,
+    # presented to the operator as a verdict. What share of its input mask a static model
+    # should keep is a property of the crop, the district and the model, and nothing at
+    # run time knows it. `static_retention_pct` is always measured and always reported;
+    # set these only if you have the local knowledge to say what is implausible.
+    qc_min_static_retention_pct: Optional[float] = None
+    qc_max_static_retention_pct: Optional[float] = None
+    # The two degenerate outcomes are true without any domain knowledge: keeping none of
+    # the mask, and removing none of it. Neither is a plausible crop boundary -- the first
+    # is an image or model that produced nothing, the second a mask that never applied.
+    # This is the tolerance for "none"/"all", not a plausible-range bound: it exists only
+    # because the sieve runs after classification, so the degenerate cases land a fraction
+    # off the exact 0% and 100%. Set to 0 to require exactly zero and exactly full.
+    qc_degenerate_retention_tolerance_pct: float = 1.0
     # Per-tile cost, now that the figure is real per-tile time rather than throughput.
     # Healthy tiles have been measured at ~2.4 min each; the credential-refresh and 502
     # failures reported from the field ran 15-30 min. 8 sits clear of both.

@@ -149,6 +149,7 @@ def run_pipeline(
         min_crop_share_pct=cfg.qc_min_crop_share_pct,
         min_static_retention_pct=cfg.qc_min_static_retention_pct,
         max_static_retention_pct=cfg.qc_max_static_retention_pct,
+        degenerate_retention_tolerance_pct=cfg.qc_degenerate_retention_tolerance_pct,
         report_path=Path(vector_dir) / "result_check.json",
     )
 
