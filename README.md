@@ -35,6 +35,18 @@ it is called.
 
 ## Quick start
 
+From a shell, without the notebook:
+
+```bash
+python run.py --crop wheat --year 2025 --district kasur \
+    --aoi /data/Kasur.shp --key /keys/service-account.json --region punjab
+```
+
+`--set name=value` overrides any `PipelineConfig` field (`--set static_window_start_at=2`).
+`--print-config` shows the resolved config without running. Use `batch.py` for many
+districts at once.
+
+
 ```python
 from config import build_pipeline_config
 from pipeline import run_pipeline
@@ -48,7 +60,7 @@ cfg = build_pipeline_config(
 result = run_pipeline(cfg)
 ```
 
-Or open [`4_fao_unified_pipeline.ipynb`](4_fao_unified_pipeline.ipynb) and edit the
+Or open [`fao_crop_mapping.ipynb`](fao_crop_mapping.ipynb) and edit the
 config cell.
 
 ## Source combinations

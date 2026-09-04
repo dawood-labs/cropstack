@@ -55,10 +55,12 @@ Kuch nahi chal raha. Kasur district run **mukammal**. Sab commit + push ho chuka
 
 ## 4. Agla qadam
 
-1. User se poochna: `stac_slow_tile_warning_minutes = 8` rakhna hai ya kam karna?
-   Asli district par healthy **5.7 min/tile** nikla — sirf 1.4x headroom.
-2. Kasur ke 288,123 acres ko local knowledge se check karana (main verdict nahi de sakta).
-3. Doosra district (Multan/Chiniot) chalana ho to wahi tarika.
+User ab khud script chalayega. Mazeed district run ki zaroorat nahi (user ne kaha).
+Sirf tab kaam karna jab user koi masla report kare.
+
+Khula sawal: `stac_slow_tile_warning_minutes = 8` rakhna hai ya kam? Asli district par
+healthy 5.7 min/tile nikla (1.4x headroom). User ne kaha download speed internet par
+hai, hamara masla nahi — is liye ye low priority hai.
 
 ---
 
@@ -79,6 +81,16 @@ Kuch nahi chal raha. Kasur district run **mukammal**. Sab commit + push ho chuka
     `git add -f`, pehle key scan karke.
   - NDVI stage muft resume hota hai: naye output dir mein `1_ndvi_run_1/` copy karo,
     phir `run_mode="resume"`. NDVI product bit-identical rehta hai.
+
+---
+
+### Adhoora download (user ka sawal) — pehle se mehfooz hai
+`farmdar.sentinel` tile ko `out_tif + ".tmp"` mein likhta hai phir `os.replace()`, aur
+manifest **baad mein**. Skip tabhi hota hai jab `.tif` AUR `.manifest.json` dono hon
+(`sentinel.py:1041` NDVI, `:2174` static). Is liye:
+- download ke beech crash → sirf `.tmp` bachta hai → agli dafa dobara download
+- tif ban gaya magar manifest nahi → skip nahi hoga → dobara download
+Koi fix nahi chahiye tha.
 
 ---
 
