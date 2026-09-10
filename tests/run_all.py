@@ -17,6 +17,7 @@ MODULES = [
     "test_qc_retention",
     "test_acquisition_reporting",
     "test_pool_recycle",
+    "test_resources",
 ]
 
 if __name__ == "__main__":
