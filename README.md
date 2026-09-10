@@ -64,6 +64,33 @@ config cell.
 
 Landsat 7 is never used — its SLC-off failure leaves permanent stripes on every scene.
 
+### Which backend for what
+
+Validated on real AOIs, so these are measurements rather than preferences:
+
+- **NDVI comes from STAC.** The two backends produce the same product (0.2% apart,
+  IoU 0.947), but GEE NDVI took 2.9× the wall clock, spending 99.8% of samples below
+  30% CPU blocked on the export queue. `ndvi_source="gee"` still works and warns.
+- **GEE is for the static image**, where it is ~60× cheaper on network than STAC
+  (40 MB vs 3–5 GB) because compositing happens server-side.
+- **No static model on Landsat.** The static models are trained on Sentinel-2's real
+  red-edge band; Landsat 8 has none, so `homogenize_landsat8` substitutes
+  `(red + NIR) / 2` and the model gets a feature unlike anything it learned — measured
+  77× below the Sentinel-2 result on the same AOI. Pre-cutover years with
+  `static_source="gee"` therefore run NDVI-only automatically; forcing
+  `run_static_model=True` raises. A pre-2018 **STAC** static image is still Sentinel-2
+  and remains supported.
+
+### Cost to budget
+
+- Pre-2018 STAC years cost roughly 8× the network and 2.4× the time of a recent year
+  (measured 40 GB / 16 min vs 5 GB / 7 min for the same AOI), because older Sentinel-2
+  reprocessings are less range-request friendly.
+- Acquisition is ~89% of wall clock. Peak memory tracks *tiles in flight × tile area*,
+  not AOI size, so raising `stac_tile_size_deg` must be paired with lowering
+  `stac_worker_count` — the pipeline estimates this before acquiring and trims the
+  worker count to fit `stac_memory_fraction` of free RAM.
+
 ## AOI input
 
 `aoi_path` takes any of these — local or GCS, in any common vector format:

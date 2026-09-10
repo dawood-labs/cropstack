@@ -214,6 +214,13 @@ class PipelineConfig:
     stac_resolution_m: int = 10
     stac_tile_size_deg: float = 0.1
     stac_worker_count: int = 8
+    # STAC acquisition holds every in-flight tile in memory, so peak tracks
+    # (tiles in flight) x (tile area) and is independent of AOI size. Measured at
+    # ~1.46 GiB per in-flight tile at tile_deg=0.1; raising tile_deg scales it by the
+    # square. The pipeline estimates the peak before acquiring and trims the worker
+    # count to fit this fraction of free RAM.
+    stac_tile_memory_gib: float = 1.46
+    stac_memory_fraction: float = 0.6
 
     # -------------------------------------------------------------- GEE options
     gee_project_name: str = "farmdar"
@@ -335,6 +342,15 @@ class PipelineConfig:
         return self._sieve_min_pixels(self.static_resolution_m)
 
     @property
+    def uses_landsat_static(self) -> bool:
+        """True when the static image would come from Landsat 8 rather than Sentinel-2.
+
+        Only the GEE backend can produce a pre-Sentinel-2 static image; STAC is
+        Sentinel-2 throughout, so a pre-cutover STAC static image is still Sentinel-2.
+        """
+        return self.static_source == "gee" and not self.uses_sentinel
+
+    @property
     def has_static_model(self) -> bool:
         return self.static_model is not None
 
@@ -370,6 +386,18 @@ class PipelineConfig:
             raise FileNotFoundError(f"AOI not found: {self.aoi_path}")
 
         ModelSource.coerce(self.ndvi_model).validate("ndvi_model")
+
+        if self.run_static_model and self.uses_landsat_static:
+            raise ValueError(
+                f"run_static_model=True with a Landsat static image ({self.year} < "
+                f"gee_landsat_cutover_year={self.gee_landsat_cutover_year}). The static "
+                "models are trained on Sentinel-2's real red-edge band; Landsat 8 has no "
+                "red-edge, so gee_client.homogenize_landsat8 substitutes (red + NIR) / 2 "
+                "and the model receives a feature that behaves nothing like the one it "
+                "learned -- measured 77x below the Sentinel-2 result on the same AOI. "
+                "Set run_static_model=False for Landsat years."
+            )
+
         if self.run_static_model:
             if not self.has_static_model:
                 raise ValueError(
@@ -410,6 +438,16 @@ class PipelineConfig:
 
         if not self.ndvi_crop_classes:
             raise ValueError("ndvi_crop_classes must be a non-empty list of class values.")
+
+        if self.ndvi_source == "gee":
+            import logging
+
+            logging.getLogger(__name__).warning(
+                "ndvi_source='gee' is not the supported path: it was measured 2.9x slower "
+                "than STAC (99.8%% of samples below 30%% CPU, blocked on the export queue) "
+                "for a product 0.2%% different (IoU 0.947). GEE is intended for the static "
+                "image only. Use ndvi_source='stac' unless you are deliberately testing it."
+            )
 
         for label, mode in (
             ("run_mode", self.run_mode),
@@ -524,6 +562,18 @@ def build_pipeline_config(
         # No static model exists for this crop yet (rice), so default to the NDVI-only
         # product instead of failing. An explicit run_static_model=True still errors in
         # validate(), rather than silently doing nothing.
+        cfg.run_static_model = False
+
+    if cfg.run_static_model and cfg.uses_landsat_static and "run_static_model" not in overrides:
+        # Landsat static imagery cannot feed a Sentinel-2-trained static model (see
+        # validate). Fall back to the NDVI-only product so a multi-year batch keeps
+        # running; an explicit run_static_model=True still raises.
+        import logging
+
+        logging.getLogger(__name__).warning(
+            f"{cfg.crop} {cfg.year}: static image would come from Landsat 8, which the "
+            "static model cannot use -- running NDVI-only."
+        )
         cfg.run_static_model = False
 
     return cfg

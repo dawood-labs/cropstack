@@ -23,6 +23,58 @@ from inference_workers import mosaic_prediction_tiles, worker_process_tile
 logger = logging.getLogger(__name__)
 
 
+def _stac_worker_budget(cfg: PipelineConfig) -> int:
+    """Trims STAC concurrency so the in-flight tiles fit in memory.
+
+    Acquisition peak tracks (tiles in flight) x (tile area), not AOI size, so the
+    defaults are safe on a small tile grid and can exhaust the box on a larger one --
+    at tile_deg=0.2 the same 8 workers want roughly 4x the memory. Estimating first and
+    trimming is cheaper than discovering it as an OOM 20 minutes into acquisition.
+    """
+    import math
+
+    import geopandas as gpd
+
+    import static_classify
+
+    workers = cfg.stac_worker_count
+    try:
+        bounds = gpd.read_file(cfg.aoi_path).to_crs(4326).total_bounds
+        tiles_across = max(1, math.ceil((bounds[2] - bounds[0]) / cfg.stac_tile_size_deg))
+        tiles_down = max(1, math.ceil((bounds[3] - bounds[1]) / cfg.stac_tile_size_deg))
+        tile_count = tiles_across * tiles_down
+    except Exception:
+        return workers
+
+    in_flight = min(workers, tile_count)
+    area_scale = (cfg.stac_tile_size_deg / 0.1) ** 2
+    per_tile_gib = cfg.stac_tile_memory_gib * area_scale
+    estimated_gib = in_flight * per_tile_gib
+
+    available = static_classify.available_memory_bytes()
+    if not available:
+        logger.info(f"STAC acquisition: ~{tile_count} tile(s), estimated peak {estimated_gib:.1f} GiB")
+        return workers
+
+    budget_gib = (available / 2**30) * cfg.stac_memory_fraction
+    if estimated_gib <= budget_gib:
+        logger.info(
+            f"STAC acquisition: ~{tile_count} tile(s), {in_flight} in flight, "
+            f"estimated peak {estimated_gib:.1f} GiB of {budget_gib:.1f} GiB budget"
+        )
+        return workers
+
+    affordable = max(1, int(budget_gib // per_tile_gib))
+    logger.warning(
+        f"STAC acquisition would need ~{estimated_gib:.1f} GiB "
+        f"({in_flight} tiles in flight x {per_tile_gib:.1f} GiB) but only "
+        f"{budget_gib:.1f} GiB is budgeted -- reducing stac_worker_count "
+        f"{workers} -> {affordable}. Lower stac_tile_size_deg, or raise "
+        f"stac_memory_fraction if this box can take it."
+    )
+    return affordable
+
+
 def _acquire_tiles_from_stac(cfg: PipelineConfig, tiles_dir: Path) -> List[Path]:
     from farmdar.sentinel import fetch_sentinel_imagery  # never modified, only called
     # from sentinel import fetch_sentinel_imagery
@@ -37,7 +89,7 @@ def _acquire_tiles_from_stac(cfg: PipelineConfig, tiles_dir: Path) -> List[Path]
         res_m=cfg.stac_resolution_m,
         tile_deg=cfg.stac_tile_size_deg,
         cloud_lt=cfg.stac_ndvi_max_cloud_pct,
-        workers=cfg.stac_worker_count,
+        workers=_stac_worker_budget(cfg),
         build_vrt_mosaic=False,   # tiles are consumed individually, no mosaic needed
         clip_to_aoi=False,
     )
@@ -87,14 +139,17 @@ def run_ndvi_pipeline(
     out_dir = Path(out_dir)
     tiles_dir = out_dir / "raw_ndvi_tiles"
     predictions_dir = out_dir / "tile_predictions"
-    for directory in (out_dir, tiles_dir, predictions_dir):
-        directory.mkdir(parents=True, exist_ok=True)
+    # tiles_dir / predictions_dir are created only when work actually needs them, so a
+    # resumed run does not leave empty scratch directories behind.
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     classification_path = out_dir / f"{Path(cfg.aoi_path).stem}_rf_classification_map.tif"
 
     if classification_path.exists():
         logger.info(f"[Checkpoint] NDVI classification map already exists: {classification_path}")
     else:
+        tiles_dir.mkdir(parents=True, exist_ok=True)
+        predictions_dir.mkdir(parents=True, exist_ok=True)
         if cfg.ndvi_source == "stac":
             tile_paths = _acquire_tiles_from_stac(cfg, tiles_dir)
         else:
