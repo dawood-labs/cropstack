@@ -64,7 +64,7 @@ def assess_result(
     min_crop_share_pct: Optional[float] = None,
     min_static_retention_pct: Optional[float] = None,
     max_static_retention_pct: Optional[float] = None,
-    degenerate_retention_tolerance_pct: float = 1.0,
+    degenerate_retention_tolerance_pct: float = 0.0,
     report_path: Optional[Union[str, Path]] = None,
 ) -> dict:
     """Measures the delivered result and reports it. Advisory only: it never fails a run.

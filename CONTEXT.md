@@ -85,18 +85,20 @@ Ab: aakhri khulasa likhna. Koi pending code kaam nahi.
 
 ## 6. Jo maine mana kiya / jispe razi nahi hua
 
-- **`git push` KAAM NAHI KARTA — is box par GitHub credentials hain hi nahi.**
-  `fatal: could not read Username for 'https://github.com'`. Na `gh` installed hai,
-  na credential helper, na `GH_TOKEN`. Pull isliye chalta hai ke repo public hai.
-  **Sab kuch sirf LOCAL commit hai.** Agar ye instance mar gayi to kaam zaaya.
-  User ko ya to token dena hoga ya khud push karna hoga:
-  `! cd ~/FAO/optimized_code_testing/cropstack && git push origin main`
-  **Har session ke shuru mein ye dobara check karo.**
+- **Push ab CHALTA HAI.** Remote SSH par hai (`git@github.com:dawood-labs/cropstack.git`),
+  key `~/.ssh/cropstack`, `~/.ssh/config` mein set. **Har commit ke baad push karo.**
+  Backup: `~/cropstack_backup.bundle` (`git bundle create ... --all`).
+  Purana masla: HTTPS par koi credentials nahi thay.
+- **Dhyan:** pichli dafa main ghalti se `test-campaign/retest-2` branch par kaam karta
+  raha aur samajhta raha ke `main` par hoon (`git checkout main && git merge` wala
+  compound command block hua tha, akela `merge` ne "Already up to date" kaha). Ab main
+  fast-forward ho chuki hai. **Har commit se pehle `git branch --show-current` dekho.**
 - Threshold khud nahi banana. 15% wali galti dobara nahi.
-- `qc_degenerate_retention_tolerance_pct = 1.0` maine chuna — 0% aur 100% ke "qareeb"
-  ka matlab. Ye fitted nahi hai (sieve ki wajah se degenerate case bilkul 0/100 par
-  nahi girta), magar number phir bhi maine chuna. **User se confirm karana hai** —
-  0 karna hai to `PipelineConfig` mein set kar dein.
+- `qc_degenerate_retention_tolerance_pct = 0.0` — **user ne 0 par razi hoke faisla diya.**
+  **Natija jo user ko maloom hai aur qabool hai:** 0.3% retention wala collapse ab
+  **warning NAHI dega** — sirf bilkul 0.0% dega. Number phir bhi report hota hai.
+  **Agar kabhi field mein aisa near-collapse case dikhe (retention 0% aur ~2% ke beech,
+  jo galat nikle) to user ko YAAD DILANA — wo isay dobara dekhna chahte hain.**
 - **"269 checks" wali test suite repo mein maujood nahi thi.** 7dd73a5 ke commit message
   mein likha hai magar wo files kabhi commit nahi hui. Ab `tests/` bani hai — 41 checks
   + `harness/unit_tests.py` ke 15.

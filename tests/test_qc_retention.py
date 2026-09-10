@@ -84,8 +84,8 @@ def run(check):
               cfg.qc_max_static_retention_pct is None, repr(cfg.qc_max_static_retention_pct))
         check("config: crop-share bounds still default to None",
               cfg.qc_max_crop_share_pct is None and cfg.qc_min_crop_share_pct is None)
-        check("config: degenerate tolerance is exposed and small",
-              0.0 <= cfg.qc_degenerate_retention_tolerance_pct <= 5.0,
+        check("config: degenerate tolerance defaults to exact (0.0)",
+              cfg.qc_degenerate_retention_tolerance_pct == 0.0,
               f"{cfg.qc_degenerate_retention_tolerance_pct}")
 
         # A retention that once tripped the 15% floor must now pass silently. 4.8% is the
@@ -115,22 +115,26 @@ def run(check):
               len(report["warnings"]) == 1 and "effectively all" in report["warnings"][0],
               f"{report['warnings']}")
 
-        # Just inside the tolerance, which exists only because the sieve runs after
-        # classification -- 0.5% and 99.5% are "none" and "all" in practice.
-        check("retention 0.5% warns as 'none' at the 1.0-point tolerance",
-              len(_assess(tmp, 1000, 5)["warnings"]) == 1)
-        check("retention 99.6% warns as 'all' at the 1.0-point tolerance",
-              len(_assess(tmp, 1000, 996)["warnings"]) == 1)
+        # The default is exact, and the cost of that is explicit: a near-collapse is
+        # reported and not warned about. This is the case to revisit if one ever shows up
+        # in the field.
+        check("DEFAULT is exact: 0.3% retention -- a near-collapse -- does NOT warn",
+              _assess(tmp, 1000, 3)["warnings"] == [],
+              "reported as 0.3, no warning")
+        check("DEFAULT is exact: 0.3% is still reported",
+              _assess(tmp, 1000, 3)["static_retention_pct"] == 0.3)
+        check("DEFAULT is exact: 99.7% does NOT warn",
+              _assess(tmp, 1000, 997)["warnings"] == [])
         check("retention 2% does not warn",
               _assess(tmp, 1000, 20)["warnings"] == [])
         check("retention 98% does not warn",
               _assess(tmp, 1000, 980)["warnings"] == [])
 
-        # tolerance=0 restores an exact-zero / exact-full test
-        check("tolerance=0: 0.5% no longer counts as 'none'",
-              _assess(tmp, 1000, 5, degenerate_retention_tolerance_pct=0.0)["warnings"] == [])
-        check("tolerance=0: exactly 0% still warns",
-              len(_assess(tmp, 1000, 0, degenerate_retention_tolerance_pct=0.0)["warnings"]) == 1)
+        # A tolerance can still be set by an operator who has a reason to.
+        check("tolerance=1.0: 0.5% counts as 'none'",
+              len(_assess(tmp, 1000, 5, degenerate_retention_tolerance_pct=1.0)["warnings"]) == 1)
+        check("tolerance=1.0: 99.6% counts as 'all'",
+              len(_assess(tmp, 1000, 996, degenerate_retention_tolerance_pct=1.0)["warnings"]) == 1)
 
         # ------------------------------------------- operator-set bounds still work
         report = _assess(tmp, 1000, 205, min_static_retention_pct=30.0)
