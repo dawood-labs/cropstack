@@ -79,6 +79,14 @@ chhote AOI ka number tha. Ye user ko batana hai.
   jo `as_completed()` ke *baad* chalta hai — us waqt future pehle hi complete hota hai.
   `as_completed()` khud **be-timeout** hai. Isliye hang forever.
 - Chhote AOI par kabhi nahi dikha kyunki Okara ke 4 tiles < 48 thay.
+- **15 line mein reproduce kiya** (CPython 3.11.15 ka bug, humara nahi).
+- **FIX HO GAYA:** `ndvi_pipeline.run_tile_inference()` — `max_tasks_per_child` ki
+  jagah har batch ke liye naya pool (memory bound wahi rehta hai), aur timeout
+  `as_completed()` par (jo asal mein block karta hai). Stall par workers kill karke
+  saaf RuntimeError, jo resume karne ko kehta hai.
+- Fix likhte waqt ek aur bug: timeout handler ke andar `Path(tile).name` fail hua to
+  cleanup skip ho gaya aur hang wapas aa gaya. Ab cleanup pehle hota hai.
+- Tests: `tests/test_pool_recycle.py` — wahi 6x8=48 shape. **51 checks** total.
 **Agar instance yahan mari:** log parho, `run_mode="resume"` se dobara chalao —
 NDVI tiles resume ho jayenge.
 
