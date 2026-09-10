@@ -49,8 +49,14 @@ poochna hai, khud nahi karna.
 
 ## 3. Abhi kis cheez par kaam chal raha hai — bilkul is waqt
 
-Task 2 **HO GAYA** — R2-1..R2-5 aur regression sab asli data par verify.
-Ab: aakhri khulasa likhna. Koi pending code kaam nahi.
+**PRODUCTION DISTRICT RUN ki tayyari.**
+AOI: `~/FAO/wheat/kasur_testing/Kasur.shp` — Kasur, **3,984 km2 / 984,440 acres**,
+bbox par 88 tiles @ 0.1 deg. Okara test AOI (418 km2, 4 tiles) se **~9.5x bara**.
+Crop: wheat, region punjab, year 2025. STAC dono stages.
+
+Abhi: **disk probe** chal raha hai — ek raw NDVI tile ka asli size naap raha hoon
+(wheat ki poori series ke saath), taake 88 tiles ka peak disk pata chale.
+Sirf 35 GB free hain. Probe se pehle run shuru NAHI karna.
 
 ---
 
