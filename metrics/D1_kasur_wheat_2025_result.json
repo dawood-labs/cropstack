@@ -1,0 +1,188 @@
+{
+  "name": "D1_kasur_wheat_2025",
+  "spec": {
+    "crop": "wheat",
+    "year": "2025",
+    "district_name": "kasur",
+    "region": "punjab",
+    "aoi_path": "/home/jovyan/FAO/wheat/kasur_testing/Kasur.shp",
+    "gee_service_account_key": "/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_district/D1_kasur_wheat_2025",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "stac_static_mode": "auto",
+    "run_mode": "resume"
+  },
+  "status": "ok",
+  "started_utc": "2026-09-04T10:19:36Z",
+  "config_summary": "crop/year/district : wheat / 2025 / kasur\nAOI                : /home/jovyan/FAO/wheat/kasur_testing/Kasur.shp\nNDVI source        : stac\nstatic source      : stac (auto)\nNDVI series window : 2024-08-24 -> 2025-07-01\nNDVI inference     : 2024-09-01 -> 2025-06-30\nstatic window      : 2025-01-20 -> 2025-03-20\nNDVI model         : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib\nstatic model       : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=resume, vector=resume\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_district/D1_kasur_wheat_2025",
+  "outcome": {
+    "crop": "wheat",
+    "year": "2025",
+    "district": "kasur",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_district/D1_kasur_wheat_2025",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": "2_static_run_1",
+    "vector_run": "3_vector_run_1",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs_district/D1_kasur_wheat_2025/1_ndvi_run_1/Kasur_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": "/home/jovyan/FAO/optimized_code_testing/runs_district/D1_kasur_wheat_2025/2_static_run_1/15_Feb_2025_and_10_Feb_2025/static_mosaic_15_Feb_2025_and_10_Feb_2025_Cls_sieved_p20.tif",
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_district/D1_kasur_wheat_2025/3_vector_run_1/final_output/kasur_wheat_2025.gpkg",
+    "ndvi_minutes": 0.3,
+    "static_minutes": 6.2,
+    "total_minutes": 6.7,
+    "result_check": {
+      "warnings": [],
+      "aoi_acres": 984439.6,
+      "feature_count": 30546,
+      "crop_acres": 288123.3,
+      "crop_share_of_aoi_pct": 29.3,
+      "ndvi_crop_pixels": 43545988,
+      "static_crop_pixels": 13657319,
+      "static_retention_pct": 31.4
+    }
+  },
+  "wall_s": 404.46,
+  "resources": {
+    "samples": 653,
+    "duration_s": 404.5,
+    "peak_rss_tree_mb": 8786.4,
+    "peak_rss_single_proc_mb": 4525.1,
+    "peak_outdir_mb": 9023.4,
+    "final_outdir_mb": 60.0,
+    "tree_read_mb": 0.18,
+    "tree_write_mb": 868.55,
+    "sys_read_mb": 0.23,
+    "sys_write_mb": 743.58,
+    "net_recv_mb": 23078.13,
+    "net_sent_mb": 20694.88,
+    "stage_peak_rss_mb": {
+      "resolve_models": 0.0,
+      "ndvi_stage": 3705.8,
+      "ndvi_acquire_stac": 202.7,
+      "ndvi_mosaic": 0.0,
+      "sieve": 4538.2,
+      "static_stage": 3856.9,
+      "static_acquire_stac": 3872.2,
+      "static_classify": 8786.4,
+      "static_crop_mask": 3891.5,
+      "vector_stage": 4186.8,
+      "pipeline": 3897.8
+    }
+  },
+  "events": [
+    {
+      "stage": "resolve_models",
+      "t_start_epoch": 1788517177.431,
+      "t_end_epoch": 1788517177.432,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_acquire_stac",
+      "t_start_epoch": 1788517177.432,
+      "t_end_epoch": 1788517177.605,
+      "start_s": 0.0,
+      "end_s": 0.18,
+      "duration_s": 0.17,
+      "peak_rss_mb_during": 202.7,
+      "error": null
+    },
+    {
+      "stage": "ndvi_mosaic",
+      "t_start_epoch": 1788517192.743,
+      "t_end_epoch": 1788517192.945,
+      "start_s": 15.31,
+      "end_s": 15.52,
+      "duration_s": 0.2,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788517193.658,
+      "t_end_epoch": 1788517197.432,
+      "start_s": 16.23,
+      "end_s": 20.0,
+      "duration_s": 3.77,
+      "peak_rss_mb_during": 1239.1,
+      "error": null
+    },
+    {
+      "stage": "ndvi_stage",
+      "t_start_epoch": 1788517177.432,
+      "t_end_epoch": 1788517197.433,
+      "start_s": 0.0,
+      "end_s": 20.0,
+      "duration_s": 20.0,
+      "peak_rss_mb_during": 3705.8,
+      "error": null
+    },
+    {
+      "stage": "static_acquire_stac",
+      "t_start_epoch": 1788517197.433,
+      "t_end_epoch": 1788517550.019,
+      "start_s": 20.0,
+      "end_s": 372.59,
+      "duration_s": 352.59,
+      "peak_rss_mb_during": 3872.2,
+      "error": null
+    },
+    {
+      "stage": "static_crop_mask",
+      "t_start_epoch": 1788517550.019,
+      "t_end_epoch": 1788517553.017,
+      "start_s": 372.59,
+      "end_s": 375.59,
+      "duration_s": 3.0,
+      "peak_rss_mb_during": 3891.5,
+      "error": null
+    },
+    {
+      "stage": "static_classify",
+      "t_start_epoch": 1788517550.019,
+      "t_end_epoch": 1788517565.561,
+      "start_s": 372.59,
+      "end_s": 388.13,
+      "duration_s": 15.54,
+      "peak_rss_mb_during": 8786.4,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788517565.646,
+      "t_end_epoch": 1788517568.76,
+      "start_s": 388.22,
+      "end_s": 391.33,
+      "duration_s": 3.11,
+      "peak_rss_mb_during": 4538.2,
+      "error": null
+    },
+    {
+      "stage": "static_stage",
+      "t_start_epoch": 1788517197.433,
+      "t_end_epoch": 1788517568.76,
+      "start_s": 20.0,
+      "end_s": 391.33,
+      "duration_s": 371.33,
+      "peak_rss_mb_during": 3856.9,
+      "error": null
+    },
+    {
+      "stage": "vector_stage",
+      "t_start_epoch": 1788517568.76,
+      "t_end_epoch": 1788517580.806,
+      "start_s": 391.33,
+      "end_s": 403.38,
+      "duration_s": 12.05,
+      "peak_rss_mb_during": 4186.8,
+      "error": null
+    }
+  ],
+  "finished_utc": "2026-09-04T10:26:21Z"
+}

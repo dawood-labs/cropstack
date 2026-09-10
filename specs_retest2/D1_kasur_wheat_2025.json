@@ -1,0 +1,4 @@
+{ "crop":"wheat","year":"2025","district_name":"kasur","region":"punjab",
+  "aoi_path":"/home/jovyan/FAO/wheat/kasur_testing/Kasur.shp","gee_service_account_key":"/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+  "output_dir":"/home/jovyan/FAO/optimized_code_testing/runs_district/D1_kasur_wheat_2025",
+  "ndvi_source":"stac","static_source":"stac","stac_static_mode":"auto","run_mode":"resume" }

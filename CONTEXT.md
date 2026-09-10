@@ -49,60 +49,16 @@ poochna hai, khud nahi karna.
 
 ## 3. Abhi kis cheez par kaam chal raha hai — bilkul is waqt
 
-**PRODUCTION DISTRICT RUN ki tayyari.**
-AOI: `~/FAO/wheat/kasur_testing/Kasur.shp` — Kasur, **3,984 km2 / 984,440 acres**,
-bbox par 88 tiles @ 0.1 deg. Okara test AOI (418 km2, 4 tiles) se **~9.5x bara**.
-Crop: wheat, region punjab, year 2025. STAC dono stages.
-
-**Disk probe HO GAYA (naapa, guess nahi):** ek raw NDVI tile = **144 MiB**
-(wheat series 2024-08-24 -> 2025-07-01, step 8). 88 tiles → **12.4 GiB** peak.
-Baqi (static staging ~1.2 GiB, mosaics/sieved ~0.5 GiB, vectors) ke saath total
-**~15 GiB**. Free 35 GB → theek hai.
-
-**RUN SHURU KAR DIYA:** `D1_kasur_wheat_2025`
-spec `specs_retest2/D1_kasur_wheat_2025.json`, output `runs_district/D1_kasur_wheat_2025`,
-log `logs/D1_kasur_wheat_2025.log`, `run_mode=new`.
-Asli tile count **57** (88 sirf bbox tha) → peak raw NDVI **8.2 GiB**.
-**NDVI acquisition MUKAMMAL (09:36):** `42.7 min for 57 tile(s) -- 5.7 min/tile
-(mean of farmdar's per-tile durations)`. Warning nahi aayi (5.7 < 8.0).
-**AHEM:** asli district par healthy = **5.7 min/tile**, Okara ke 2.6 se do guna.
-8 min threshold ab sirf **1.4x** door hai — pehle main ne 3.1x bataya tha, wo
-chhote AOI ka number tha. Ye user ko batana hai.
-**RF inference HANG HO GAYA (09:37:54 se koi harkat nahi).** Ye asli production bug hai.
-
-**FAIL-13 (HIGH) — NDVI inference pool `max_tasks_per_child` recycle par deadlock:**
-- 6 workers (75% of 8 cores) x `ndvi_worker_max_tasks=8` = **48**. Theek 48/57 tiles
-  ke baad ruka. 49th task ke liye naye workers spawn hone thay — wahin phansa.
-- Koi worker process zinda nahi; parent 25 threads, CPU 0.5%, `futex_wait_queue`,
-  ek thread `do_poll` par (mare hue workers ka pipe).
-- `ndvi_tile_timeout_s=900` **bekaar hai**: wo `future.result(timeout=)` par lagta hai
-  jo `as_completed()` ke *baad* chalta hai — us waqt future pehle hi complete hota hai.
-  `as_completed()` khud **be-timeout** hai. Isliye hang forever.
-- Chhote AOI par kabhi nahi dikha kyunki Okara ke 4 tiles < 48 thay.
-- **15 line mein reproduce kiya** (CPython 3.11.15 ka bug, humara nahi).
-- **FIX HO GAYA:** `ndvi_pipeline.run_tile_inference()` — `max_tasks_per_child` ki
-  jagah har batch ke liye naya pool (memory bound wahi rehta hai), aur timeout
-  `as_completed()` par (jo asal mein block karta hai). Stall par workers kill karke
-  saaf RuntimeError, jo resume karne ko kehta hai.
-- Fix likhte waqt ek aur bug: timeout handler ke andar `Path(tile).name` fail hua to
-  cleanup skip ho gaya aur hang wapas aa gaya. Ab cleanup pehle hota hai.
-- Tests: `tests/test_pool_recycle.py` — wahi 6x8=48 shape. **51 checks** total.
-
-**DISTRICT RUN RESUME KAR RAHA HOON (10:25):** spec ab `run_mode="resume"`.
-48 tile_predictions + 57 raw tiles disk par mehfooz hain, is liye sirf 9 tiles
-baqi hain. Uske baad mosaic → sieve → static stage → vector.
-Agar phir mari: wahi resume dobara chalao.
-**Agar instance yahan mari:** log parho, `run_mode="resume"` se dobara chalao —
-NDVI tiles resume ho jayenge.
+Kuch nahi chal raha. Kasur district run **mukammal**. Sab commit + push ho chuka.
 
 ---
 
 ## 4. Agla qadam
 
-1. Task 2 baqi: R2-3 (2027 vs Z1), R2-4 (chaar crops ka retention),
-   R2-5 (min/tile basis + 8 min threshold).
-2. Regression: pinned-date 2,184.7 acres → delta 0.0% hona chahiye.
-3. `specs/` + `specs_retest/` — 269 checks har commit se pehle.
+1. User se poochna: `stac_slow_tile_warning_minutes = 8` rakhna hai ya kam karna?
+   Asli district par healthy **5.7 min/tile** nikla — sirf 1.4x headroom.
+2. Kasur ke 288,123 acres ko local knowledge se check karana (main verdict nahi de sakta).
+3. Doosra district (Multan/Chiniot) chalana ho to wahi tarika.
 
 ---
 
