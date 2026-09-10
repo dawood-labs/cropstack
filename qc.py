@@ -62,12 +62,18 @@ def assess_result(
     static_crop_label: int = 1,
     max_crop_share_pct: Optional[float] = None,
     min_crop_share_pct: Optional[float] = None,
-    min_static_retention_pct: Optional[float] = 5.0,
-    max_static_retention_pct: Optional[float] = 99.5,
+    min_static_retention_pct: Optional[float] = None,
+    max_static_retention_pct: Optional[float] = None,
+    degenerate_retention_tolerance_pct: float = 1.0,
     report_path: Optional[Union[str, Path]] = None,
 ) -> dict:
-    """Measures the delivered result and warns when it looks implausible. Advisory only:
-    it never fails a run, because a genuinely low-cropped district is a valid answer."""
+    """Measures the delivered result and reports it. Advisory only: it never fails a run.
+
+    Everything measurable is reported unconditionally. Warnings are deliberately narrow --
+    the two degenerate retention outcomes, plus whatever bounds the operator has set from
+    their own local knowledge. There is no built-in plausible range, because a plausible
+    range is exactly the domain knowledge this module does not have.
+    """
     report: dict = {"warnings": []}
 
     def warn(message: str) -> None:
@@ -103,18 +109,35 @@ def assess_result(
         static_pixels = _count_labelled_pixels(static_raster, [static_crop_label])
         report["ndvi_crop_pixels"] = ndvi_pixels
         report["static_crop_pixels"] = static_pixels
+
+        # Always measured, always reported -- including as an explicit null when it cannot
+        # be computed, so a reader never has to wonder whether the field is missing or the
+        # measurement failed. Reporting the number is the job; judging it is not.
+        retention = None
         if ndvi_pixels and static_pixels is not None:
             retention = 100.0 * static_pixels / ndvi_pixels
-            report["static_retention_pct"] = round(retention, 1)
-            if min_static_retention_pct is not None and retention < min_static_retention_pct:
-                warn(f"The static model kept only {retention:.1f}% of the NDVI stage's crop "
-                     "area. That is the signature of a hazy or cloud-contaminated image "
-                     "rather than of a real crop boundary -- re-run from the next window "
-                     "(static_window_start_at) before accepting this.")
+        report["static_retention_pct"] = round(retention, 1) if retention is not None else None
+
+        if retention is not None:
+            # The only two retention outcomes that are wrong without knowing the crop, the
+            # district or the model. Everything between them is a question about
+            # agronomy that this module cannot answer and should not pretend to.
+            tolerance = max(0.0, degenerate_retention_tolerance_pct)
+            if retention <= tolerance:
+                warn(f"The static model kept {retention:.1f}% of the NDVI stage's crop area "
+                     "-- effectively none of it. That is a classification that produced "
+                     "nothing, not a crop boundary: check that the static image covers the "
+                     "AOI and that the model loaded.")
+            elif retention >= 100.0 - tolerance:
+                warn(f"The static model kept {retention:.1f}% of the NDVI stage's crop area "
+                     "-- effectively all of it, so it removed nothing. Check that the crop "
+                     "mask was applied and that the right static model loaded.")
+            elif min_static_retention_pct is not None and retention < min_static_retention_pct:
+                warn(f"The static model kept {retention:.1f}% of the NDVI stage's crop area, "
+                     f"below the {min_static_retention_pct:.1f}% floor set for this run.")
             elif max_static_retention_pct is not None and retention > max_static_retention_pct:
                 warn(f"The static model kept {retention:.1f}% of the NDVI stage's crop area, "
-                     "so it removed essentially nothing. Check that the right static model "
-                     "loaded and that the image is the intended date.")
+                     f"above the {max_static_retention_pct:.1f}% ceiling set for this run.")
 
     logger.info(
         "Result: "

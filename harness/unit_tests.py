@@ -47,7 +47,10 @@ for extension, driver in format_specs:
         continue
     try:
         resolved = aoi_io.resolve_aoi(target)
-        loaded = gpd.read_file(resolved) if extension != "parquet" else gpd.read_parquet(resolved)
+        # `resolve_aoi` normalises to an OGR-readable path, so a .parquet input comes
+        # back as the converted .gpkg. Reading the *resolved* path as parquet asserted
+        # something resolve_aoi never promised, and failed on its own converted output.
+        loaded = gpd.read_file(resolved)
         same = [round(v, 6) for v in loaded.total_bounds] == reference_bounds
         record(f"aoi format .{extension}", same,
                f"resolved -> {resolved.name}, n={len(loaded)}, bounds match={same}")

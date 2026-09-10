@@ -24,22 +24,27 @@ poochna hai, khud nahi karna.
 - `git pull` → main `7dd73a5` par hai.
 - **Purani reports commit ho gayi** (`b5ddd94`): TEST_REPORT / FAILURES / BOTTLENECKS /
   RETEST_REPORT / RETEST_2 + `metrics/ harness/ specs_retest2/ logs/`. 333 files.
+- **CONTEXT.md** bana (`0d9e0c1`).
+- **Task 1 mukammal**: retention bounds `None`; retention hamesha report hota hai;
+  sirf degenerate (0% / 100%) warnings; README theek; `tests/` suite bani — 27 checks.
+- `harness/unit_tests.py` ka parquet test theek kiya (test ka apna bug tha,
+  `resolve_aoi` parquet ko gpkg banata hai) — ab 15/15.
 
 ---
 
 ## 3. Abhi kis cheez par kaam chal raha hai — bilkul is waqt
 
-Task 1 shuru: `qc.py` + `config.py` + `README.md` mein retention bounds ko `None` karna.
+Task 1 **HO GAYA**. Ab Task 2 shuru: R2-1..R2-5 ki asli-data verification.
+Sabse pehle R2-1 (rate-limit retry / NOT SCORED / run rukna).
 
 ---
 
 ## 4. Agla qadam
 
-1. Task 1 mukammal + test + commit.
-2. Task 2: R2-1 (rate-limit retry / NOT SCORED / run rukna), R2-2 (staging tiles),
+1. Task 2: R2-1 (rate-limit retry / NOT SCORED / run rukna), R2-2 (staging tiles),
    R2-3 (2027 vs Z1), R2-4 (chaar crops ka retention), R2-5 (min/tile basis).
-3. Regression: pinned-date 2,184.7 acres → delta 0.0% hona chahiye.
-4. `specs/` + `specs_retest/` — 269 checks har commit se pehle.
+2. Regression: pinned-date 2,184.7 acres → delta 0.0% hona chahiye.
+3. `specs/` + `specs_retest/` — 269 checks har commit se pehle.
 
 ---
 

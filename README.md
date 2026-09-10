@@ -147,13 +147,25 @@ crop, and the two must not produce the same output: the NDVI stage refuses an al
 classification, and vectorising refuses an all-nodata input, rather than reporting a clean
 zero.
 
-It warns — never fails a run — when the static model keeps under
-`qc_min_static_retention_pct` (15%, provisional — six observations put real retention at
-20–44%) of its input mask, the mark of a hazy image rather
-than a real crop boundary, or over `qc_max_static_retention_pct` (99.5%), meaning it
-removed nothing. Set `qc_max_crop_share_pct` / `qc_min_crop_share_pct` per district to
-catch the regional over-prediction seen in lower Sindh; they are off until you set them,
-since a plausible share is local knowledge.
+`static_retention_pct` — the share of the NDVI stage's crop area the static model kept —
+is always measured and always reported, in the log and in `result_check.json`. **The
+pipeline does not judge it.** There is no built-in plausible range, because what a static
+model should keep depends on the crop, the district and the model, and nothing at run
+time knows that. An earlier version shipped a 15% floor fitted to six observations on one
+AOI; it has been removed.
+
+It warns — never fails a run — only on the two outcomes that are wrong regardless of
+domain: the static model kept effectively **none** of its input mask (a classification
+that produced nothing), or effectively **all** of it (a mask that never applied, or the
+wrong model). `qc_degenerate_retention_tolerance_pct` (1.0) is how close to 0% and 100%
+counts as "none" and "all"; it is there only because the sieve runs after classification,
+and it is not a plausible-range bound. Set it to 0 to require exactly zero and exactly
+full.
+
+`qc_min_static_retention_pct` / `qc_max_static_retention_pct` are off (`None`) and exist
+for operators who do have the local knowledge to say what is implausible. The same goes
+for `qc_max_crop_share_pct` / `qc_min_crop_share_pct`, which catch the regional
+over-prediction seen in lower Sindh once you set them per district.
 
 Haze defence is `cloud_metric="aoi"` (the default): it scores against the SCL band,
 which classes cirrus alongside cloud, rather than trusting scene-level `eo:cloud_cover`.
