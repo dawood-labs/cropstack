@@ -15,6 +15,7 @@ from checks import run_modules  # noqa: E402
 
 MODULES = [
     "test_qc_retention",
+    "test_acquisition_reporting",
 ]
 
 if __name__ == "__main__":

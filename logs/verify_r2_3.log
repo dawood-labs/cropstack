@@ -1,0 +1,258 @@
+
+==============================================================================
+### 1 spr_maize 2027 -- year outside the archive, static path
+==============================================================================
+INFO pipeline: Pipeline configuration:
+crop/year/district : spr_maize / 2027 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_spr_maize.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2026-12-24 -> 2027-07-17
+NDVI inference     : 2027-01-01 -> 2027-07-15
+static window      : 2027-04-20 -> 2027-05-20
+NDVI model         : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+INFO run_manager: 1_ndvi: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_sprmaize_2027/1_ndvi_run_1  (no previous output to reuse)
+INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_sprmaize_2027/3_vector_run_1  (no previous output to reuse)
+INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_NDVI_Model/FAO_Spr_Maize_RF_Model.joblib
+INFO model_registry: static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_SPR_MAIZE_MODELS/FAO_Spr_Maize_Static_IMG_Model/FAO_Spr_Maize_XGB_Static_IMG_Model.json
+INFO ndvi_pipeline: STAC acquisition: ~4 tile(s), 4 in flight, estimated peak 5.8 GiB of 33.4 GiB budget
+INFO farmdar.sentinel: aws-creds: bootstrapped 12-hour session, expires 2026-09-04T20:15:33+00:00
+INFO farmdar.sentinel: AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['red', 'nir'], 8 workers)
+INFO farmdar.sentinel: [1/4] tile 0004: written (8.8s)
+INFO farmdar.sentinel: [2/4] tile 0003: written (10.8s)
+INFO farmdar.sentinel: [3/4] tile 0001: written (12.7s)
+INFO farmdar.sentinel: [4/4] tile 0002: written (14.3s)
+INFO farmdar.sentinel: DONE 4 tiles in 0.3 min. out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/V3_sprmaize_2027/1_ndvi_run_1/raw_ndvi_tiles vrt=None
+INFO ndvi_pipeline: STAC acquisition: ~4 tile(s), 4 in flight, estimated peak 5.8 GiB of 32.5 GiB budget
+INFO ndvi_pipeline: STAC acquisition took 0.3 min for 4 tile(s) -- 0.2 min/tile (mean of farmdar's per-tile durations).
+INFO ndvi_pipeline: Running RF inference over 4 tile(s) on 4 worker(s)...
+NDVI tiles:   0%|                                                                                                                                                               | 0/4 [00:00<?, ?it/s]INFO botocore.credentials: Found credentials in environment variables.
+INFO botocore.credentials: Found credentials in environment variables.
+INFO botocore.credentials: Found credentials in environment variables.
+INFO botocore.credentials: Found credentials in environment variables.
+NDVI tiles:  25%|█████████████████████████████████████▊                                                                                                                 | 1/4 [00:01<00:05,  1.92s/it]NDVI tiles: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:01<00:00,  2.02it/s]
+INFO raster_io: Mosaicking 4 raster(s) -> okara_test_data_spr_maize_rf_classification_map.tif
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+ERROR 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+
+--- case result ---
+{
+  "case": "1 spr_maize 2027 -- year outside the archive, static path",
+  "run": "V3_sprmaize_2027",
+  "crop": "spr_maize",
+  "year": "2027",
+  "status": "stopped",
+  "error_type": "RuntimeError",
+  "error": "The NDVI classification for spr_maize 2027 is nodata in every pixel: the acquisition returned no imagery over this AOI for 2026-12-24..2027-07-17. Check the year is within the archive and the AOI is where you think it is -- this is an acquisition failure, not a district without crop.",
+  "seconds": 19.4
+}
+
+==============================================================================
+### 2 rice 2027 -- year outside the archive, NDVI-only path
+==============================================================================
+INFO pipeline: Pipeline configuration:
+crop/year/district : rice / 2027 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp
+NDVI source        : stac
+static source      : stac (auto)  [DISABLED: run_static_model=False]
+NDVI series window : 2027-05-24 -> 2027-12-01
+NDVI inference     : 2027-06-01 -> 2027-11-30
+static window      :  -> 
+NDVI model         : gs://farmdar_data_catalog/fao_rice_maize_timeseries_model/fao_rice_maize_rf_model.joblib
+static model       : (none yet for rice)
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+INFO run_manager: 1_ndvi: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_rice_2027/1_ndvi_run_1  (no previous output to reuse)
+INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_rice_2027/3_vector_run_1  (no previous output to reuse)
+INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/fao_rice_maize_timeseries_model/fao_rice_maize_rf_model.joblib
+INFO ndvi_pipeline: STAC acquisition: ~4 tile(s), 4 in flight, estimated peak 5.8 GiB of 33.0 GiB budget
+INFO farmdar.sentinel: AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['red', 'nir'], 8 workers)
+INFO farmdar.sentinel: [1/4] tile 0001: written (12.2s)
+INFO farmdar.sentinel: [2/4] tile 0003: written (15.3s)
+INFO farmdar.sentinel: [3/4] tile 0002: written (18.8s)
+INFO farmdar.sentinel: [4/4] tile 0004: written (22.5s)
+INFO farmdar.sentinel: DONE 4 tiles in 0.4 min. out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/V3_rice_2027/1_ndvi_run_1/raw_ndvi_tiles vrt=None
+INFO ndvi_pipeline: STAC acquisition: ~4 tile(s), 4 in flight, estimated peak 5.8 GiB of 32.2 GiB budget
+INFO ndvi_pipeline: STAC acquisition took 0.4 min for 4 tile(s) -- 0.3 min/tile (mean of farmdar's per-tile durations).
+INFO ndvi_pipeline: Running RF inference over 4 tile(s) on 4 worker(s)...
+NDVI tiles:   0%|                                                                                                                                                               | 0/4 [00:00<?, ?it/s]INFO botocore.credentials: Found credentials in environment variables.
+INFO botocore.credentials: Found credentials in environment variables.
+INFO botocore.credentials: Found credentials in environment variables.
+INFO botocore.credentials: Found credentials in environment variables.
+NDVI tiles:  25%|█████████████████████████████████████▊                                                                                                                 | 1/4 [00:02<00:06,  2.26s/it]NDVI tiles: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:02<00:00,  1.71it/s]
+INFO raster_io: Mosaicking 4 raster(s) -> okara_test_data_rice_rf_classification_map.tif
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+ERROR 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+
+--- case result ---
+{
+  "case": "2 rice 2027 -- year outside the archive, NDVI-only path",
+  "run": "V3_rice_2027",
+  "crop": "rice",
+  "year": "2027",
+  "status": "stopped",
+  "error_type": "RuntimeError",
+  "error": "The NDVI classification for rice 2027 is nodata in every pixel: the acquisition returned no imagery over this AOI for 2027-05-24..2027-12-01. Check the year is within the archive and the AOI is where you think it is -- this is an acquisition failure, not a district without crop.",
+  "seconds": 25.8
+}
+
+==============================================================================
+### 3 cane on a real sub-AOI with genuinely no cane
+==============================================================================
+INFO pipeline: Pipeline configuration:
+crop/year/district : cane / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_nocane_block.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-12-24 -> 2025-11-17
+NDVI inference     : 2025-01-01 -> 2025-11-15
+static window      : 2025-10-15 -> 2025-11-25
+NDVI model         : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib
+static model       : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+INFO run_manager: 1_ndvi: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/1_ndvi_run_1  (no previous output to reuse)
+INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/3_vector_run_1  (no previous output to reuse)
+INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib
+INFO model_registry: static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json
+INFO ndvi_pipeline: STAC acquisition: ~1 tile(s), 1 in flight, estimated peak 1.5 GiB of 32.8 GiB budget
+INFO farmdar.sentinel: AOI -> 1 tiles @ 10m (tile=0.10deg, bands=['red', 'nir'], 8 workers)
+/opt/gis/lib/python3.11/site-packages/rasterio/warp.py:387: NotGeoreferencedWarning: Dataset has no geotransform, gcps, or rpcs. The identity matrix will be returned.
+  dest = _reproject(
+INFO farmdar.sentinel: [1/1] tile 0001: written (115.3s)
+INFO farmdar.sentinel: DONE 1 tiles in 1.9 min. out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/1_ndvi_run_1/raw_ndvi_tiles vrt=None
+INFO ndvi_pipeline: STAC acquisition: ~1 tile(s), 1 in flight, estimated peak 1.5 GiB of 32.2 GiB budget
+INFO ndvi_pipeline: STAC acquisition took 1.9 min for 1 tile(s) -- 1.9 min/tile (mean of farmdar's per-tile durations).
+INFO ndvi_pipeline: Running RF inference over 1 tile(s) on 1 worker(s)...
+NDVI tiles:   0%|                                                                                                                                                               | 0/1 [00:00<?, ?it/s]INFO botocore.credentials: Found credentials in environment variables.
+NDVI tiles: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:29<00:00, 29.78s/it]NDVI tiles: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:29<00:00, 29.78s/it]
+INFO raster_io: Mosaicking 1 raster(s) -> okara_nocane_block_rf_classification_map.tif
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_database: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+ERROR 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Warning 1: PROJ: proj_create_from_name: Open of /opt/gis/share/proj failed
+Loading categorical map for strict sieving: okara_nocane_block_rf_classification_map.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/1_ndvi_run_1/okara_nocane_block_rf_classification_map_sieved_p20.tif
+INFO pipeline: NDVI stage finished in 2.4 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/1_ndvi_run_1/okara_nocane_block_rf_classification_map_sieved_p20.tif
+INFO run_manager: 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/2_static_run_1  (no previous output to reuse)
+INFO farmdar.sentinel: static: 4 scenes on 4 dates in [2025-11-07, 2025-11-15)
+INFO farmdar.sentinel: static: dates=['2025-11-07'] (anchor=2025-11-07) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 3 scenes on 2 dates in [2025-11-01, 2025-11-06)
+INFO farmdar.sentinel: static: dates=['2025-11-05'] (anchor=2025-11-05) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 7 scenes on 7 dates in [2025-10-15, 2025-10-31)
+INFO farmdar.sentinel: static: dates=['2025-10-16'] (anchor=2025-10-16) -> 100.00% of AOI usable
+INFO farmdar.sentinel: static: 4 scenes on 3 dates in [2025-11-16, 2025-11-25)
+INFO farmdar.sentinel: static: dates=['2025-11-17'] (anchor=2025-11-17) -> 100.00% of AOI usable
+INFO static_pipeline: Window scores (4 of 4 window(s) scored):
+INFO static_pipeline:   window 1 (2025-11-07 to 2025-11-15): ['2025-11-07'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 2 (2025-11-01 to 2025-11-06): ['2025-11-05'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 3 (2025-10-15 to 2025-10-31): ['2025-10-16'] -> 100.0% of AOI usable
+INFO static_pipeline:   window 4 (2025-11-16 to 2025-11-25): ['2025-11-17'] -> 100.0% of AOI usable
+INFO static_pipeline: Coverage spread across the scored windows: 100.0%-100.0%. The chosen date, not just the code, determines the acreage reported.
+INFO static_pipeline: Chose window 1 (2025-11-07 to 2025-11-15) at 100.0% (floor 80%).
+INFO farmdar.sentinel: AOI -> 1 tiles @ 10m (tile=0.10deg, bands=['blue', 'green', 'red', 'rededge1', 'nir', 'ndvi'], dates=['2025-11-07'], 8 workers)
+INFO farmdar.sentinel: [1/1] tile 0001: written (4.3s, 99.77% filled)
+INFO farmdar.sentinel: DONE 1 tiles in 0.1 min. dates=['2025-11-07'] out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/2_static_run_1/static_staging vrt=/home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/2_static_run_1/static_staging/static.vrt
+INFO static_pipeline: STAC static dates (auto mode): ['2025-11-07'] via window 1 (2025-11-07 to 2025-11-15)
+INFO static_classify: Building crop mask | crop_classes=(1,) | AOI=/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_nocane_block.shp
+Building crop mask:   0%|                                                                                                                                                    | 0/1 [00:00<?, ?block/s]Building crop mask: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 30.16block/s]
+INFO static_classify: Crop mask coverage: 0 px (0.00% of the AOI)
+WARNING static_classify: Crop mask is empty: classes (1,) not present in this AOI.
+INFO static_classify: Grid parity verified: crop mask is 1:1 with the static image.
+INFO static_classify: Static worker pool = 1  [requested=7; windows=1]
+INFO static_classify: Classifying 1 window(s) across 1 worker(s)...
+Classifying static image:   0%|                                                                                                                                              | 0/1 [00:00<?, ?block/s]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.49s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.49s/block]
+Loading categorical map for strict sieving: static_mosaic_07_Nov_2025_Cls.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/2_static_run_1/07_Nov_2025/static_mosaic_07_Nov_2025_Cls_sieved_p20.tif
+INFO pipeline: Static stage finished in 0.3 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/2_static_run_1/07_Nov_2025/static_mosaic_07_Nov_2025_Cls_sieved_p20.tif
+1. Vectorising target classes [1]...
+  [Warning] No pixels found for classes [1].
+  -> Writing an empty layer with the full schema (no pixels of classes [1]).
+INFO pyogrio._io: Created 0 records
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/3_vector_run_1/final_output/okara_cane_2025.gpkg
+INFO pyogrio._io: Created 0 records
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/3_vector_run_1/final_output/okara_cane_2025.zip
+WARNING qc: RESULT CHECK: The static model kept 0.0% of the NDVI stage's crop area -- effectively none of it. Either there is no crop here, or the static image or model produced nothing; the two look the same from here. Worth confirming the image covers the AOI and the model loaded.
+INFO qc: Result: aoi_acres=1324.7, feature_count=0, crop_acres=0.0, crop_share_of_aoi_pct=0.0, ndvi_crop_pixels=21951, static_crop_pixels=0, static_retention_pct=0.0 -- 1 warning(s)
+INFO pipeline: Pipeline finished in 2.7 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/3_vector_run_1/final_output/okara_cane_2025.gpkg
+
+--- case result ---
+{
+  "case": "3 cane on a real sub-AOI with genuinely no cane",
+  "run": "V3_nocane_block",
+  "crop": "cane",
+  "year": "2025",
+  "status": "completed",
+  "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+  "features": 0,
+  "acres": 0.0,
+  "aoi_acres": 1324.7,
+  "retention_pct": 0.0,
+  "warnings": [
+    "The static model kept 0.0% of the NDVI stage's crop area -- effectively none of it. Either there is no crop here, or the static image or model produced nothing; the two look the same from here. Worth confirming the image covers the AOI and the model loaded."
+  ],
+  "gpkg_rows": 0,
+  "gpkg_columns": [
+    "predicted",
+    "area_acres",
+    "geometry"
+  ],
+  "seconds": 164.5
+}
+
+wrote metrics/verify_r2_3.json
+
+=== verdict ===
+[PASS] spr_maize 2027 stops rather than reporting a result -- stopped: The NDVI classification for spr_maize 2027 is nodata in every pixel: the acquisition retur
+[PASS] rice 2027 (NDVI-only) stops too -- this is the path that used to ship a zero -- stopped: The NDVI classification for rice 2027 is nodata in every pixel: the acquisition returned n
+[PASS] the 2027 error names it an acquisition failure, not an absent crop -- The NDVI classification for rice 2027 is nodata in every pixel: the acquisition returned no imagery over this AOI for 20
+[PASS] the real crop-free sub-AOI still completes -- completed: 
+[PASS] it still gets an empty GPKG with the full schema -- rows=0 cols=['predicted', 'area_acres', 'geometry']
+[PASS] it still returns a path, not None -- ocane_block/3_vector_run_1/final_output/okara_cane_2025.gpkg
+[PASS] the two outcomes are genuinely different -- 2027=stopped / crop-free=completed

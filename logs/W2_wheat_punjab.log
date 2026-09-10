@@ -1,0 +1,147 @@
+==============================================================================
+crop/year/district : wheat / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_wheat.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-08-24 -> 2025-07-01
+NDVI inference     : 2024-09-01 -> 2025-06-30
+static window      : 2025-01-20 -> 2025-03-20
+NDVI model         : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+==============================================================================
+2026-09-04 08:07:31,883 INFO pipeline: Pipeline configuration:
+crop/year/district : wheat / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_wheat.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-08-24 -> 2025-07-01
+NDVI inference     : 2024-09-01 -> 2025-06-30
+static window      : 2025-01-20 -> 2025-03-20
+NDVI model         : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+2026-09-04 08:07:31,883 INFO run_manager: 1_ndvi: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/1_ndvi_run_1
+2026-09-04 08:07:31,883 INFO run_manager: 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/3_vector_run_1  (no previous output to reuse)
+2026-09-04 08:07:31,883 INFO model_registry: ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib
+2026-09-04 08:07:31,883 INFO model_registry: static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json
+2026-09-04 08:07:31,883 INFO ndvi_pipeline: [Checkpoint] NDVI classification map already exists: /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/1_ndvi_run_1/okara_test_data_wheat_rf_classification_map.tif
+[Skipped] Sieved raster already exists at: /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/1_ndvi_run_1/okara_test_data_wheat_rf_classification_map_sieved_p20.tif
+2026-09-04 08:07:31,883 INFO pipeline: NDVI stage finished in 0.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/1_ndvi_run_1/okara_test_data_wheat_rf_classification_map_sieved_p20.tif
+2026-09-04 08:07:31,884 INFO run_manager: 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/2_static_run_1  (no previous output to reuse)
+2026-09-04 08:07:31,976 INFO farmdar.sentinel: aws-creds: bootstrapped 12-hour session, expires 2026-09-04T20:07:31+00:00
+2026-09-04 08:07:34,611 INFO farmdar.sentinel: static: 6 scenes on 5 dates in [2025-02-10, 2025-02-25)
+2026-09-04 08:07:37,766 INFO farmdar.sentinel: static: dates=['2025-02-18'] (anchor=2025-02-18) -> 100.00% of AOI usable
+2026-09-04 08:07:38,793 INFO farmdar.sentinel: static: 5 scenes on 5 dates in [2025-01-25, 2025-02-10)
+2026-09-04 08:07:41,025 INFO farmdar.sentinel: static: dates=['2025-02-03'] (anchor=2025-02-03) -> 100.00% of AOI usable
+2026-09-04 08:07:41,729 INFO farmdar.sentinel: static: 3 scenes on 3 dates in [2025-02-26, 2025-03-10)
+2026-09-04 08:07:43,650 INFO farmdar.sentinel: static: dates=['2025-03-05'] (anchor=2025-03-05) -> 99.68% of AOI usable
+2026-09-04 08:07:44,301 INFO farmdar.sentinel: static: 4 scenes on 4 dates in [2025-03-11, 2025-03-20)
+2026-09-04 08:07:46,391 INFO farmdar.sentinel: static: dates=['2025-03-15'] (anchor=2025-03-15) -> 100.00% of AOI usable
+2026-09-04 08:07:46,392 INFO static_pipeline: Window scores (4 of 4 window(s) scored):
+2026-09-04 08:07:46,392 INFO static_pipeline:   window 1 (2025-02-10 to 2025-02-25): ['2025-02-18'] -> 100.0% of AOI usable
+2026-09-04 08:07:46,392 INFO static_pipeline:   window 2 (2025-01-25 to 2025-02-10): ['2025-02-03'] -> 100.0% of AOI usable
+2026-09-04 08:07:46,392 INFO static_pipeline:   window 3 (2025-02-26 to 2025-03-10): ['2025-03-05'] -> 99.7% of AOI usable
+2026-09-04 08:07:46,392 INFO static_pipeline:   window 4 (2025-03-11 to 2025-03-20): ['2025-03-15'] -> 100.0% of AOI usable
+2026-09-04 08:07:46,392 INFO static_pipeline: Coverage spread across the scored windows: 99.7%-100.0%. The chosen date, not just the code, determines the acreage reported.
+2026-09-04 08:07:46,392 INFO static_pipeline: Chose window 1 (2025-02-10 to 2025-02-25) at 100.0% (floor 80%).
+2026-09-04 08:07:46,395 INFO farmdar.sentinel: AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['blue', 'green', 'red', 'rededge1', 'nir', 'ndvi'], dates=['2025-02-18'], 8 workers)
+2026-09-04 08:07:52,116 INFO farmdar.sentinel: [1/4] tile 0002: written (5.5s, 100.0% filled)
+2026-09-04 08:07:52,117 INFO farmdar.sentinel: [2/4] tile 0004: written (5.1s, 100.0% filled)
+2026-09-04 08:07:54,652 INFO farmdar.sentinel: [3/4] tile 0001: written (7.7s, 100.0% filled)
+2026-09-04 08:07:54,652 INFO farmdar.sentinel: [4/4] tile 0003: written (7.7s, 100.0% filled)
+2026-09-04 08:07:54,684 INFO farmdar.sentinel: DONE 4 tiles in 0.1 min. dates=['2025-02-18'] out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/2_static_run_1/static_staging vrt=/home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/2_static_run_1/static_staging/static.vrt
+2026-09-04 08:07:54,684 INFO static_pipeline: STAC static dates (auto mode): ['2025-02-18'] via window 1 (2025-02-10 to 2025-02-25)
+2026-09-04 08:07:54,685 INFO static_classify: Building crop mask | crop_classes=(14,) | AOI=/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_wheat.shp
+Building crop mask:   0%|                                                                                                                                                    | 0/4 [00:00<?, ?block/s]Building crop mask:  25%|███████████████████████████████████                                                                                                         | 1/4 [00:00<00:00,  8.10block/s]Building crop mask: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 28.69block/s]
+2026-09-04 08:07:54,844 INFO static_classify: Crop mask coverage: 1,407,169 px (58.28% of the AOI)
+2026-09-04 08:07:54,853 INFO static_classify: Grid parity verified: crop mask is 1:1 with the static image.
+2026-09-04 08:07:54,859 INFO static_classify: Static worker pool = 4  [requested=7; windows=4]
+2026-09-04 08:07:54,859 INFO static_classify: Classifying 4 window(s) across 4 worker(s)...
+Classifying static image:   0%|                                                                                                                                              | 0/4 [00:00<?, ?block/s]Classifying static image:  25%|█████████████████████████████████▌                                                                                                    | 1/4 [00:01<00:03,  1.09s/block]Classifying static image:  50%|███████████████████████████████████████████████████████████████████                                                                   | 2/4 [00:01<00:01,  1.78block/s]Classifying static image:  75%|████████████████████████████████████████████████████████████████████████████████████████████████████▌                                 | 3/4 [00:01<00:00,  2.61block/s]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:03<00:00,  1.02block/s]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:03<00:00,  1.20block/s]
+Loading categorical map for strict sieving: static_mosaic_18_Feb_2025_Cls.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/2_static_run_1/18_Feb_2025/static_mosaic_18_Feb_2025_Cls_sieved_p20.tif
+2026-09-04 08:07:58,796 INFO pipeline: Static stage finished in 0.4 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/2_static_run_1/18_Feb_2025/static_mosaic_18_Feb_2025_Cls_sieved_p20.tif
+1. Vectorising target classes [1]...
+  -> Extracted 2,282 raw polygon features.
+  -> Pre-filter dropped 166 sub-threshold polygons before clipping.
+2. Loading boundary for clipping...
+3. Clip to boundary, explode to singlepart...
+4. Computing area (EPSG:32642) and filtering (>= 0.5 acres)...
+   Retained 2,114 features, 18,404.35 acres, label 14
+5. Exporting...
+2026-09-04 08:07:59,420 INFO pyogrio._io: Created 2,114 records
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/3_vector_run_1/final_output/okara_wheat_2025.gpkg
+2026-09-04 08:07:59,440 INFO pyogrio._io: Created 2,114 records
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/3_vector_run_1/final_output/okara_wheat_2025.zip
+2026-09-04 08:07:59,639 INFO qc: Result: aoi_acres=51293.1, feature_count=2114, crop_acres=18404.3, crop_share_of_aoi_pct=35.9, ndvi_crop_pixels=2889629, static_crop_pixels=871772, static_retention_pct=30.2
+2026-09-04 08:07:59,640 INFO pipeline: Pipeline finished in 0.5 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/3_vector_run_1/final_output/okara_wheat_2025.gpkg
+
+=== RESULT ===
+{
+  "name": "W2_wheat_punjab",
+  "status": "ok",
+  "started_utc": "2026-09-04T08:07:31Z",
+  "config_summary": "crop/year/district : wheat / 2025 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_wheat.shp\nNDVI source        : stac\nstatic source      : stac (auto)\nNDVI series window : 2024-08-24 -> 2025-07-01\nNDVI inference     : 2024-09-01 -> 2025-06-30\nstatic window      : 2025-01-20 -> 2025-03-20\nNDVI model         : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib\nstatic model       : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=resume, vector=resume\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab",
+  "outcome": {
+    "crop": "wheat",
+    "year": "2025",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": "2_static_run_1",
+    "vector_run": "3_vector_run_1",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/1_ndvi_run_1/okara_test_data_wheat_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/2_static_run_1/18_Feb_2025/static_mosaic_18_Feb_2025_Cls_sieved_p20.tif",
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_retest/W2_wheat_punjab/3_vector_run_1/final_output/okara_wheat_2025.gpkg",
+    "ndvi_minutes": 0.0,
+    "static_minutes": 0.4,
+    "total_minutes": 0.5,
+    "result_check": {
+      "warnings": [],
+      "aoi_acres": 51293.1,
+      "feature_count": 2114,
+      "crop_acres": 18404.3,
+      "crop_share_of_aoi_pct": 35.9,
+      "ndvi_crop_pixels": 2889629,
+      "static_crop_pixels": 871772,
+      "static_retention_pct": 30.2
+    }
+  },
+  "wall_s": 27.76,
+  "resources": {
+    "samples": 46,
+    "duration_s": 27.8,
+    "peak_rss_tree_mb": 2321.0,
+    "peak_rss_single_proc_mb": 949.3,
+    "peak_outdir_mb": 54.8,
+    "final_outdir_mb": 54.8,
+    "tree_read_mb": 0.0,
+    "tree_write_mb": 54.55,
+    "sys_read_mb": 0.0,
+    "sys_write_mb": 21.07,
+    "net_recv_mb": 54.89,
+    "net_sent_mb": 0.96,
+    "stage_peak_rss_mb": {
+      "resolve_models": 0.0,
+      "ndvi_stage": 0.0,
+      "sieve": 835.9,
+      "static_stage": 0.0,
+      "static_acquire_stac": 922.9,
+      "static_classify": 2321.0,
+      "static_crop_mask": 0.0,
+      "vector_stage": 836.8
+    }
+  },
+  "finished_utc": "2026-09-04T08:07:59Z"
+}

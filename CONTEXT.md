@@ -35,13 +35,22 @@ poochna hai, khud nahi karna.
 - **R2-2 verify (8/8 PASS)** — `harness/verify_r2_2_staging.py`, `logs/verify_r2_2.log`,
   `metrics/verify_r2_2.json`. Purane tiles discard hote hain, same-date resume reuse
   karta hai (manual aur auto dono).
+- **R2-3 verify (7/7 PASS)** — `harness/verify_r2_3_empty_vs_failure.py`. 2027 (spr_maize
+  aur rice dono) ruk jata hai; asli khaali sub-AOI ko empty GPKG + exit 0 milta hai.
+- **R2-4** — chaar crops ka retention, bounds `None`, zero warnings:
+  cane 36.9 · wheat/punjab 30.2 · wheat/sindh 25.9 · spr_maize 20.5.
+- **R2-5** — asli run: 3.3 min / 4 tiles → **2.6 min/tile**, basis = farmdar ki apni
+  per-tile durations. Purana wall/tiles form 0.8 kehta. 8 min threshold fire nahi hua.
+- **Regression PASS** — fresh full run (`W5_cane_fresh_1016`, run_mode=new):
+  926 features / **2,184.67 acres** → delta **0.0%**. NDVI map byte-identical.
+- `ndvi_pipeline.per_tile_minutes()` alag function bana (testable). Tests: 41.
 
 ---
 
 ## 3. Abhi kis cheez par kaam chal raha hai — bilkul is waqt
 
-Task 2 chal raha hai. R2-1 aur R2-2 **verify ho gaye asli data par**.
-Ab R2-3 (2027 acquisition failure vs Z1 empty district).
+Task 2 **HO GAYA** — R2-1..R2-5 aur regression sab asli data par verify.
+Ab: aakhri khulasa likhna. Koi pending code kaam nahi.
 
 ---
 

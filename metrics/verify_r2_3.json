@@ -1,0 +1,44 @@
+[
+  {
+    "case": "1 spr_maize 2027 -- year outside the archive, static path",
+    "run": "V3_sprmaize_2027",
+    "crop": "spr_maize",
+    "year": "2027",
+    "status": "stopped",
+    "error_type": "RuntimeError",
+    "error": "The NDVI classification for spr_maize 2027 is nodata in every pixel: the acquisition returned no imagery over this AOI for 2026-12-24..2027-07-17. Check the year is within the archive and the AOI is where you think it is -- this is an acquisition failure, not a district without crop.",
+    "seconds": 19.4
+  },
+  {
+    "case": "2 rice 2027 -- year outside the archive, NDVI-only path",
+    "run": "V3_rice_2027",
+    "crop": "rice",
+    "year": "2027",
+    "status": "stopped",
+    "error_type": "RuntimeError",
+    "error": "The NDVI classification for rice 2027 is nodata in every pixel: the acquisition returned no imagery over this AOI for 2027-05-24..2027-12-01. Check the year is within the archive and the AOI is where you think it is -- this is an acquisition failure, not a district without crop.",
+    "seconds": 25.8
+  },
+  {
+    "case": "3 cane on a real sub-AOI with genuinely no cane",
+    "run": "V3_nocane_block",
+    "crop": "cane",
+    "year": "2025",
+    "status": "completed",
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_retest/V3_nocane_block/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+    "features": 0,
+    "acres": 0.0,
+    "aoi_acres": 1324.7,
+    "retention_pct": 0.0,
+    "warnings": [
+      "The static model kept 0.0% of the NDVI stage's crop area -- effectively none of it. Either there is no crop here, or the static image or model produced nothing; the two look the same from here. Worth confirming the image covers the AOI and the model loaded."
+    ],
+    "gpkg_rows": 0,
+    "gpkg_columns": [
+      "predicted",
+      "area_acres",
+      "geometry"
+    ],
+    "seconds": 164.5
+  }
+]
