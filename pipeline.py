@@ -14,6 +14,7 @@ from typing import Any, Dict, Optional
 
 import model_registry
 import postprocess
+import run_manager
 from config import PipelineConfig
 from ndvi_pipeline import run_ndvi_pipeline
 from static_pipeline import run_static_pipeline
@@ -62,7 +63,15 @@ def run_pipeline(
 
     logger.info("Pipeline configuration:\n%s", cfg.summary())
 
-    # Models first: a missing or unreachable model should fail in seconds, not an hour
+    # Each stage gets its own numbered folder, so re-running an AOI never collides with a
+    # previous run and a crashed run can be resumed in place. The static stage is
+    # resolved later, only if it actually runs.
+    ndvi_dir, ndvi_run_id, ndvi_resumed = run_manager.resolve_stage_dir(
+        out_dir, run_manager.STAGE_NDVI, cfg.stage_mode(cfg.ndvi_run_mode), cfg.run_tag)
+    vector_dir, vector_run_id, _ = run_manager.resolve_stage_dir(
+        out_dir, run_manager.STAGE_VECTOR, cfg.stage_mode(cfg.vector_run_mode), cfg.run_tag)
+
+    # Models next: a missing or unreachable model should fail in seconds, not an hour
     # into imagery acquisition. Downloaded models land in the permanent cache.
     models = model_registry.resolve_pipeline_models(cfg, force_refresh=refresh_models)
 
@@ -75,16 +84,34 @@ def run_pipeline(
 
     ndvi_started_at = time.time()
     sieved_ndvi_path = run_ndvi_pipeline(
-        cfg, out_dir, ndvi_model_path=str(models["ndvi_model"]),
+        cfg, ndvi_dir, ndvi_model_path=str(models["ndvi_model"]),
         gee_credentials=gee_credentials, gee_project=gee_project,
     )
     ndvi_minutes = (time.time() - ndvi_started_at) / 60
     logger.info(f"NDVI stage finished in {ndvi_minutes:.1f} min -> {sieved_ndvi_path}")
 
+    run_manager.write_run_info(ndvi_dir, {
+        "stage": "ndvi", "run_id": ndvi_run_id, "resumed": ndvi_resumed,
+        "source": cfg.ndvi_source, "crop": cfg.crop, "year": cfg.year,
+        "aoi": cfg.aoi_source or cfg.aoi_path, "minutes": round((time.time() - ndvi_started_at) / 60, 1),
+        "output": str(sieved_ndvi_path),
+    })
+
+    static_dir = static_run_id = None
     static_started_at = time.time()
-    sieved_static_path = run_static_pipeline(
-        cfg, out_dir, sieved_ndvi_path, static_model_path=str(models["static_model"]),
-    ) if cfg.run_static_model else None
+    sieved_static_path = None
+    if cfg.run_static_model:
+        static_dir, static_run_id, static_resumed = run_manager.resolve_stage_dir(
+            out_dir, run_manager.STAGE_STATIC, cfg.stage_mode(cfg.static_run_mode), cfg.run_tag)
+        sieved_static_path = run_static_pipeline(
+            cfg, static_dir, sieved_ndvi_path, static_model_path=str(models["static_model"]),
+        )
+        run_manager.write_run_info(static_dir, {
+            "stage": "static", "run_id": static_run_id, "resumed": static_resumed,
+            "source": cfg.static_source, "crop": cfg.crop, "year": cfg.year,
+            "minutes": round((time.time() - static_started_at) / 60, 1),
+            "output": str(sieved_static_path),
+        })
     static_minutes = (time.time() - static_started_at) / 60
     if sieved_static_path:
         logger.info(f"Static stage finished in {static_minutes:.1f} min -> {sieved_static_path}")
@@ -101,7 +128,7 @@ def run_pipeline(
     vector_path = postprocess.vectorize_process_and_export(
         input_raster_path=source_raster,
         boundary_shp_path=cfg.aoi_path,
-        output_dir=Path(source_raster).parent,
+        output_dir=vector_dir,
         output_basename=cfg.output_basename,
         target_labels=vector_labels,
         relabel_as=cfg.output_polygon_label,
@@ -112,6 +139,11 @@ def run_pipeline(
 
     total_minutes = (time.time() - started_at) / 60
     logger.info(f"Pipeline finished in {total_minutes:.1f} min -> {vector_path}")
+    run_manager.write_run_info(vector_dir, {
+        "stage": "vector", "run_id": vector_run_id, "crop": cfg.crop, "year": cfg.year,
+        "source_raster": str(source_raster), "output": str(vector_path),
+        "total_minutes": round(total_minutes, 1),
+    })
 
     return {
         "crop": cfg.crop,
@@ -120,6 +152,9 @@ def run_pipeline(
         "ndvi_source": cfg.ndvi_source,
         "static_source": cfg.static_source if cfg.run_static_model else None,
         "output_dir": str(out_dir),
+        "ndvi_run": f"{run_manager.STAGE_NDVI}_run_{ndvi_run_id}",
+        "static_run": f"{run_manager.STAGE_STATIC}_run_{static_run_id}" if static_run_id else None,
+        "vector_run": f"{run_manager.STAGE_VECTOR}_run_{vector_run_id}",
         "sieved_ndvi_raster": str(sieved_ndvi_path),
         "sieved_static_raster": str(sieved_static_path) if sieved_static_path else None,
         "vector_output": str(vector_path) if vector_path else None,
