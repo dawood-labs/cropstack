@@ -184,6 +184,46 @@ def get_crop_config(crop_name: str, year_str: str) -> dict:
             "ndvi_model": "gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib",
             "static_model": "gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json",
         },
+        "cotton": {
+            "ndvi_crop_classes": [1],
+            "sieve_min_pixel_size": 20,
+            "min_polygon_area_acres": 0.5,
+            "static_model_positive_class": 1,
+            "static_crop_label": 1,
+            "static_background_label": 4,
+            "output_polygon_label": 1,
+            # The series bounds are chosen so the composite windows land exactly on the
+            # 35 dates the RF model was trained on (2025-04-01 .. 2025-12-29). Composites
+            # are named by their END date, so the series must start one step earlier than
+            # the first feature date and end on the last feature date.
+            "ndvi_series_start": f"{current_year}-03-24",
+            "ndvi_series_end": f"{current_year}-12-29",
+            "ndvi_inference_start": f"{current_year}-04-01",
+            "ndvi_inference_end": f"{current_year}-12-29",
+            # The exact 35 dates the RF was trained on. Listed rather than derived so a
+            # changed step or start cannot silently reshuffle the model's features.
+            "ndvi_training_dates": [
+                f"{current_year}-04-01", f"{current_year}-04-09", f"{current_year}-04-17",
+                f"{current_year}-04-25", f"{current_year}-05-03", f"{current_year}-05-11",
+                f"{current_year}-05-19", f"{current_year}-05-27", f"{current_year}-06-04",
+                f"{current_year}-06-12", f"{current_year}-06-20", f"{current_year}-06-28",
+                f"{current_year}-07-06", f"{current_year}-07-14", f"{current_year}-07-22",
+                f"{current_year}-07-30", f"{current_year}-08-07", f"{current_year}-08-15",
+                f"{current_year}-08-23", f"{current_year}-08-31", f"{current_year}-09-08",
+                f"{current_year}-09-16", f"{current_year}-09-24", f"{current_year}-10-02",
+                f"{current_year}-10-10", f"{current_year}-10-18", f"{current_year}-10-26",
+                f"{current_year}-11-03", f"{current_year}-11-11", f"{current_year}-11-19",
+                f"{current_year}-11-27", f"{current_year}-12-05", f"{current_year}-12-13",
+                f"{current_year}-12-21", f"{current_year}-12-29",
+            ],
+            # No static window: there is no cotton static model yet, so the static stage
+            # is skipped (see PipelineConfig.validate).
+            "static_window_start": "",
+            "static_window_end": "",
+            "composite_step_days": 8,
+            "ndvi_model": "/home/jovyan/FAO/cotton/timeseries_model/model_v1/best_rf_classifier.joblib",
+            "static_model": None,
+        },
         "rice": {
             "ndvi_crop_classes": [1],
             "sieve_min_pixel_size": 20,
@@ -375,6 +415,9 @@ class PipelineConfig:
     # ------------------------------------------------------------ date windows
     ndvi_series_start: str = ""
     ndvi_series_end: str = ""
+    # The composite dates the NDVI model was trained on, in feature order. Optional:
+    # models that predate this field simply get the weaker band-count check.
+    ndvi_training_dates: Optional[List[str]] = None
     ndvi_inference_start: str = ""
     ndvi_inference_end: str = ""
     static_window_start: str = ""

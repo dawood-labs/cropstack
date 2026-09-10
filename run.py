@@ -42,7 +42,7 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
         description="Run the FAO crop-mapping pipeline for one district.",
         formatter_class=argparse.RawDescriptionHelpFormatter, epilog=__doc__)
-    parser.add_argument("--crop", required=True, help="cane | wheat | spr_maize | rice")
+    parser.add_argument("--crop", required=True, help="cane | wheat | spr_maize | rice | cotton")
     parser.add_argument("--year", required=True)
     parser.add_argument("--district", required=True, help="used to name the outputs")
     parser.add_argument("--aoi", required=True, help="path to the AOI (.shp/.gpkg/.geojson/...)")

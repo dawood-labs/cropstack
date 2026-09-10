@@ -21,6 +21,7 @@ import rasterio
 from tqdm import tqdm
 
 import postprocess
+from band_utils import parse_band_stack
 from config import PipelineConfig
 from inference_workers import mosaic_prediction_tiles, worker_process_tile
 
@@ -324,6 +325,77 @@ def _assert_classification_has_data(classification_path, cfg) -> None:
     )
 
 
+
+def _assert_inference_window_matches_model(
+    tile_path: Path, cfg: PipelineConfig, ndvi_model_path: str
+) -> None:
+    """Fails the run when the inference window does not select the composites the NDVI
+    model was trained on.
+
+    A Random Forest reads features positionally, so a window that is off by one composite
+    still predicts happily -- every date is silently compared against the wrong point in
+    the crop calendar. On a cotton test AOI that off-by-one raised mapped cotton from
+    4.63% of pixels to 7.57%, and nothing in the run said so.
+
+    Two checks, strongest first. `ndvi_training_dates` pins the actual dates, which is the
+    only thing that catches a shift that happens to keep the count. Where it is not
+    configured, the band count against `n_features_in_` is what is left.
+    """
+    import joblib
+    import pandas as pd
+
+    with rasterio.open(tile_path) as src:
+        _, _, dates = parse_band_stack(src.descriptions)
+
+    stamps = pd.to_datetime(dates, errors="coerce")
+    window_start = pd.Timestamp(cfg.ndvi_inference_start)
+    window_end = pd.Timestamp(cfg.ndvi_inference_end)
+    selected = [str(d.date()) for d in stamps if window_start <= d <= window_end]
+
+    window = f"{cfg.ndvi_inference_start}..{cfg.ndvi_inference_end}"
+    acquired = f"the tile carries {dates[0]}..{dates[-1]} at a {cfg.composite_step_days}-day step"
+    remedy = (
+        f"Fix ndvi_series_start/end or ndvi_inference_start/end for crop {cfg.crop!r} so "
+        "the two agree -- predicting through a mismatched window is worse than not "
+        "predicting, because it still produces a map."
+    )
+
+    expected_dates = cfg.ndvi_training_dates
+    if expected_dates:
+        if selected == list(expected_dates):
+            logger.info(
+                f"Inference window selects {len(selected)} composite(s) "
+                f"({selected[0]}..{selected[-1]}), matching the model's training dates."
+            )
+            return
+        missing = [d for d in expected_dates if d not in selected]
+        extra = [d for d in selected if d not in expected_dates]
+        raise ValueError(
+            f"The inference window {window} selects {len(selected)} composite(s) "
+            f"({selected[0] if selected else 'none'}..{selected[-1] if selected else 'none'}), "
+            f"but the model was trained on {len(expected_dates)} "
+            f"({expected_dates[0]}..{expected_dates[-1]}). "
+            f"Missing: {missing[:4] or 'none'}. Unexpected: {extra[:4] or 'none'}. "
+            f"{acquired}. {remedy}"
+        )
+
+    expected_width = getattr(joblib.load(ndvi_model_path), "n_features_in_", None)
+    if expected_width is None:      # a model that cannot state its width cannot be checked
+        return
+    if len(selected) == expected_width:
+        logger.info(
+            f"Inference window selects {len(selected)} composite(s) "
+            f"({selected[0]}..{selected[-1]}), matching the model's width. "
+            "Set ndvi_training_dates for this crop to check the dates themselves."
+        )
+        return
+    raise ValueError(
+        f"The inference window {window} selects {len(selected)} composite(s) from the "
+        f"acquired stack, but the model at {ndvi_model_path} was trained on "
+        f"{expected_width}. {acquired}. {remedy}"
+    )
+
+
 def run_ndvi_pipeline(
     cfg: PipelineConfig,
     out_dir: Path,
@@ -358,6 +430,8 @@ def run_ndvi_pipeline(
 
         if not tile_paths:
             raise FileNotFoundError(f"NDVI acquisition produced no tiles in {tiles_dir}")
+
+        _assert_inference_window_matches_model(tile_paths[0], cfg, ndvi_model_path)
 
         # Parallelism is capped by tile count, not cores: extra workers would spawn,
         # load a model, and idle.

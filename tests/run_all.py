@@ -18,6 +18,7 @@ MODULES = [
     "test_acquisition_reporting",
     "test_pool_recycle",
     "test_resources",
+    "test_window_model_match",
 ]
 
 if __name__ == "__main__":
