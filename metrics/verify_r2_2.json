@@ -1,0 +1,156 @@
+[
+  {
+    "label": "A manual 2025-04-29 (populates staging)",
+    "seconds": 45.4,
+    "date_folder": "29_Apr_2025",
+    "product_md5": "5b2b3bc81b1f",
+    "acres": 8322.0,
+    "features": 1945,
+    "staging_before": {
+      "tile_count": 0,
+      "tile_md5": {},
+      "recorded_dates": null
+    },
+    "staging_after": {
+      "tile_count": 4,
+      "tile_md5": {
+        "static_10m_tile_0001.tif": "03dc22cdf2d7",
+        "static_10m_tile_0002.tif": "710ed44dd52e",
+        "static_10m_tile_0003.tif": "4dfd6906420d",
+        "static_10m_tile_0004.tif": "0a5ef17d16c3"
+      },
+      "recorded_dates": [
+        "2025-04-29"
+      ]
+    },
+    "tiles_changed": true
+  },
+  {
+    "label": "B manual 2025-05-09 in the SAME folder (must discard A's tiles)",
+    "seconds": 43.1,
+    "date_folder": "09_May_2025",
+    "product_md5": "c7562afa5232",
+    "acres": 3992.8,
+    "features": 1070,
+    "staging_before": {
+      "tile_count": 4,
+      "tile_md5": {
+        "static_10m_tile_0001.tif": "03dc22cdf2d7",
+        "static_10m_tile_0002.tif": "710ed44dd52e",
+        "static_10m_tile_0003.tif": "4dfd6906420d",
+        "static_10m_tile_0004.tif": "0a5ef17d16c3"
+      },
+      "recorded_dates": [
+        "2025-04-29"
+      ]
+    },
+    "staging_after": {
+      "tile_count": 4,
+      "tile_md5": {
+        "static_10m_tile_0001.tif": "0f7186aa0ce1",
+        "static_10m_tile_0002.tif": "3010c17ed984",
+        "static_10m_tile_0003.tif": "256ad5b15f58",
+        "static_10m_tile_0004.tif": "f2df8ed47067"
+      },
+      "recorded_dates": [
+        "2025-05-09"
+      ]
+    },
+    "tiles_changed": true
+  },
+  {
+    "label": "C manual 2025-05-09 again (must REUSE B's tiles)",
+    "seconds": 0.2,
+    "date_folder": "09_May_2025",
+    "product_md5": "c7562afa5232",
+    "acres": 3992.8,
+    "features": 1070,
+    "staging_before": {
+      "tile_count": 4,
+      "tile_md5": {
+        "static_10m_tile_0001.tif": "0f7186aa0ce1",
+        "static_10m_tile_0002.tif": "3010c17ed984",
+        "static_10m_tile_0003.tif": "256ad5b15f58",
+        "static_10m_tile_0004.tif": "f2df8ed47067"
+      },
+      "recorded_dates": [
+        "2025-05-09"
+      ]
+    },
+    "staging_after": {
+      "tile_count": 4,
+      "tile_md5": {
+        "static_10m_tile_0001.tif": "0f7186aa0ce1",
+        "static_10m_tile_0002.tif": "3010c17ed984",
+        "static_10m_tile_0003.tif": "256ad5b15f58",
+        "static_10m_tile_0004.tif": "f2df8ed47067"
+      },
+      "recorded_dates": [
+        "2025-05-09"
+      ]
+    },
+    "tiles_changed": false
+  },
+  {
+    "label": "D auto/priority-window run",
+    "seconds": 65.5,
+    "date_folder": "09_May_2025_and_01_May_2025",
+    "product_md5": "c7562afa5232",
+    "acres": 3992.8,
+    "features": 1070,
+    "staging_before": {
+      "tile_count": 0,
+      "tile_md5": {},
+      "recorded_dates": null
+    },
+    "staging_after": {
+      "tile_count": 4,
+      "tile_md5": {
+        "static_10m_tile_0001.tif": "18768982a086",
+        "static_10m_tile_0002.tif": "37919afa893a",
+        "static_10m_tile_0003.tif": "cfeb336baf8e",
+        "static_10m_tile_0004.tif": "ef868a142afd"
+      },
+      "recorded_dates": [
+        "2025-05-09",
+        "2025-05-01"
+      ]
+    },
+    "tiles_changed": true
+  },
+  {
+    "label": "E auto again, same folder (must REUSE D's tiles)",
+    "seconds": 18.2,
+    "date_folder": "09_May_2025_and_01_May_2025",
+    "product_md5": "c7562afa5232",
+    "acres": 3992.8,
+    "features": 1070,
+    "staging_before": {
+      "tile_count": 4,
+      "tile_md5": {
+        "static_10m_tile_0001.tif": "18768982a086",
+        "static_10m_tile_0002.tif": "37919afa893a",
+        "static_10m_tile_0003.tif": "cfeb336baf8e",
+        "static_10m_tile_0004.tif": "ef868a142afd"
+      },
+      "recorded_dates": [
+        "2025-05-09",
+        "2025-05-01"
+      ]
+    },
+    "staging_after": {
+      "tile_count": 4,
+      "tile_md5": {
+        "static_10m_tile_0001.tif": "18768982a086",
+        "static_10m_tile_0002.tif": "37919afa893a",
+        "static_10m_tile_0003.tif": "cfeb336baf8e",
+        "static_10m_tile_0004.tif": "ef868a142afd"
+      },
+      "recorded_dates": [
+        "2025-05-09",
+        "2025-05-01"
+      ]
+    },
+    "tiles_changed": false
+  }
+]

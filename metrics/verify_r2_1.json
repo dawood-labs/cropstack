@@ -1,0 +1,44 @@
+[
+  {
+    "case": "D control - no injected failure",
+    "run": "V1_D_control",
+    "status": "completed",
+    "static_dates": "09_May_2025_and_01_May_2025",
+    "acres": 3992.8,
+    "features": 1070,
+    "retention_pct": 20.5,
+    "window_1_scoring_attempts": 1,
+    "seconds": 67.6
+  },
+  {
+    "case": "A window 1 always fails, on_score_error=error (default)",
+    "run": "V1_A_error",
+    "status": "stopped",
+    "error_type": "RuntimeError",
+    "error": "Chose window 2 (2025-04-20 to 2025-04-30), but ['window 1 (2025-05-01 to 2025-05-10)'] could not be scored and rank higher. The result may differ substantially from what a complete comparison would give. Retry, or set static_window_on_score_error='warn' to accept this.",
+    "window_1_scoring_attempts": 3,
+    "seconds": 20.8
+  },
+  {
+    "case": "B window 1 always fails, on_score_error=warn",
+    "run": "V1_B_warn",
+    "status": "completed",
+    "static_dates": "29_Apr_2025",
+    "acres": 8322.0,
+    "features": 1945,
+    "retention_pct": 42.4,
+    "window_1_scoring_attempts": 3,
+    "seconds": 59.8
+  },
+  {
+    "case": "C window 1 fails twice then succeeds",
+    "run": "V1_C_retry_recovers",
+    "status": "completed",
+    "static_dates": "09_May_2025_and_01_May_2025",
+    "acres": 3992.8,
+    "features": 1070,
+    "retention_pct": 20.5,
+    "window_1_scoring_attempts": 3,
+    "seconds": 74.8
+  }
+]
