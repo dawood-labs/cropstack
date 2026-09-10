@@ -68,7 +68,17 @@ Asli tile count **57** (88 sirf bbox tha) → peak raw NDVI **8.2 GiB**.
 **AHEM:** asli district par healthy = **5.7 min/tile**, Okara ke 2.6 se do guna.
 8 min threshold ab sirf **1.4x** door hai — pehle main ne 3.1x bataya tha, wo
 chhote AOI ka number tha. Ye user ko batana hai.
-Ab RF inference 57 tiles par. free 36G.
+**RF inference HANG HO GAYA (09:37:54 se koi harkat nahi).** Ye asli production bug hai.
+
+**FAIL-13 (HIGH) — NDVI inference pool `max_tasks_per_child` recycle par deadlock:**
+- 6 workers (75% of 8 cores) x `ndvi_worker_max_tasks=8` = **48**. Theek 48/57 tiles
+  ke baad ruka. 49th task ke liye naye workers spawn hone thay — wahin phansa.
+- Koi worker process zinda nahi; parent 25 threads, CPU 0.5%, `futex_wait_queue`,
+  ek thread `do_poll` par (mare hue workers ka pipe).
+- `ndvi_tile_timeout_s=900` **bekaar hai**: wo `future.result(timeout=)` par lagta hai
+  jo `as_completed()` ke *baad* chalta hai — us waqt future pehle hi complete hota hai.
+  `as_completed()` khud **be-timeout** hai. Isliye hang forever.
+- Chhote AOI par kabhi nahi dikha kyunki Okara ke 4 tiles < 48 thay.
 **Agar instance yahan mari:** log parho, `run_mode="resume"` se dobara chalao —
 NDVI tiles resume ho jayenge.
 
