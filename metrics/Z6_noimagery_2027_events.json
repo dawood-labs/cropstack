@@ -1,0 +1,72 @@
+[
+  {
+    "stage": "resolve_models",
+    "t_start_epoch": 1788504973.173,
+    "t_end_epoch": 1788504973.173,
+    "start_s": 0.0,
+    "end_s": 0.0,
+    "duration_s": 0.0,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "ndvi_acquire_stac",
+    "t_start_epoch": 1788504973.173,
+    "t_end_epoch": 1788504989.208,
+    "start_s": 0.0,
+    "end_s": 16.04,
+    "duration_s": 16.03,
+    "peak_rss_mb_during": 2101.7,
+    "error": null
+  },
+  {
+    "stage": "ndvi_mosaic",
+    "t_start_epoch": 1788504991.528,
+    "t_end_epoch": 1788504991.59,
+    "start_s": 18.36,
+    "end_s": 18.42,
+    "duration_s": 0.06,
+    "peak_rss_mb_during": 0.0,
+    "error": null
+  },
+  {
+    "stage": "sieve",
+    "t_start_epoch": 1788504991.59,
+    "t_end_epoch": 1788504991.828,
+    "start_s": 18.42,
+    "end_s": 18.66,
+    "duration_s": 0.24,
+    "peak_rss_mb_during": 431.5,
+    "error": null
+  },
+  {
+    "stage": "ndvi_stage",
+    "t_start_epoch": 1788504973.173,
+    "t_end_epoch": 1788504991.828,
+    "start_s": 0.0,
+    "end_s": 18.66,
+    "duration_s": 18.66,
+    "peak_rss_mb_during": 2317.3,
+    "error": null
+  },
+  {
+    "stage": "static_acquire_stac",
+    "t_start_epoch": 1788504991.829,
+    "t_end_epoch": 1788504997.365,
+    "start_s": 18.66,
+    "end_s": 24.19,
+    "duration_s": 5.54,
+    "peak_rss_mb_during": 431.6,
+    "error": "RuntimeError: No usable static imagery in any configured window for spr_maize 2027 (no window produced a usable acquisition)."
+  },
+  {
+    "stage": "static_stage",
+    "t_start_epoch": 1788504991.829,
+    "t_end_epoch": 1788504997.365,
+    "start_s": 18.66,
+    "end_s": 24.19,
+    "duration_s": 5.54,
+    "peak_rss_mb_during": 0.0,
+    "error": "RuntimeError: No usable static imagery in any configured window for spr_maize 2027 (no window produced a usable acquisition)."
+  }
+]

@@ -1,0 +1,199 @@
+2026-09-04 07:14:00,671 - __main__ - INFO - Starting batch of 3 job(s).
+2026-09-04 07:14:00,672 - __main__ - INFO - [1/3] cane 2025 okara: starting
+2026-09-04 07:14:00,696 - pipeline - INFO - Pipeline configuration:
+crop/year/district : cane / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp
+NDVI source        : stac
+static source      : stac (manual)
+NDVI series window : 2024-12-24 -> 2025-11-17
+NDVI inference     : 2025-01-01 -> 2025-11-15
+static window      : 2025-10-15 -> 2025-11-25
+NDVI model         : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib
+static model       : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+2026-09-04 07:14:00,696 - run_manager - INFO - 1_ndvi: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/1_ndvi_run_1
+2026-09-04 07:14:00,697 - run_manager - INFO - 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/3_vector_run_1  (no previous output to reuse)
+2026-09-04 07:14:00,697 - model_registry - INFO - ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib
+2026-09-04 07:14:00,697 - model_registry - INFO - static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json
+2026-09-04 07:14:00,697 - ndvi_pipeline - INFO - [Checkpoint] NDVI classification map already exists: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/1_ndvi_run_1/okara_test_data_cane_rf_classification_map.tif
+2026-09-04 07:14:00,697 - pipeline - INFO - NDVI stage finished in 0.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/1_ndvi_run_1/okara_test_data_cane_rf_classification_map_sieved_p20.tif
+2026-09-04 07:14:00,698 - run_manager - INFO - 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/2_static_run_1  (no previous output to reuse)
+2026-09-04 07:14:00,821 - farmdar.sentinel - INFO - aws-creds: bootstrapped 12-hour session, expires 2026-09-04T19:14:00+00:00
+2026-09-04 07:14:00,885 - farmdar.sentinel - INFO - AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['blue', 'green', 'red', 'rededge1', 'nir', 'ndvi'], dates=['2025-10-16'], 8 workers)
+2026-09-04 07:14:07,428 - farmdar.sentinel - INFO - [1/4] tile 0002: written (5.1s, 100.0% filled)
+2026-09-04 07:14:08,721 - farmdar.sentinel - INFO - [2/4] tile 0004: written (6.3s, 100.0% filled)
+2026-09-04 07:14:11,200 - farmdar.sentinel - INFO - [3/4] tile 0003: written (8.9s, 100.0% filled)
+2026-09-04 07:14:11,200 - farmdar.sentinel - INFO - [4/4] tile 0001: written (8.8s, 100.0% filled)
+2026-09-04 07:14:11,233 - farmdar.sentinel - INFO - DONE 4 tiles in 0.2 min. dates=['2025-10-16'] out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/2_static_run_1/static_staging vrt=/home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/2_static_run_1/static_staging/static.vrt
+2026-09-04 07:14:11,233 - static_pipeline - INFO - STAC static dates (manual mode): ['2025-10-16']
+2026-09-04 07:14:11,233 - static_pipeline - WARNING - Manual static dates: 2025-10-16 is the ANCHOR (layered on top and used as the radiometric reference). Put the date with the best AOI coverage first -- chronological order is not automatically correct.
+2026-09-04 07:14:11,234 - static_classify - INFO - Building crop mask | crop_classes=(1,) | AOI=/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp
+[Skipped] Sieved raster already exists at: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/1_ndvi_run_1/okara_test_data_cane_rf_classification_map_sieved_p20.tif
+Building crop mask:   0%|                                                                                                                                                    | 0/4 [00:00<?, ?block/s]Building crop mask:  25%|███████████████████████████████████                                                                                                         | 1/4 [00:00<00:00,  9.58block/s]Building crop mask: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 33.59block/s]
+2026-09-04 07:14:11,374 - static_classify - INFO - Crop mask coverage: 153,043 px (6.34% of the AOI)
+2026-09-04 07:14:11,381 - static_classify - INFO - Grid parity verified: crop mask is 1:1 with the static image.
+2026-09-04 07:14:11,387 - static_classify - INFO - Static worker pool = 4  [requested=7; windows=4]
+2026-09-04 07:14:11,387 - static_classify - INFO - Classifying 4 window(s) across 4 worker(s)...
+Classifying static image:   0%|                                                                                                                                              | 0/4 [00:00<?, ?block/s]Classifying static image:  25%|█████████████████████████████████▌                                                                                                    | 1/4 [00:01<00:05,  1.70s/block]Classifying static image:  75%|████████████████████████████████████████████████████████████████████████████████████████████████████▌                                 | 3/4 [00:01<00:00,  1.91block/s]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:03<00:00,  1.06block/s]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:03<00:00,  1.10block/s]
+2026-09-04 07:14:15,642 - pipeline - INFO - Static stage finished in 0.2 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/2_static_run_1/16_Oct_2025/static_mosaic_16_Oct_2025_Cls_sieved_p20.tif
+2026-09-04 07:14:15,987 - pyogrio._io - INFO - Created 926 records
+2026-09-04 07:14:15,995 - pyogrio._io - INFO - Created 926 records
+2026-09-04 07:14:16,137 - qc - INFO - Result: aoi_acres=51293.1, feature_count=926, crop_acres=2184.7, crop_share_of_aoi_pct=4.3, ndvi_crop_pixels=245245, static_crop_pixels=106793, static_retention_pct=43.5
+2026-09-04 07:14:16,138 - pipeline - INFO - Pipeline finished in 0.3 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/3_vector_run_1/final_output/okara_cane_2025.gpkg
+2026-09-04 07:14:16,138 - __main__ - INFO - [1/3] cane 2025 okara: done in 0.3 min
+2026-09-04 07:14:16,138 - __main__ - INFO - [2/3] cane 2025 okara_nocane: starting
+2026-09-04 07:14:16,141 - pipeline - INFO - Pipeline configuration:
+crop/year/district : cane / 2025 / okara_nocane
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_nocane_block.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-12-24 -> 2025-11-17
+NDVI inference     : 2025-01-01 -> 2025-11-15
+static window      : 2025-10-15 -> 2025-11-25
+NDVI model         : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib
+static model       : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+2026-09-04 07:14:16,141 - run_manager - INFO - 1_ndvi: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/1_ndvi_run_1
+2026-09-04 07:14:16,141 - run_manager - INFO - 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/3_vector_run_1  (no previous output to reuse)
+2026-09-04 07:14:16,141 - model_registry - INFO - ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib
+2026-09-04 07:14:16,141 - model_registry - INFO - static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json
+2026-09-04 07:14:16,141 - ndvi_pipeline - INFO - [Checkpoint] NDVI classification map already exists: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/1_ndvi_run_1/okara_nocane_block_rf_classification_map.tif
+2026-09-04 07:14:16,141 - pipeline - INFO - NDVI stage finished in 0.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/1_ndvi_run_1/okara_nocane_block_rf_classification_map_sieved_p20.tif
+2026-09-04 07:14:16,141 - run_manager - INFO - 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/2_static_run_1  (no previous output to reuse)
+2026-09-04 07:14:17,244 - farmdar.sentinel - INFO - static: 4 scenes on 4 dates in [2025-11-07, 2025-11-15)
+2026-09-04 07:14:18,888 - farmdar.sentinel - INFO - static: dates=['2025-11-07'] (anchor=2025-11-07) -> 100.00% of AOI usable
+2026-09-04 07:14:19,992 - farmdar.sentinel - INFO - static: 3 scenes on 2 dates in [2025-11-01, 2025-11-06)
+2026-09-04 07:14:22,046 - farmdar.sentinel - INFO - static: dates=['2025-11-05'] (anchor=2025-11-05) -> 100.00% of AOI usable
+2026-09-04 07:14:23,253 - farmdar.sentinel - INFO - static: 7 scenes on 7 dates in [2025-10-15, 2025-10-31)
+2026-09-04 07:14:24,875 - farmdar.sentinel - INFO - static: dates=['2025-10-16'] (anchor=2025-10-16) -> 100.00% of AOI usable
+2026-09-04 07:14:25,906 - farmdar.sentinel - INFO - static: 4 scenes on 3 dates in [2025-11-16, 2025-11-25)
+2026-09-04 07:14:27,989 - farmdar.sentinel - INFO - static: dates=['2025-11-17'] (anchor=2025-11-17) -> 100.00% of AOI usable
+2026-09-04 07:14:27,989 - static_pipeline - INFO - Window scores (best-first by preference):
+2026-09-04 07:14:27,989 - static_pipeline - INFO -   window 1 (2025-11-07 to 2025-11-15): ['2025-11-07'] -> 100.0% of AOI usable
+2026-09-04 07:14:27,989 - static_pipeline - INFO -   window 2 (2025-11-01 to 2025-11-06): ['2025-11-05'] -> 100.0% of AOI usable
+2026-09-04 07:14:27,989 - static_pipeline - INFO -   window 3 (2025-10-15 to 2025-10-31): ['2025-10-16'] -> 100.0% of AOI usable
+2026-09-04 07:14:27,989 - static_pipeline - INFO -   window 4 (2025-11-16 to 2025-11-25): ['2025-11-17'] -> 100.0% of AOI usable
+2026-09-04 07:14:27,989 - static_pipeline - INFO - Chose window 1 (2025-11-07 to 2025-11-15) at 100.0% (floor 80%).
+2026-09-04 07:14:27,992 - farmdar.sentinel - INFO - AOI -> 1 tiles @ 10m (tile=0.10deg, bands=['blue', 'green', 'red', 'rededge1', 'nir', 'ndvi'], dates=['2025-11-07'], 8 workers)
+2026-09-04 07:14:32,999 - farmdar.sentinel - INFO - [1/1] tile 0001: written (4.4s, 99.77% filled)
+2026-09-04 07:14:33,028 - farmdar.sentinel - INFO - DONE 1 tiles in 0.1 min. dates=['2025-11-07'] out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/2_static_run_1/static_staging vrt=/home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/2_static_run_1/static_staging/static.vrt
+2026-09-04 07:14:33,028 - static_pipeline - INFO - STAC static dates (auto mode): ['2025-11-07'] via window 1 (2025-11-07 to 2025-11-15)
+2026-09-04 07:14:33,028 - static_classify - INFO - Building crop mask | crop_classes=(1,) | AOI=/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_nocane_block.shp
+Loading categorical map for strict sieving: static_mosaic_16_Oct_2025_Cls.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/2_static_run_1/16_Oct_2025/static_mosaic_16_Oct_2025_Cls_sieved_p20.tif
+1. Vectorising target classes [1]...
+  -> Extracted 1,101 raw polygon features.
+  -> Pre-filter dropped 175 sub-threshold polygons before clipping.
+2. Loading boundary for clipping...
+3. Clip to boundary, explode to singlepart...
+4. Computing area (EPSG:32642) and filtering (>= 0.5 acres)...
+   Retained 926 features, 2,184.67 acres, label 1
+5. Exporting...
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/3_vector_run_1/final_output/okara_cane_2025.gpkg
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_normal/3_vector_run_1/final_output/okara_cane_2025.zip
+[Skipped] Sieved raster already exists at: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/1_ndvi_run_1/okara_nocane_block_rf_classification_map_sieved_p20.tif
+Building crop mask:   0%|                                                                                                                                                    | 0/1 [00:00<?, ?block/s]Building crop mask: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 35.67block/s]
+2026-09-04 07:14:33,072 - static_classify - INFO - Crop mask coverage: 0 px (0.00% of the AOI)
+2026-09-04 07:14:33,072 - static_classify - WARNING - Crop mask is empty: classes (1,) not present in this AOI.
+2026-09-04 07:14:33,078 - static_classify - INFO - Grid parity verified: crop mask is 1:1 with the static image.
+2026-09-04 07:14:33,083 - static_classify - INFO - Static worker pool = 1  [requested=7; windows=1]
+2026-09-04 07:14:33,083 - static_classify - INFO - Classifying 1 window(s) across 1 worker(s)...
+Classifying static image:   0%|                                                                                                                                              | 0/1 [00:00<?, ?block/s]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.49s/block]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.49s/block]
+2026-09-04 07:14:34,968 - pipeline - INFO - Static stage finished in 0.3 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/2_static_run_1/07_Nov_2025/static_mosaic_07_Nov_2025_Cls_sieved_p20.tif
+2026-09-04 07:14:34,982 - pyogrio._io - INFO - Created 0 records
+2026-09-04 07:14:34,984 - pyogrio._io - INFO - Created 0 records
+2026-09-04 07:14:35,007 - qc - WARNING - RESULT CHECK: The static model kept only 0.0% of the NDVI stage's crop area. That is the signature of a hazy or cloud-contaminated image rather than of a real crop boundary -- re-run from the next window (static_window_start_at) before accepting this.
+2026-09-04 07:14:35,007 - qc - INFO - Result: aoi_acres=1324.7, feature_count=0, crop_acres=0.0, crop_share_of_aoi_pct=0.0, ndvi_crop_pixels=21951, static_crop_pixels=0, static_retention_pct=0.0 -- 1 warning(s)
+2026-09-04 07:14:35,007 - pipeline - INFO - Pipeline finished in 0.3 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/3_vector_run_1/final_output/okara_nocane_cane_2025.gpkg
+2026-09-04 07:14:35,008 - __main__ - INFO - [2/3] cane 2025 okara_nocane: done in 0.3 min
+2026-09-04 07:14:35,008 - __main__ - INFO - [3/3] wheat 2025 okara: starting
+2026-09-04 07:14:35,009 - pipeline - INFO - Pipeline configuration:
+crop/year/district : wheat / 2025 / okara
+AOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_wheat.shp
+NDVI source        : stac
+static source      : stac (auto)
+NDVI series window : 2024-08-24 -> 2025-07-01
+NDVI inference     : 2024-09-01 -> 2025-06-30
+static window      : 2025-01-20 -> 2025-03-20
+NDVI model         : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib
+static model       : gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json
+model cache        : /home/jovyan/.cache/fao_pipeline/models
+run modes          : ndvi=resume, static=resume, vector=resume
+sieve min pixels   : ndvi=20, static=20
+2026-09-04 07:14:35,009 - run_manager - INFO - 1_ndvi: resuming run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/1_ndvi_run_1
+2026-09-04 07:14:35,010 - run_manager - INFO - 3_vector: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/3_vector_run_1  (no previous output to reuse)
+2026-09-04 07:14:35,010 - model_registry - INFO - ndvi_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_NDVI_Model/FAO_Wheat_RF_Model.joblib
+2026-09-04 07:14:35,010 - model_registry - INFO - static_model: cache hit, using /home/jovyan/.cache/fao_pipeline/models/farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json
+2026-09-04 07:14:35,010 - ndvi_pipeline - INFO - [Checkpoint] NDVI classification map already exists: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/1_ndvi_run_1/okara_test_data_wheat_rf_classification_map.tif
+2026-09-04 07:14:35,010 - pipeline - INFO - NDVI stage finished in 0.0 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/1_ndvi_run_1/okara_test_data_wheat_rf_classification_map_sieved_p20.tif
+2026-09-04 07:14:35,010 - run_manager - INFO - 2_static: starting run 1 -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/2_static_run_1  (no previous output to reuse)
+2026-09-04 07:14:35,992 - farmdar.sentinel - INFO - static: 6 scenes on 5 dates in [2025-02-10, 2025-02-25)
+2026-09-04 07:14:39,295 - farmdar.sentinel - INFO - static: dates=['2025-02-18'] (anchor=2025-02-18) -> 100.00% of AOI usable
+2026-09-04 07:14:39,970 - farmdar.sentinel - INFO - static: 5 scenes on 5 dates in [2025-01-25, 2025-02-10)
+2026-09-04 07:14:42,189 - farmdar.sentinel - INFO - static: dates=['2025-02-03'] (anchor=2025-02-03) -> 100.00% of AOI usable
+2026-09-04 07:14:43,319 - farmdar.sentinel - INFO - static: 3 scenes on 3 dates in [2025-02-26, 2025-03-10)
+2026-09-04 07:14:45,365 - farmdar.sentinel - INFO - static: dates=['2025-03-05'] (anchor=2025-03-05) -> 99.68% of AOI usable
+2026-09-04 07:14:46,317 - farmdar.sentinel - INFO - static: 4 scenes on 4 dates in [2025-03-11, 2025-03-20)
+2026-09-04 07:14:48,356 - farmdar.sentinel - INFO - static: dates=['2025-03-15'] (anchor=2025-03-15) -> 100.00% of AOI usable
+2026-09-04 07:14:48,356 - static_pipeline - INFO - Window scores (best-first by preference):
+2026-09-04 07:14:48,356 - static_pipeline - INFO -   window 1 (2025-02-10 to 2025-02-25): ['2025-02-18'] -> 100.0% of AOI usable
+2026-09-04 07:14:48,356 - static_pipeline - INFO -   window 2 (2025-01-25 to 2025-02-10): ['2025-02-03'] -> 100.0% of AOI usable
+2026-09-04 07:14:48,356 - static_pipeline - INFO -   window 3 (2025-02-26 to 2025-03-10): ['2025-03-05'] -> 99.7% of AOI usable
+2026-09-04 07:14:48,356 - static_pipeline - INFO -   window 4 (2025-03-11 to 2025-03-20): ['2025-03-15'] -> 100.0% of AOI usable
+2026-09-04 07:14:48,356 - static_pipeline - INFO - Coverage spread across windows: 99.7%-100.0%. The chosen date, not just the code, determines the acreage reported.
+2026-09-04 07:14:48,357 - static_pipeline - INFO - Chose window 1 (2025-02-10 to 2025-02-25) at 100.0% (floor 80%).
+2026-09-04 07:14:48,359 - farmdar.sentinel - INFO - AOI -> 4 tiles @ 10m (tile=0.10deg, bands=['blue', 'green', 'red', 'rededge1', 'nir', 'ndvi'], dates=['2025-02-18'], 8 workers)
+2026-09-04 07:14:52,840 - farmdar.sentinel - INFO - [1/4] tile 0002: written (3.8s, 100.0% filled)
+2026-09-04 07:14:54,096 - farmdar.sentinel - INFO - [2/4] tile 0004: written (5.5s, 100.0% filled)
+2026-09-04 07:14:55,346 - farmdar.sentinel - INFO - [3/4] tile 0001: written (6.4s, 100.0% filled)
+2026-09-04 07:14:56,596 - farmdar.sentinel - INFO - [4/4] tile 0003: written (7.6s, 100.0% filled)
+2026-09-04 07:14:56,630 - farmdar.sentinel - INFO - DONE 4 tiles in 0.1 min. dates=['2025-02-18'] out_dir=/home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/2_static_run_1/static_staging vrt=/home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/2_static_run_1/static_staging/static.vrt
+2026-09-04 07:14:56,630 - static_pipeline - INFO - STAC static dates (auto mode): ['2025-02-18'] via window 1 (2025-02-10 to 2025-02-25)
+2026-09-04 07:14:56,630 - static_classify - INFO - Building crop mask | crop_classes=(14,) | AOI=/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_wheat.shp
+Loading categorical map for strict sieving: static_mosaic_07_Nov_2025_Cls.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/2_static_run_1/07_Nov_2025/static_mosaic_07_Nov_2025_Cls_sieved_p20.tif
+1. Vectorising target classes [1]...
+  [Warning] No pixels found for classes [1].
+  -> Writing an empty layer with the full schema (no pixels of classes [1]).
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/3_vector_run_1/final_output/okara_nocane_cane_2025.gpkg
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/cane_EMPTY/3_vector_run_1/final_output/okara_nocane_cane_2025.zip
+[Skipped] Sieved raster already exists at: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/1_ndvi_run_1/okara_test_data_wheat_rf_classification_map_sieved_p20.tif
+Building crop mask:   0%|                                                                                                                                                    | 0/4 [00:00<?, ?block/s]Building crop mask:  25%|███████████████████████████████████                                                                                                         | 1/4 [00:00<00:00,  8.33block/s]Building crop mask: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:00<00:00, 29.53block/s]
+2026-09-04 07:14:56,782 - static_classify - INFO - Crop mask coverage: 1,407,169 px (58.28% of the AOI)
+2026-09-04 07:14:56,790 - static_classify - INFO - Grid parity verified: crop mask is 1:1 with the static image.
+2026-09-04 07:14:56,795 - static_classify - INFO - Static worker pool = 4  [requested=7; windows=4]
+2026-09-04 07:14:56,795 - static_classify - INFO - Classifying 4 window(s) across 4 worker(s)...
+Classifying static image:   0%|                                                                                                                                              | 0/4 [00:00<?, ?block/s]Classifying static image:  25%|█████████████████████████████████▌                                                                                                    | 1/4 [00:01<00:03,  1.06s/block]Classifying static image:  50%|███████████████████████████████████████████████████████████████████                                                                   | 2/4 [00:01<00:01,  1.84block/s]Classifying static image:  75%|████████████████████████████████████████████████████████████████████████████████████████████████████▌                                 | 3/4 [00:01<00:00,  2.82block/s]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:03<00:00,  1.07block/s]Classifying static image: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:03<00:00,  1.25block/s]
+2026-09-04 07:15:00,522 - pipeline - INFO - Static stage finished in 0.4 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/2_static_run_1/18_Feb_2025/static_mosaic_18_Feb_2025_Cls_sieved_p20.tif
+2026-09-04 07:15:01,131 - pyogrio._io - INFO - Created 2,114 records
+2026-09-04 07:15:01,151 - pyogrio._io - INFO - Created 2,114 records
+2026-09-04 07:15:01,343 - qc - INFO - Result: aoi_acres=51293.1, feature_count=2114, crop_acres=18404.3, crop_share_of_aoi_pct=35.9, ndvi_crop_pixels=2889629, static_crop_pixels=871772, static_retention_pct=30.2
+2026-09-04 07:15:01,344 - pipeline - INFO - Pipeline finished in 0.4 min -> /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/3_vector_run_1/final_output/okara_wheat_2025.gpkg
+2026-09-04 07:15:01,345 - __main__ - INFO - [3/3] wheat 2025 okara: done in 0.4 min
+2026-09-04 07:15:01,345 - __main__ - INFO - Batch finished: 3 succeeded, 0 failed.
+2026-09-04 07:15:01,349 - __main__ - INFO - Batch summary written to ../metrics/retest2_batch_results.csv
+Loading categorical map for strict sieving: static_mosaic_18_Feb_2025_Cls.tif
+Phase 1: base sieve filter (removing blobs < 20 px)...
+Phase 2: enforcing strict topological encapsulation...
+Writing topologically-enforced output to disk...
+SUCCESS: sieved raster saved to: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/2_static_run_1/18_Feb_2025/static_mosaic_18_Feb_2025_Cls_sieved_p20.tif
+1. Vectorising target classes [1]...
+  -> Extracted 2,282 raw polygon features.
+  -> Pre-filter dropped 166 sub-threshold polygons before clipping.
+2. Loading boundary for clipping...
+3. Clip to boundary, explode to singlepart...
+4. Computing area (EPSG:32642) and filtering (>= 0.5 acres)...
+   Retained 2,114 features, 18,404.35 acres, label 14
+5. Exporting...
+   -> Saved GPKG: /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/3_vector_run_1/final_output/okara_wheat_2025.gpkg
+   -> Saved ZIP (Shapefile): /home/jovyan/FAO/optimized_code_testing/runs_retest/B2_batch/wheat_after_empty/3_vector_run_1/final_output/okara_wheat_2025.zip

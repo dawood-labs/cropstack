@@ -1,0 +1,74 @@
+{
+  "name": "N_real_plus_bowtie",
+  "spec": {
+    "crop": "cane",
+    "year": "2025",
+    "district_name": "okara",
+    "aoi_path": "/home/jovyan/FAO/optimized_code_testing/aoi_variants/messy/real_plus_bowtie.gpkg",
+    "gee_service_account_key": "/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/N_real_plus_bowtie",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "run_static_model": false,
+    "run_mode": "new"
+  },
+  "status": "failed",
+  "started_utc": "2026-09-03T12:59:25Z",
+  "config_summary": "crop/year/district : cane / 2025 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/aoi_variants/messy/real_plus_bowtie.gpkg\nNDVI source        : stac\nstatic source      : stac (auto)  [DISABLED: run_static_model=False]\nNDVI series window : 2024-12-24 -> 2025-11-17\nNDVI inference     : 2025-01-01 -> 2025-11-15\nstatic window      : 2025-10-15 -> 2025-11-25\nNDVI model         : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib\nstatic model       : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=new, static=new, vector=new\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/N_real_plus_bowtie",
+  "error": "GEOSException: TopologyException: side location conflict at 73.428118148070055 30.925908048229278. This can occur if the input geometry is invalid.",
+  "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/run_scenario.py\", line 86, in main\n    outcome = pipeline_module.run_pipeline(cfg)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/pipeline.py\", line 86, in run_pipeline\n    sieved_ndvi_path = run_ndvi_pipeline(\n                       ^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/instrument.py\", line 251, in wrapper\n    return self._timed(label, original, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/instrument.py\", line 264, in _timed\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/ndvi_pipeline.py\", line 175, in run_ndvi_pipeline\n    tile_paths = _acquire_tiles_from_stac(cfg, tiles_dir)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/instrument.py\", line 251, in wrapper\n    return self._timed(label, original, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/instrument.py\", line 264, in _timed\n    return fn(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/ndvi_pipeline.py\", line 82, in _acquire_tiles_from_stac\n    result = fetch_sentinel_imagery(\n             ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/shared/git/standard-libraries/.worktrees/30c67408d63a3eff3167aed568143ed9626e1f18/farmdar/sentinel.py\", line 1109, in fetch_sentinel_imagery\n    geom = _load_aoi_geometry(aoi)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/shared/git/standard-libraries/.worktrees/30c67408d63a3eff3167aed568143ed9626e1f18/farmdar/sentinel.py\", line 377, in _load_aoi_geometry\n    return geom.union_all() if hasattr(geom, \"union_all\") else geom.unary_union\n           ^^^^^^^^^^^^^^^^\n  File \"/opt/gis/lib/python3.11/site-packages/geopandas/base.py\", line 2152, in union_all\n    return self.geometry.values.union_all(method=method)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/gis/lib/python3.11/site-packages/geopandas/array.py\", line 863, in union_all\n    return shapely.union_all(self._data)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/gis/lib/python3.11/site-packages/shapely/decorators.py\", line 77, in wrapped\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/gis/lib/python3.11/site-packages/shapely/set_operations.py\", line 421, in union_all\n    return lib.unary_union(collections, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nshapely.errors.GEOSException: TopologyException: side location conflict at 73.428118148070055 30.925908048229278. This can occur if the input geometry is invalid.\n",
+  "resources": {
+    "samples": 1,
+    "duration_s": 0.0,
+    "peak_rss_tree_mb": 201.5,
+    "peak_rss_single_proc_mb": 201.5,
+    "peak_outdir_mb": 0.0,
+    "final_outdir_mb": 0.0,
+    "tree_read_mb": 0.0,
+    "tree_write_mb": 0.0,
+    "sys_read_mb": 0.0,
+    "sys_write_mb": 0.0,
+    "net_recv_mb": 0.0,
+    "net_sent_mb": 0.0,
+    "stage_peak_rss_mb": {
+      "init": 201.5,
+      "resolve_models": 0.0,
+      "ndvi_stage": 0.0,
+      "ndvi_acquire_stac": 0.0
+    }
+  },
+  "events": [
+    {
+      "stage": "resolve_models",
+      "t_start_epoch": 1788440366.468,
+      "t_end_epoch": 1788440366.468,
+      "start_s": 0.01,
+      "end_s": 0.01,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_acquire_stac",
+      "t_start_epoch": 1788440366.468,
+      "t_end_epoch": 1788440366.48,
+      "start_s": 0.01,
+      "end_s": 0.03,
+      "duration_s": 0.01,
+      "peak_rss_mb_during": 0.0,
+      "error": "GEOSException: TopologyException: side location conflict at 73.428118148070055 30.925908048229278. This can occur if the input geometry is invalid."
+    },
+    {
+      "stage": "ndvi_stage",
+      "t_start_epoch": 1788440366.468,
+      "t_end_epoch": 1788440366.48,
+      "start_s": 0.01,
+      "end_s": 0.03,
+      "duration_s": 0.01,
+      "peak_rss_mb_during": 0.0,
+      "error": "GEOSException: TopologyException: side location conflict at 73.428118148070055 30.925908048229278. This can occur if the input geometry is invalid."
+    }
+  ],
+  "finished_utc": "2026-09-03T12:59:26Z"
+}

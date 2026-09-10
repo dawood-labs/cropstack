@@ -1,0 +1,250 @@
+[
+  {
+    "label": "spr_maize 2025 margin=5 (DEFAULT)",
+    "crop": "spr_maize",
+    "year": "2025",
+    "overrides": {},
+    "configured_windows": [
+      [
+        "2025-05-01",
+        "2025-05-10"
+      ],
+      [
+        "2025-04-20",
+        "2025-04-30"
+      ],
+      [
+        "2025-05-11",
+        "2025-05-20"
+      ]
+    ],
+    "status": "ok",
+    "dates": [
+      "2025-05-09",
+      "2025-05-01"
+    ],
+    "description": "window 1 (2025-05-01 to 2025-05-10)",
+    "coverage_pct": 99.12,
+    "window_scores": [
+      {
+        "label": "window 1 (2025-05-01 to 2025-05-10)",
+        "window": [
+          "2025-05-01",
+          "2025-05-10"
+        ],
+        "dates": [
+          "2025-05-09",
+          "2025-05-01"
+        ],
+        "coverage_pct": 99.12
+      },
+      {
+        "label": "window 2 (2025-04-20 to 2025-04-30)",
+        "window": [
+          "2025-04-20",
+          "2025-04-30"
+        ],
+        "dates": [
+          "2025-04-29"
+        ],
+        "coverage_pct": 100.0
+      },
+      {
+        "label": "window 3 (2025-05-11 to 2025-05-20)",
+        "window": [
+          "2025-05-11",
+          "2025-05-20"
+        ],
+        "dates": [
+          "2025-05-14"
+        ],
+        "coverage_pct": 100.0
+      }
+    ],
+    "seconds": 11.8
+  },
+  {
+    "label": "spr_maize 2025 margin=0",
+    "crop": "spr_maize",
+    "year": "2025",
+    "overrides": {
+      "static_window_preference_margin_pct": 0
+    },
+    "configured_windows": [
+      [
+        "2025-05-01",
+        "2025-05-10"
+      ],
+      [
+        "2025-04-20",
+        "2025-04-30"
+      ],
+      [
+        "2025-05-11",
+        "2025-05-20"
+      ]
+    ],
+    "status": "ok",
+    "dates": [
+      "2025-04-29"
+    ],
+    "description": "window 2 (2025-04-20 to 2025-04-30)",
+    "coverage_pct": 100.0,
+    "window_scores": [
+      {
+        "label": "window 1 (2025-05-01 to 2025-05-10)",
+        "window": [
+          "2025-05-01",
+          "2025-05-10"
+        ],
+        "dates": [
+          "2025-05-09",
+          "2025-05-01"
+        ],
+        "coverage_pct": 99.12
+      },
+      {
+        "label": "window 2 (2025-04-20 to 2025-04-30)",
+        "window": [
+          "2025-04-20",
+          "2025-04-30"
+        ],
+        "dates": [
+          "2025-04-29"
+        ],
+        "coverage_pct": 100.0
+      },
+      {
+        "label": "window 3 (2025-05-11 to 2025-05-20)",
+        "window": [
+          "2025-05-11",
+          "2025-05-20"
+        ],
+        "dates": [
+          "2025-05-14"
+        ],
+        "coverage_pct": 100.0
+      }
+    ],
+    "seconds": 3.3
+  },
+  {
+    "label": "spr_maize 2025 margin=100",
+    "crop": "spr_maize",
+    "year": "2025",
+    "overrides": {
+      "static_window_preference_margin_pct": 100
+    },
+    "configured_windows": [
+      [
+        "2025-05-01",
+        "2025-05-10"
+      ],
+      [
+        "2025-04-20",
+        "2025-04-30"
+      ],
+      [
+        "2025-05-11",
+        "2025-05-20"
+      ]
+    ],
+    "status": "ok",
+    "dates": [
+      "2025-05-09",
+      "2025-05-01"
+    ],
+    "description": "window 1 (2025-05-01 to 2025-05-10)",
+    "coverage_pct": 99.12,
+    "window_scores": [
+      {
+        "label": "window 1 (2025-05-01 to 2025-05-10)",
+        "window": [
+          "2025-05-01",
+          "2025-05-10"
+        ],
+        "dates": [
+          "2025-05-09",
+          "2025-05-01"
+        ],
+        "coverage_pct": 99.12
+      },
+      {
+        "label": "window 2 (2025-04-20 to 2025-04-30)",
+        "window": [
+          "2025-04-20",
+          "2025-04-30"
+        ],
+        "dates": [
+          "2025-04-29"
+        ],
+        "coverage_pct": 100.0
+      },
+      {
+        "label": "window 3 (2025-05-11 to 2025-05-20)",
+        "window": [
+          "2025-05-11",
+          "2025-05-20"
+        ],
+        "dates": [
+          "2025-05-14"
+        ],
+        "coverage_pct": 100.0
+      }
+    ],
+    "seconds": 3.5
+  },
+  {
+    "label": "spr_maize 2025 start_at=2",
+    "crop": "spr_maize",
+    "year": "2025",
+    "overrides": {
+      "static_window_start_at": 2
+    },
+    "configured_windows": [
+      [
+        "2025-05-01",
+        "2025-05-10"
+      ],
+      [
+        "2025-04-20",
+        "2025-04-30"
+      ],
+      [
+        "2025-05-11",
+        "2025-05-20"
+      ]
+    ],
+    "status": "ok",
+    "dates": [
+      "2025-04-29"
+    ],
+    "description": "window 2 (2025-04-20 to 2025-04-30)",
+    "coverage_pct": 100.0,
+    "window_scores": [
+      {
+        "label": "window 2 (2025-04-20 to 2025-04-30)",
+        "window": [
+          "2025-04-20",
+          "2025-04-30"
+        ],
+        "dates": [
+          "2025-04-29"
+        ],
+        "coverage_pct": 100.0
+      },
+      {
+        "label": "window 3 (2025-05-11 to 2025-05-20)",
+        "window": [
+          "2025-05-11",
+          "2025-05-20"
+        ],
+        "dates": [
+          "2025-05-14"
+        ],
+        "coverage_pct": 100.0
+      }
+    ],
+    "seconds": 2.6
+  }
+]

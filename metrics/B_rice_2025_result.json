@@ -1,0 +1,121 @@
+{
+  "name": "B_rice_2025",
+  "spec": {
+    "crop": "rice",
+    "year": "2025",
+    "district_name": "okara",
+    "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp",
+    "gee_service_account_key": "/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/B_rice_2025",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "stac_static_mode": "auto"
+  },
+  "status": "ok",
+  "started_utc": "2026-09-03T07:52:35Z",
+  "config_summary": "crop/year/district : rice / 2025 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp\nNDVI source        : stac\nstatic source      : stac (auto)  [DISABLED: run_static_model=False]\nNDVI series window : 2025-05-24 -> 2025-12-01\nNDVI inference     : 2025-06-01 -> 2025-11-30\nstatic window      :  -> \nNDVI model         : gs://farmdar_data_catalog/fao_rice_maize_timeseries_model/fao_rice_maize_rf_model.joblib\nstatic model       : (none yet for rice)\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=resume, vector=resume\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/B_rice_2025",
+  "outcome": {
+    "crop": "rice",
+    "year": "2025",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": null,
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs/B_rice_2025",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": null,
+    "vector_run": "3_vector_run_1",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs/B_rice_2025/1_ndvi_run_1/okara_test_data_rice_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": null,
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs/B_rice_2025/3_vector_run_1/final_output/okara_rice_2025.gpkg",
+    "ndvi_minutes": 5.5,
+    "static_minutes": null,
+    "total_minutes": 5.6
+  },
+  "wall_s": 336.41,
+  "resources": {
+    "samples": 397,
+    "duration_s": 336.4,
+    "peak_rss_tree_mb": 4672.7,
+    "peak_rss_single_proc_mb": 4672.7,
+    "peak_outdir_mb": 535.5,
+    "final_outdir_mb": 535.5,
+    "tree_read_mb": 0.0,
+    "tree_write_mb": 807.12,
+    "sys_read_mb": 0.0,
+    "sys_write_mb": 564.88,
+    "net_recv_mb": 1247.36,
+    "net_sent_mb": 28.55,
+    "stage_peak_rss_mb": {
+      "resolve_models": 254.2,
+      "ndvi_stage": 4605.1,
+      "ndvi_acquire_stac": 4672.7,
+      "ndvi_mosaic": 0.0,
+      "sieve": 2217.0,
+      "vector_stage": 2217.8
+    }
+  },
+  "events": [
+    {
+      "stage": "resolve_models",
+      "t_start_epoch": 1788421955.668,
+      "t_end_epoch": 1788421959.024,
+      "start_s": 0.0,
+      "end_s": 3.36,
+      "duration_s": 3.36,
+      "peak_rss_mb_during": 254.2,
+      "error": null
+    },
+    {
+      "stage": "ndvi_acquire_stac",
+      "t_start_epoch": 1788421959.024,
+      "t_end_epoch": 1788422275.046,
+      "start_s": 3.36,
+      "end_s": 319.38,
+      "duration_s": 316.02,
+      "peak_rss_mb_during": 4672.7,
+      "error": null
+    },
+    {
+      "stage": "ndvi_mosaic",
+      "t_start_epoch": 1788422290.221,
+      "t_end_epoch": 1788422290.285,
+      "start_s": 334.56,
+      "end_s": 334.62,
+      "duration_s": 0.06,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788422290.344,
+      "t_end_epoch": 1788422290.894,
+      "start_s": 334.68,
+      "end_s": 335.23,
+      "duration_s": 0.55,
+      "peak_rss_mb_during": 2217.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_stage",
+      "t_start_epoch": 1788421959.024,
+      "t_end_epoch": 1788422290.894,
+      "start_s": 3.36,
+      "end_s": 335.23,
+      "duration_s": 331.87,
+      "peak_rss_mb_during": 4605.1,
+      "error": null
+    },
+    {
+      "stage": "vector_stage",
+      "t_start_epoch": 1788422290.895,
+      "t_end_epoch": 1788422292.08,
+      "start_s": 335.23,
+      "end_s": 336.42,
+      "duration_s": 1.18,
+      "peak_rss_mb_during": 2217.8,
+      "error": null
+    }
+  ],
+  "finished_utc": "2026-09-03T07:58:12Z"
+}

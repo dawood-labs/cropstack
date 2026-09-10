@@ -1,0 +1,15 @@
+[2026-09-04T07:02:56+00:00] launching K1_kill_static (own process group)
+[2026-09-04T07:02:57+00:00] process group 4066
+[2026-09-04T07:03:26+00:00] marker hit: Classifying static image:  25%
+[2026-09-04T07:03:29+00:00] process tree immediately before SIGKILL:
+    PID    PPID    PGID     ELAPSED   RSS CMD
+   4066    4061    4066       00:33  3688 bash /home/jovyan/FAO/optimized_code_testing/harness/run2.sh K1_kill_static specs_retest2/K1_kill_static.json
+   4070    4066    4066       00:33 852356 /home/jovyan/FAO/optimized_code_testing/cropstack_venv/bin/python /home/jovyan/FAO/optimized_code_testing/harness/run_scenario.py --name K1_kill_static --sp
+   4071    4066    4066       00:33  2016 tee /home/jovyan/FAO/optimized_code_testing/logs/K1_kill_static.log
+   4338    4070    4066       00:15 12864 /home/jovyan/FAO/optimized_code_testing/cropstack_venv/bin/python -c from multiprocessing.resource_tracker import main;main(27)
+   4339    4070    4066       00:15 5620536 /home/jovyan/FAO/optimized_code_testing/cropstack_venv/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=30, pipe_handle=34
+   4342    4070    4066       00:15 5611336 /home/jovyan/FAO/optimized_code_testing/cropstack_venv/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=30, pipe_handle=36
+   4343    4070    4066       00:15 5612560 /home/jovyan/FAO/optimized_code_testing/cropstack_venv/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=30, pipe_handle=38
+   4344    4070    4066       00:15 5609928 /home/jovyan/FAO/optimized_code_testing/cropstack_venv/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=30, pipe_handle=59
+[2026-09-04T07:03:33+00:00] survivors after SIGKILL: 
+[2026-09-04T07:03:33+00:00] kill complete

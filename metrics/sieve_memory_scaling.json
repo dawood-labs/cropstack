@@ -1,0 +1,50 @@
+[
+  {
+    "factor": 1,
+    "pixels": 4955076,
+    "megapixels": 5.0,
+    "baseline_mb": 189.0,
+    "sieve_s": 0.2,
+    "sieve_peak_mb": 190.1,
+    "sieve_bytes_per_px": 0.22,
+    "vector_s": 0.0,
+    "overall_peak_mb": 190.1,
+    "overall_bytes_per_px": 0.22
+  },
+  {
+    "factor": 3,
+    "pixels": 44595684,
+    "megapixels": 44.6,
+    "baseline_mb": 188.6,
+    "sieve_s": 1.6,
+    "sieve_peak_mb": 559.8,
+    "sieve_bytes_per_px": 8.32,
+    "vector_s": 0.0,
+    "overall_peak_mb": 559.8,
+    "overall_bytes_per_px": 8.32
+  },
+  {
+    "factor": 5,
+    "pixels": 123876900,
+    "megapixels": 123.9,
+    "baseline_mb": 188.6,
+    "sieve_s": 4.2,
+    "sieve_peak_mb": 796.3,
+    "sieve_bytes_per_px": 4.91,
+    "vector_s": 0.0,
+    "overall_peak_mb": 796.3,
+    "overall_bytes_per_px": 4.91
+  },
+  {
+    "factor": 7,
+    "pixels": 242798724,
+    "megapixels": 242.8,
+    "baseline_mb": 188.2,
+    "sieve_s": 8.5,
+    "sieve_peak_mb": 2141.8,
+    "sieve_bytes_per_px": 8.05,
+    "vector_s": 11.5,
+    "overall_peak_mb": 2141.8,
+    "overall_bytes_per_px": 8.05
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "old_Polygon_then_new_MultiPolygon": {
+    "status": "ok",
+    "declared_first": "Polygon",
+    "rows": 1732,
+    "types": [
+      "MultiPolygon",
+      "Polygon"
+    ]
+  },
+  "new_MultiPolygon_then_old_Polygon": {
+    "status": "ok",
+    "declared_first": "MultiPolygon",
+    "rows": 1732,
+    "types": [
+      "MultiPolygon",
+      "Polygon"
+    ]
+  },
+  "write_genuinely_mixed_frame": {
+    "status": "ok",
+    "declared": "MultiPolygon",
+    "types": [
+      "MultiPolygon"
+    ]
+  }
+}

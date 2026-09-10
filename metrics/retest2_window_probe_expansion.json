@@ -1,0 +1,84 @@
+[
+  {
+    "label": "spr_maize 2014 (no imagery) expansion=5d x3 DEFAULT",
+    "crop": "spr_maize",
+    "year": "2014",
+    "overrides": {},
+    "configured_windows": [
+      [
+        "2014-05-01",
+        "2014-05-10"
+      ],
+      [
+        "2014-04-20",
+        "2014-04-30"
+      ],
+      [
+        "2014-05-11",
+        "2014-05-20"
+      ]
+    ],
+    "status": "ok",
+    "dates": null,
+    "description": "no window produced a usable acquisition",
+    "coverage_pct": null,
+    "window_scores": null,
+    "seconds": 6.3
+  },
+  {
+    "label": "spr_maize 2014 expansion DISABLED (=0)",
+    "crop": "spr_maize",
+    "year": "2014",
+    "overrides": {
+      "static_window_expansion_days": 0
+    },
+    "configured_windows": [
+      [
+        "2014-05-01",
+        "2014-05-10"
+      ],
+      [
+        "2014-04-20",
+        "2014-04-30"
+      ],
+      [
+        "2014-05-11",
+        "2014-05-20"
+      ]
+    ],
+    "status": "ok",
+    "dates": null,
+    "description": "no window produced a usable acquisition",
+    "coverage_pct": null,
+    "window_scores": null,
+    "seconds": 2.8
+  },
+  {
+    "label": "spr_maize 2014 expansion=5d x1",
+    "crop": "spr_maize",
+    "year": "2014",
+    "overrides": {
+      "static_window_max_expansions": 1
+    },
+    "configured_windows": [
+      [
+        "2014-05-01",
+        "2014-05-10"
+      ],
+      [
+        "2014-04-20",
+        "2014-04-30"
+      ],
+      [
+        "2014-05-11",
+        "2014-05-20"
+      ]
+    ],
+    "status": "ok",
+    "dates": null,
+    "description": "no window produced a usable acquisition",
+    "coverage_pct": null,
+    "window_scores": null,
+    "seconds": 3.6
+  }
+]

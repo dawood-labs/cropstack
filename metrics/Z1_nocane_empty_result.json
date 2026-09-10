@@ -1,0 +1,189 @@
+{
+  "name": "Z1_nocane_empty",
+  "spec": {
+    "crop": "cane",
+    "year": "2025",
+    "district_name": "okara",
+    "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_nocane_block.shp",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z1_nocane_empty",
+    "gee_service_account_key": "/home/jovyan/FAO/optimized_code_testing/gcs_data_downloader_ee_farmdar.json",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "run_mode": "resume",
+    "stac_static_mode": "auto"
+  },
+  "status": "ok",
+  "started_utc": "2026-09-04T06:57:00Z",
+  "config_summary": "crop/year/district : cane / 2025 / okara\nAOI                : /home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_nocane_block.shp\nNDVI source        : stac\nstatic source      : stac (auto)\nNDVI series window : 2024-12-24 -> 2025-11-17\nNDVI inference     : 2025-01-01 -> 2025-11-15\nstatic window      : 2025-10-15 -> 2025-11-25\nNDVI model         : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_rf_model.joblib\nstatic model       : gs://farmdar_data_catalog/fao_cane_model_file/fao_cane_xgb_model.json\nmodel cache        : /home/jovyan/.cache/fao_pipeline/models\nrun modes          : ndvi=resume, static=resume, vector=resume\nsieve min pixels   : ndvi=20, static=20",
+  "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z1_nocane_empty",
+  "outcome": {
+    "crop": "cane",
+    "year": "2025",
+    "district": "okara",
+    "ndvi_source": "stac",
+    "static_source": "stac",
+    "output_dir": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z1_nocane_empty",
+    "ndvi_run": "1_ndvi_run_1",
+    "static_run": "2_static_run_1",
+    "vector_run": "3_vector_run_1",
+    "sieved_ndvi_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z1_nocane_empty/1_ndvi_run_1/okara_nocane_block_rf_classification_map_sieved_p20.tif",
+    "sieved_static_raster": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z1_nocane_empty/2_static_run_1/07_Nov_2025/static_mosaic_07_Nov_2025_Cls_sieved_p20.tif",
+    "vector_output": "/home/jovyan/FAO/optimized_code_testing/runs_retest/Z1_nocane_empty/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+    "ndvi_minutes": 2.4,
+    "static_minutes": 0.7,
+    "total_minutes": 3.2,
+    "result_check": {
+      "warnings": [
+        "The static model kept only 0.0% of the NDVI stage's crop area. That is the signature of a hazy or cloud-contaminated image rather than of a real crop boundary -- re-run from the next window (static_window_start_at) before accepting this."
+      ],
+      "aoi_acres": 1324.7,
+      "feature_count": 0,
+      "crop_acres": 0.0,
+      "crop_share_of_aoi_pct": 0.0,
+      "ndvi_crop_pixels": 21951,
+      "static_crop_pixels": 0,
+      "static_retention_pct": 0.0
+    }
+  },
+  "wall_s": 189.58,
+  "resources": {
+    "samples": 342,
+    "duration_s": 189.6,
+    "peak_rss_tree_mb": 2953.5,
+    "peak_rss_single_proc_mb": 2953.5,
+    "peak_outdir_mb": 177.6,
+    "final_outdir_mb": 13.3,
+    "tree_read_mb": 324.9,
+    "tree_write_mb": 254.91,
+    "sys_read_mb": 163.26,
+    "sys_write_mb": 219.59,
+    "net_recv_mb": 1369.84,
+    "net_sent_mb": 301.98,
+    "stage_peak_rss_mb": {
+      "init": 203.2,
+      "resolve_models": 0.0,
+      "ndvi_stage": 2680.6,
+      "ndvi_acquire_stac": 2953.5,
+      "ndvi_mosaic": 0.0,
+      "sieve": 0.0,
+      "static_stage": 0.0,
+      "static_acquire_stac": 2062.9,
+      "static_classify": 2580.2,
+      "static_crop_mask": 0.0,
+      "vector_stage": 2032.7
+    }
+  },
+  "events": [
+    {
+      "stage": "resolve_models",
+      "t_start_epoch": 1788505020.683,
+      "t_end_epoch": 1788505020.683,
+      "start_s": 0.0,
+      "end_s": 0.0,
+      "duration_s": 0.0,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_acquire_stac",
+      "t_start_epoch": 1788505020.683,
+      "t_end_epoch": 1788505134.82,
+      "start_s": 0.0,
+      "end_s": 114.14,
+      "duration_s": 114.14,
+      "peak_rss_mb_during": 2953.5,
+      "error": null
+    },
+    {
+      "stage": "ndvi_mosaic",
+      "t_start_epoch": 1788505165.001,
+      "t_end_epoch": 1788505165.058,
+      "start_s": 144.32,
+      "end_s": 144.38,
+      "duration_s": 0.06,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788505165.073,
+      "t_end_epoch": 1788505165.313,
+      "start_s": 144.39,
+      "end_s": 144.63,
+      "duration_s": 0.24,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "ndvi_stage",
+      "t_start_epoch": 1788505020.683,
+      "t_end_epoch": 1788505165.313,
+      "start_s": 0.0,
+      "end_s": 144.63,
+      "duration_s": 144.63,
+      "peak_rss_mb_during": 2680.6,
+      "error": null
+    },
+    {
+      "stage": "static_acquire_stac",
+      "t_start_epoch": 1788505165.314,
+      "t_end_epoch": 1788505208.247,
+      "start_s": 144.63,
+      "end_s": 187.57,
+      "duration_s": 42.93,
+      "peak_rss_mb_during": 2062.9,
+      "error": null
+    },
+    {
+      "stage": "static_crop_mask",
+      "t_start_epoch": 1788505208.248,
+      "t_end_epoch": 1788505208.302,
+      "start_s": 187.57,
+      "end_s": 187.62,
+      "duration_s": 0.05,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_classify",
+      "t_start_epoch": 1788505208.247,
+      "t_end_epoch": 1788505209.95,
+      "start_s": 187.57,
+      "end_s": 189.27,
+      "duration_s": 1.7,
+      "peak_rss_mb_during": 2580.2,
+      "error": null
+    },
+    {
+      "stage": "sieve",
+      "t_start_epoch": 1788505209.951,
+      "t_end_epoch": 1788505210.221,
+      "start_s": 189.27,
+      "end_s": 189.54,
+      "duration_s": 0.27,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "static_stage",
+      "t_start_epoch": 1788505165.314,
+      "t_end_epoch": 1788505210.221,
+      "start_s": 144.63,
+      "end_s": 189.54,
+      "duration_s": 44.91,
+      "peak_rss_mb_during": 0.0,
+      "error": null
+    },
+    {
+      "stage": "vector_stage",
+      "t_start_epoch": 1788505210.222,
+      "t_end_epoch": 1788505210.241,
+      "start_s": 189.54,
+      "end_s": 189.56,
+      "duration_s": 0.02,
+      "peak_rss_mb_during": 2032.7,
+      "error": null
+    }
+  ],
+  "finished_utc": "2026-09-04T07:00:10Z"
+}

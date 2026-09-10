@@ -1,0 +1,77 @@
+[
+  {
+    "name": "aoi format .kml",
+    "result": "PASS",
+    "detail": "resolved -> okara_test_data_cane.kml, n=1, bounds match=True"
+  },
+  {
+    "name": "aoi format .fgb",
+    "result": "PASS",
+    "detail": "resolved -> okara_test_data_cane.fgb, n=1, bounds match=True"
+  },
+  {
+    "name": "aoi format .parquet",
+    "result": "FAIL",
+    "detail": "ValueError: Could not read AOI /home/jovyan/FAO/optimized_code_testing/aoi_variants/okara_test_data_cane.parquet: '/home/jovyan/FAO/optimized_code_testing/aoi_variants/okara_test_data_cane.parquet' not recognized as being in a supported file format. It might help to specify the correct driver explicitly by prefixing the file path with '<DRIVER>:', e.g. 'CSV:path'."
+  },
+  {
+    "name": "aoi format .geojson",
+    "result": "PASS",
+    "detail": "resolved -> okara_test_data_cane.geojson, n=1, bounds match=True"
+  },
+  {
+    "name": "aoi format .zip (shapefile inside)",
+    "result": "PASS",
+    "detail": "extracted -> okara_test_data_cane.shp, n=1, bounds match=True"
+  },
+  {
+    "name": "shapefile missing .shx/.dbf",
+    "result": "PASS",
+    "detail": "raised FileNotFoundError: lonely.shp is missing its .shx sidecar -- a shapefile is not a single file. Copy the whole set, or use a .gpkg/.geojson."
+  },
+  {
+    "name": "windows escape repair (\\f -> formfeed)",
+    "result": "PASS",
+    "detail": "'C:\\\\data\\\\aoi\\x0cao_cane.shp' -> 'C:\\\\data\\\\aoi\\\\fao_cane.shp'"
+  },
+  {
+    "name": "windows -> WSL/GitBash spellings",
+    "result": "PASS",
+    "detail": "['C:\\\\data\\\\aoi.shp', '/mnt/c/data/aoi.shp', '/c/data/aoi.shp']"
+  },
+  {
+    "name": "normalize strips quotes/whitespace/r-prefix",
+    "result": "PASS",
+    "detail": "'/tmp/x.shp'"
+  },
+  {
+    "name": "resume on empty dir starts at run 1",
+    "result": "PASS",
+    "detail": "id=1 reusing=False"
+  },
+  {
+    "name": "resume reuses a populated run",
+    "result": "PASS",
+    "detail": "id=1 reusing=True"
+  },
+  {
+    "name": "new increments to max+1",
+    "result": "PASS",
+    "detail": "id=2 -> 1_ndvi_run_2"
+  },
+  {
+    "name": "run_tag is appended to a new folder",
+    "result": "PASS",
+    "detail": "1_ndvi_run_3_cloudfix"
+  },
+  {
+    "name": "explicit run id selects that run",
+    "result": "PASS",
+    "detail": "1_ndvi_run_2"
+  },
+  {
+    "name": "tagged folders are discovered by id",
+    "result": "PASS",
+    "detail": "{1: '1_ndvi_run_1', 2: '1_ndvi_run_2', 3: '1_ndvi_run_3_cloudfix'}"
+  }
+]

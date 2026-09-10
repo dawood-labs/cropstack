@@ -1,0 +1,12 @@
+{
+  "factor": 1,
+  "pixels": 4955076,
+  "megapixels": 5.0,
+  "baseline_mb": 189.0,
+  "sieve_s": 0.2,
+  "sieve_peak_mb": 190.1,
+  "sieve_bytes_per_px": 0.22,
+  "vector_s": 0.0,
+  "overall_peak_mb": 190.1,
+  "overall_bytes_per_px": 0.22
+}

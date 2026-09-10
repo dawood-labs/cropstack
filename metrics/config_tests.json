@@ -1,0 +1,230 @@
+[
+  {
+    "name": "literal_brief_A4_static_source_stack",
+    "expectation": "must raise: 'stack' is not a valid static_source",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "static_source": "stack",
+      "gee_static_mode": "manual"
+    },
+    "result": "RAISED",
+    "error_type": "ValueError",
+    "error": "static_source must be 'gee' or 'stac', got 'stack'.",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/config_tests.py\", line 77, in run_case\n    cfg.validate()\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/config.py\", line 357, in validate\n    raise ValueError(f\"static_source must be 'gee' or 'stac', got {self.static_source!r}.\")\nValueError: static_source must be 'gee' or 'stac', got 'stack'.\n"
+  },
+  {
+    "name": "literal_brief_gee_static_mode_manual",
+    "expectation": "must raise: 'manual' is not a valid gee_static_mode",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "static_source": "gee",
+      "gee_static_mode": "manual"
+    },
+    "result": "RAISED",
+    "error_type": "ValueError",
+    "error": "Unknown gee_static_mode: 'manual'.",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/config_tests.py\", line 77, in run_case\n    cfg.validate()\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/config.py\", line 394, in validate\n    raise ValueError(f\"Unknown gee_static_mode: {self.gee_static_mode!r}.\")\nValueError: Unknown gee_static_mode: 'manual'.\n"
+  },
+  {
+    "name": "literal_brief_A1_stac_mode_on_gee_source",
+    "expectation": "stac_static_mode is ignored when static_source='gee' -- expect PASS (silently ignored)",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "static_source": "gee",
+      "stac_static_mode": "auto"
+    },
+    "result": "PASSED_VALIDATION",
+    "run_static_model": true,
+    "details": {
+      "static_source": "gee",
+      "stac_static_mode": "auto",
+      "gee_static_mode": "api_auto",
+      "sensor_mode": "SENTINEL",
+      "ndvi_resolution_m": 10,
+      "static_resolution_m": 10,
+      "ndvi_sieve_min_pixels": 20,
+      "static_sieve_min_pixels": 20,
+      "composite_step_days": 8,
+      "needs_gee_api": true
+    }
+  },
+  {
+    "name": "literal_brief_A3_gee_mode_on_stac_source",
+    "expectation": "gee_static_mode is ignored when static_source='stac' -- expect PASS (silently ignored)",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "static_source": "stac",
+      "gee_static_mode": "api_auto"
+    },
+    "result": "PASSED_VALIDATION",
+    "run_static_model": true,
+    "details": {
+      "static_source": "stac",
+      "stac_static_mode": "auto",
+      "gee_static_mode": "api_auto",
+      "sensor_mode": "SENTINEL",
+      "ndvi_resolution_m": 10,
+      "static_resolution_m": 10,
+      "ndvi_sieve_min_pixels": 20,
+      "static_sieve_min_pixels": 20,
+      "composite_step_days": 8,
+      "needs_gee_api": false
+    }
+  },
+  {
+    "name": "rice_default_no_static",
+    "expectation": "must pass with run_static_model=False",
+    "kwargs": {
+      "crop": "rice",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp"
+    },
+    "result": "PASSED_VALIDATION",
+    "run_static_model": false,
+    "details": {
+      "static_source": "stac",
+      "stac_static_mode": "auto",
+      "gee_static_mode": "api_auto",
+      "sensor_mode": "SENTINEL",
+      "ndvi_resolution_m": 10,
+      "static_resolution_m": 10,
+      "ndvi_sieve_min_pixels": 20,
+      "static_sieve_min_pixels": 20,
+      "composite_step_days": 5,
+      "needs_gee_api": false
+    }
+  },
+  {
+    "name": "rice_force_static_true",
+    "expectation": "must raise a clear error naming run_static_model",
+    "kwargs": {
+      "crop": "rice",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_rice.shp",
+      "run_static_model": true
+    },
+    "result": "RAISED",
+    "error_type": "ValueError",
+    "error": "run_static_model=True but no static model is configured for 'rice'. Set run_static_model=False, or point static_model at a model file.",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/config_tests.py\", line 77, in run_case\n    cfg.validate()\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/config.py\", line 365, in validate\n    raise ValueError(\nValueError: run_static_model=True but no static model is configured for 'rice'. Set run_static_model=False, or point static_model at a model file.\n"
+  },
+  {
+    "name": "stac_static_manual_without_dates",
+    "expectation": "must raise: manual mode needs stac_static_dates",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "static_source": "stac",
+      "stac_static_mode": "manual"
+    },
+    "result": "RAISED",
+    "error_type": "ValueError",
+    "error": "stac_static_mode='manual' requires stac_static_dates=['YYYY-MM-DD', ...].",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/config_tests.py\", line 77, in run_case\n    cfg.validate()\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/config.py\", line 380, in validate\n    raise ValueError(\"stac_static_mode='manual' requires stac_static_dates=['YYYY-MM-DD', ...].\")\nValueError: stac_static_mode='manual' requires stac_static_dates=['YYYY-MM-DD', ...].\n"
+  },
+  {
+    "name": "gee_api_manual_without_dates",
+    "expectation": "must raise: api_manual needs dates",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "static_source": "gee",
+      "gee_static_mode": "api_manual"
+    },
+    "result": "RAISED",
+    "error_type": "ValueError",
+    "error": "gee_static_mode='api_manual' requires gee_static_single_date, or both gee_static_top_date and gee_static_bottom_date.",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/config_tests.py\", line 77, in run_case\n    cfg.validate()\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/config.py\", line 389, in validate\n    raise ValueError(\nValueError: gee_static_mode='api_manual' requires gee_static_single_date, or both gee_static_top_date and gee_static_bottom_date.\n"
+  },
+  {
+    "name": "gee_manual_gcs_link_without_uri",
+    "expectation": "must raise: needs gee_static_gcs_uri",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "static_source": "gee",
+      "gee_static_mode": "manual_gcs_link"
+    },
+    "result": "RAISED",
+    "error_type": "ValueError",
+    "error": "gee_static_mode='manual_gcs_link' requires gee_static_gcs_uri='gs://...'.",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/config_tests.py\", line 77, in run_case\n    cfg.validate()\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/config.py\", line 384, in validate\n    raise ValueError(\"gee_static_mode='manual_gcs_link' requires gee_static_gcs_uri='gs://...'.\")\nValueError: gee_static_mode='manual_gcs_link' requires gee_static_gcs_uri='gs://...'.\n"
+  },
+  {
+    "name": "bad_run_mode",
+    "expectation": "must raise: invalid run mode",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "run_mode": "rewind"
+    },
+    "result": "RAISED",
+    "error_type": "ValueError",
+    "error": "run_mode='rewind' is not valid. Use 'new', 'resume', or a run id like '3'.",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/config_tests.py\", line 77, in run_case\n    cfg.validate()\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/config.py\", line 414, in validate\n    raise ValueError(\nValueError: run_mode='rewind' is not valid. Use 'new', 'resume', or a run id like '3'.\n"
+  },
+  {
+    "name": "unknown_config_field",
+    "expectation": "must raise TypeError for unknown field",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "nonexistent_option": 1
+    },
+    "result": "RAISED",
+    "error_type": "TypeError",
+    "error": "Unknown PipelineConfig field(s): ['nonexistent_option']",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/config_tests.py\", line 75, in run_case\n    cfg = build_pipeline_config(\n          ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/config.py\", line 493, in build_pipeline_config\n    raise TypeError(f\"Unknown PipelineConfig field(s): {unknown}\")\nTypeError: Unknown PipelineConfig field(s): ['nonexistent_option']\n"
+  },
+  {
+    "name": "bad_aoi_path",
+    "expectation": "must raise FileNotFoundError at config build time",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2025",
+      "aoi_path": "/nonexistent/path/nope.shp"
+    },
+    "result": "RAISED",
+    "error_type": "FileNotFoundError",
+    "error": "AOI not found: /nonexistent/path/nope.shp.",
+    "traceback": "Traceback (most recent call last):\n  File \"/home/jovyan/FAO/optimized_code_testing/harness/config_tests.py\", line 75, in run_case\n    cfg = build_pipeline_config(\n          ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/config.py\", line 474, in build_pipeline_config\n    resolved_aoi = aoi_io.resolve_aoi(\n                   ^^^^^^^^^^^^^^^^^^^\n  File \"/home/jovyan/FAO/optimized_code_testing/cropstack/aoi_io.py\", line 217, in resolve_aoi\n    raise FileNotFoundError(\nFileNotFoundError: AOI not found: /nonexistent/path/nope.shp.\n"
+  },
+  {
+    "name": "cane_2016_landsat_switch",
+    "expectation": "2016 < cutover 2018 -> LANDSAT, 30 m, sieve min pixels 1",
+    "kwargs": {
+      "crop": "cane",
+      "year": "2016",
+      "aoi_path": "/home/jovyan/FAO/optimized_code_testing/test_aois_small/okara_test_data_cane.shp",
+      "ndvi_source": "gee",
+      "static_source": "gee"
+    },
+    "result": "PASSED_VALIDATION",
+    "run_static_model": true,
+    "details": {
+      "static_source": "gee",
+      "stac_static_mode": "auto",
+      "gee_static_mode": "api_auto",
+      "sensor_mode": "LANDSAT",
+      "ndvi_resolution_m": 30,
+      "static_resolution_m": 30,
+      "ndvi_sieve_min_pixels": 1,
+      "static_sieve_min_pixels": 1,
+      "composite_step_days": 8,
+      "needs_gee_api": true
+    }
+  }
+]

@@ -1,0 +1,110 @@
+{
+  "layers": [
+    {
+      "path": "runs_retest/Z3_cane_auto/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "exists": true,
+      "rows": 800,
+      "declared_geometry_type": "MultiPolygon",
+      "actual_geom_types": [
+        "MultiPolygon"
+      ],
+      "columns": [
+        "predicted",
+        "area_acres",
+        "geometry"
+      ],
+      "dtypes": {
+        "predicted": "int64",
+        "area_acres": "float64",
+        "geometry": "geometry"
+      },
+      "crs": "EPSG:4326",
+      "acres": 1855.54
+    },
+    {
+      "path": "runs_retest/Z4_wheat_punjab/3_vector_run_1/final_output/okara_wheat_2025.gpkg",
+      "exists": true,
+      "rows": 2114,
+      "declared_geometry_type": "MultiPolygon",
+      "actual_geom_types": [
+        "MultiPolygon"
+      ],
+      "columns": [
+        "predicted",
+        "area_acres",
+        "geometry"
+      ],
+      "dtypes": {
+        "predicted": "int64",
+        "area_acres": "float64",
+        "geometry": "geometry"
+      },
+      "crs": "EPSG:4326",
+      "acres": 18404.35
+    },
+    {
+      "path": "runs_retest/T1_sprmaize_margin5/3_vector_run_1/final_output/okara_spr_maize_2025.gpkg",
+      "exists": true,
+      "rows": 1070,
+      "declared_geometry_type": "MultiPolygon",
+      "actual_geom_types": [
+        "MultiPolygon"
+      ],
+      "columns": [
+        "predicted",
+        "area_acres",
+        "geometry"
+      ],
+      "dtypes": {
+        "predicted": "int64",
+        "area_acres": "float64",
+        "geometry": "geometry"
+      },
+      "crs": "EPSG:4326",
+      "acres": 3992.79
+    },
+    {
+      "path": "runs_retest/Z1_nocane_empty/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+      "exists": true,
+      "rows": 0,
+      "declared_geometry_type": "Unknown",
+      "actual_geom_types": [],
+      "columns": [
+        "predicted",
+        "area_acres",
+        "geometry"
+      ],
+      "dtypes": {
+        "predicted": "int64",
+        "area_acres": "float64",
+        "geometry": "geometry"
+      },
+      "crs": "EPSG:4326",
+      "acres": 0.0
+    }
+  ],
+  "append_two_districts": {
+    "label": "two non-empty results",
+    "a": "runs_retest/Z3_cane_auto/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+    "b": "runs_retest/Z4_wheat_punjab/3_vector_run_1/final_output/okara_wheat_2025.gpkg",
+    "status": "ok",
+    "rows_a": 800,
+    "rows_b": 2114,
+    "rows_combined": 2914,
+    "combined_geom_types": [
+      "MultiPolygon"
+    ]
+  },
+  "append_empty_into_real": {
+    "label": "real + empty result",
+    "a": "runs_retest/Z3_cane_auto/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+    "b": "runs_retest/Z1_nocane_empty/3_vector_run_1/final_output/okara_cane_2025.gpkg",
+    "status": "ok",
+    "rows_a": 800,
+    "rows_b": 0,
+    "rows_combined": 800,
+    "combined_geom_types": [
+      "MultiPolygon"
+    ]
+  }
+}
