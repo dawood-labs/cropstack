@@ -23,6 +23,29 @@ def _format_date_suffix(dates) -> str:
     return "_and_".join(datetime.strptime(d, "%Y-%m-%d").strftime("%d_%b_%Y") for d in dates)
 
 
+def _check_static_coverage(cfg: PipelineConfig, coverage_pct) -> None:
+    """A cloud-free-looking date can still cover a fraction of the AOI.
+
+    farmdar's selector reports how much of the AOI its chosen dates actually make usable.
+    Nothing downstream reads it, so a 17%-usable image would be classified as if it were
+    clear ground and reported without a word. This surfaces that.
+    """
+    if coverage_pct is None or cfg.stac_static_min_coverage_pct is None:
+        return
+    if coverage_pct >= cfg.stac_static_min_coverage_pct:
+        return
+
+    message = (
+        f"Static imagery covers only {coverage_pct:.1f}% of the AOI "
+        f"(minimum {cfg.stac_static_min_coverage_pct:.1f}%). The remainder is cloud or "
+        f"outside the scene footprint, and the classifier cannot tell the difference -- "
+        f"results over that area are not trustworthy."
+    )
+    if cfg.stac_static_on_low_coverage == "error":
+        raise RuntimeError(message)
+    logger.warning("LOW STATIC COVERAGE: " + message)
+
+
 def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[str, str]:
     """Returns (static image path, date suffix). In 'auto' mode the cloud-aware
     selector inside farmdar.sentinel picks the dates; in 'manual' mode the configured
@@ -62,6 +85,16 @@ def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[s
         logger.info(
             f"Date selection: anchor={selection.get('anchor')}, "
             f"AOI coverage={selection.get('coverage_pct')}%, metric={selection.get('cloud_metric')}"
+        )
+        _check_static_coverage(cfg, selection.get("coverage_pct"))
+    else:
+        # The first manual date is the anchor: it is layered on top AND is the
+        # radiometric reference the other layers are matched to, so a partial or
+        # swath-edge scene in that position degrades the whole composite.
+        logger.warning(
+            f"Manual static dates: {selected_dates[0] if selected_dates else '?'} is the ANCHOR "
+            "(layered on top and used as the radiometric reference). Put the date with the "
+            "best AOI coverage first -- chronological order is not automatically correct."
         )
 
     image_path = result.get("vrt") or result.get("clipped")
@@ -178,6 +211,8 @@ def run_static_pipeline(
             background_label=cfg.static_background_label,
             worker_count=cfg.static_worker_count,
             output_nodata=cfg.static_output_nodata,
+            memory_fraction=cfg.static_memory_fraction,
+            model_memory_expansion=cfg.static_model_memory_expansion,
         )
 
     if cfg.delete_raw_static_tiles:
@@ -191,5 +226,8 @@ def run_static_pipeline(
         target_classes=[cfg.static_crop_label],
         min_pixel_size=cfg.static_sieve_min_pixels,
         connectivity=4,
-        nodata_val=cfg.static_background_label,
+        # None, not the background label: the static raster has no absent pixels, and
+        # naming a real class as nodata masks it out of the sieve entirely, turning the
+        # whole step into a silent no-op.
+        nodata_val=None,
     )

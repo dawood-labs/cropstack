@@ -134,6 +134,28 @@ def _extract_zip(zip_path: Path, cache_dir: Path) -> Path:
     return shapefiles[0] if shapefiles else candidates[0]
 
 
+def _convert_parquet(parquet_path: Path, cache_dir: Path) -> Path:
+    """Rewrites a GeoParquet AOI as a GeoPackage in the cache.
+
+    GeoParquet needs `gpd.read_parquet`; every consumer in this pipeline (the grid split,
+    the crop mask, the boundary clip) calls `gpd.read_file`, which cannot open it.
+    Converting once here makes the format work end to end instead of only at the door.
+    """
+    import geopandas as gpd
+
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    converted = cache_dir / f"{parquet_path.stem}_from_parquet.gpkg"
+    if converted.exists() and converted.stat().st_mtime >= parquet_path.stat().st_mtime:
+        return converted
+
+    frame = gpd.read_parquet(parquet_path)
+    if frame.empty:
+        raise ValueError(f"GeoParquet AOI is empty: {parquet_path}")
+    frame.to_file(converted, driver="GPKG")
+    logger.info(f"Converted GeoParquet AOI -> {converted}")
+    return converted
+
+
 def _download_from_gcs(uri: str, cache_dir: Path, gcs_key_path: Optional[str]) -> Path:
     """Downloads an AOI from GCS, including every shapefile sidecar when the URI names
     a `.shp`. Cached by bucket layout, so it is fetched once per machine."""
@@ -225,6 +247,9 @@ def resolve_aoi(
     if resolved.suffix.lower() == ".zip":
         resolved = _extract_zip(resolved, cache_dir)
         logger.info(f"Extracted zipped AOI -> {resolved}")
+
+    if resolved.suffix.lower() == ".parquet":
+        resolved = _convert_parquet(resolved, cache_dir)
 
     if resolved.suffix.lower() == ".shp":
         for required in (".shx", ".dbf"):
