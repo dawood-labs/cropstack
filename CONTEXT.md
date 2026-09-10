@@ -87,6 +87,11 @@ chhote AOI ka number tha. Ye user ko batana hai.
 - Fix likhte waqt ek aur bug: timeout handler ke andar `Path(tile).name` fail hua to
   cleanup skip ho gaya aur hang wapas aa gaya. Ab cleanup pehle hota hai.
 - Tests: `tests/test_pool_recycle.py` — wahi 6x8=48 shape. **51 checks** total.
+
+**DISTRICT RUN RESUME KAR RAHA HOON (10:25):** spec ab `run_mode="resume"`.
+48 tile_predictions + 57 raw tiles disk par mehfooz hain, is liye sirf 9 tiles
+baqi hain. Uske baad mosaic → sieve → static stage → vector.
+Agar phir mari: wahi resume dobara chalao.
 **Agar instance yahan mari:** log parho, `run_mode="resume"` se dobara chalao —
 NDVI tiles resume ho jayenge.
 
