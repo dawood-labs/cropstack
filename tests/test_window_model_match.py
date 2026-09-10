@@ -118,6 +118,32 @@ def run(check):
         check("width alone cannot see a shift that keeps the count", True,
               "the reason ndvi_training_dates exists")
 
+        # ------------------------------------ a model card outranks the config's list
+        import json
+        card_dir = tmp / "carded"
+        card_dir.mkdir()
+        carded_model = _write_model(card_dir / "rf.joblib", 35)
+        (card_dir / "model_card.json").write_text(json.dumps({"feature_dates": TRAINED}))
+
+        # Config pinned to the wrong dates; the card is right, and the card is what ships
+        # with the file, so it wins and the run is allowed.
+        ndvi_pipeline._assert_inference_window_matches_model(
+            tile, _cfg("2025-04-01", "2025-12-29", tmp, COTTON_DATES[1:]), str(carded_model))
+        check("a model card overrides the config's date list", True, "the file states its own contract")
+
+        check.raises(
+            "and the card still refuses a shifted window",
+            lambda: ndvi_pipeline._assert_inference_window_matches_model(
+                tile, _cfg("2025-04-02", "2025-12-31", tmp, None), str(carded_model)),
+            ValueError, contains="2025-04-01",
+        )
+
+        (card_dir / "model_card.json").write_text("{ not json")
+        ndvi_pipeline._assert_inference_window_matches_model(
+            tile, _cfg("2025-04-01", "2025-12-29", tmp, TRAINED), str(carded_model))
+        check("an unreadable card falls back to the config rather than failing", True,
+              "diagnostics must not be the thing that breaks the run")
+
         # -------------------------------------------- a model that cannot say, is let by
         joblib.dump(Opaque(), tmp / "opaque.joblib")
         ndvi_pipeline._assert_inference_window_matches_model(

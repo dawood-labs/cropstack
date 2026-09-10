@@ -326,6 +326,31 @@ def _assert_classification_has_data(classification_path, cfg) -> None:
 
 
 
+def _training_dates_from_card(model_path: Path) -> Optional[List[str]]:
+    """The dates a model was trained on, read from `model_card.json` beside it.
+
+    Written by the v2 trainer so the model carries its own feature contract. A config
+    entry says what a crop's model *should* expect; the card says what this file
+    actually does, and when the two disagree the file wins.
+    """
+    card = model_path.parent / "model_card.json"
+    if not card.exists():
+        return None
+    try:
+        import json
+        card_body = json.loads(card.read_text())
+        # "feature_dates" is what the v2 trainer writes; "training_dates" is accepted so a
+        # card written to the config's own vocabulary is not silently ignored.
+        dates = card_body.get("feature_dates") or card_body.get("training_dates")
+    except (OSError, ValueError) as exc:
+        logger.warning(f"model card at {card} is unreadable ({exc}); falling back to the config")
+        return None
+    if not dates:
+        return None
+    logger.info(f"Model card at {card.name} pins {len(dates)} training dates; using those.")
+    return list(dates)
+
+
 def _assert_inference_window_matches_model(
     tile_path: Path, cfg: PipelineConfig, ndvi_model_path: str
 ) -> None:
@@ -360,7 +385,9 @@ def _assert_inference_window_matches_model(
         "predicting, because it still produces a map."
     )
 
-    expected_dates = cfg.ndvi_training_dates
+    # A model that ships a card states its own contract, and that beats a list in a
+    # config file which nobody updates when the model is retrained.
+    expected_dates = _training_dates_from_card(Path(ndvi_model_path)) or cfg.ndvi_training_dates
     if expected_dates:
         if selected == list(expected_dates):
             logger.info(
