@@ -185,7 +185,7 @@ def get_crop_config(crop_name: str, year_str: str) -> dict:
             "static_model": "gs://farmdar_data_catalog/FAO_Wheat_Model_Files/FAO_Wheat_Static_IMG_Model/FAO_Wheat_XGB_Model.json",
         },
         "cotton": {
-            "ndvi_crop_classes": [1],
+            "ndvi_crop_classes": [1],      # v2 is multiclass; 1 is cotton in both
             "sieve_min_pixel_size": 20,
             "min_polygon_area_acres": 0.5,
             "static_model_positive_class": 1,
@@ -221,7 +221,13 @@ def get_crop_config(crop_name: str, year_str: str) -> dict:
             "static_window_start": "",
             "static_window_end": "",
             "composite_step_days": 8,
-            "ndvi_model": "/home/jovyan/FAO/cotton/timeseries_model/model_v1/best_rf_classifier.joblib",
+            # v2: trained on surveyed polygons rather than eye-labelled clusters, and
+            # multiclass, so a false positive names the crop it came from. Against v1 on
+            # six validation AOIs it lifts cotton recall everywhere (worst AOI 57.3% to
+            # 78.6%) and cuts rice commission in three of the four AOIs that carry rice.
+            # It ships a model_card.json, which the window guard reads in preference to
+            # ndvi_training_dates above.
+            "ndvi_model": "/home/jovyan/FAO/cotton/timeseries_model/model_v2/cotton_rf_v2.joblib",
             "static_model": None,
         },
         "rice": {
