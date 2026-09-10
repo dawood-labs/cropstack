@@ -54,9 +54,17 @@ AOI: `~/FAO/wheat/kasur_testing/Kasur.shp` — Kasur, **3,984 km2 / 984,440 acre
 bbox par 88 tiles @ 0.1 deg. Okara test AOI (418 km2, 4 tiles) se **~9.5x bara**.
 Crop: wheat, region punjab, year 2025. STAC dono stages.
 
-Abhi: **disk probe** chal raha hai — ek raw NDVI tile ka asli size naap raha hoon
-(wheat ki poori series ke saath), taake 88 tiles ka peak disk pata chale.
-Sirf 35 GB free hain. Probe se pehle run shuru NAHI karna.
+**Disk probe HO GAYA (naapa, guess nahi):** ek raw NDVI tile = **144 MiB**
+(wheat series 2024-08-24 -> 2025-07-01, step 8). 88 tiles → **12.4 GiB** peak.
+Baqi (static staging ~1.2 GiB, mosaics/sieved ~0.5 GiB, vectors) ke saath total
+**~15 GiB**. Free 35 GB → theek hai.
+
+**RUN SHURU KAR DIYA:** `D1_kasur_wheat_2025`
+spec `specs_retest2/D1_kasur_wheat_2025.json`, output `runs_district/D1_kasur_wheat_2025`,
+log `logs/D1_kasur_wheat_2025.log`, `run_mode=new`.
+Andaza: acquisition ~30 min (11 batches x 2.7 min), total 1.5-2.5 ghante.
+**Agar instance yahan mari:** log parho, `run_mode="resume"` se dobara chalao —
+NDVI tiles resume ho jayenge.
 
 ---
 
