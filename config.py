@@ -367,6 +367,13 @@ class PipelineConfig:
     gee_static_single_date: Optional[str] = None  # api_manual, single-date composite
     gee_static_top_date: Optional[str] = None     # api_manual, two-date mosaic (top layer)
     gee_static_bottom_date: Optional[str] = None  # api_manual, two-date mosaic (bottom layer)
+    # gee_static_single_date and the (top_date, bottom_date) pair are two different ways
+    # to specify an api_manual composite. When only one of the two is set, it is used --
+    # no need to state this. Set this explicitly to 'single' or 'mosaic' only when both
+    # are set (e.g. switching between them across runs without clearing the other), so the
+    # choice is a decision recorded in config rather than whichever field composite_type
+    # happened to notice first. See resolved_gee_manual_layering().
+    gee_static_manual_layering: Optional[Literal["single", "mosaic"]] = None
     gee_static_gcs_uri: Optional[str] = None      # required when gee_static_mode == "manual_gcs_link"
     gee_wait_for_exports: bool = True
     gee_export_submit_workers: int = 4
@@ -489,6 +496,7 @@ class PipelineConfig:
     def resolved_static_windows(self) -> List[tuple]:
         """Concrete (start, end) date pairs for this year, in preference order."""
         import calendar
+        import logging
 
         windows = self.static_priority_windows
         if self.region and self.static_priority_windows_by_region:
@@ -501,6 +509,15 @@ class PipelineConfig:
                     f"No static windows defined for region {self.region!r} on {self.crop}. "
                     f"Known regions: {known}."
                 )
+        elif self.region:
+            # Not an error: a batch shares one set of overrides across crops (build_jobs
+            # applies shared_overrides to every job regardless of crop), so region= is
+            # routinely set for a crop that has no regional windows at all. But it is a
+            # genuine no-op here, and nothing else says so.
+            logging.getLogger(__name__).warning(
+                f"region={self.region!r} was set but '{self.crop}' has no region-specific "
+                "static windows -- it has no effect for this crop."
+            )
 
         year = int(self.year)
         resolved = []
@@ -514,6 +531,72 @@ class PipelineConfig:
                 f"{year}-{end_month:02d}-{end_day:02d}",
             ))
         return resolved
+
+    def resolved_gee_manual_layering(self) -> str:
+        """Which api_manual GEE composite to build: 'single' or 'mosaic' (top+bottom).
+
+        The single-date field and the top/bottom pair are two different ways to name a
+        manual composite. Composite_type used to be picked purely from whether top_date
+        happened to be truthy, so a stray top_date silently outranked a set
+        gee_static_single_date -- the exact "which field wins" hazard the top/bottom pair
+        already has over stac_static_dates[0]. This is the one place that decision is
+        made; both `validate()` and the code that actually builds the composite call it,
+        so they can never disagree.
+
+        `gee_static_manual_layering` breaks the tie explicitly when both a single date and
+        a full pair are set -- useful for switching between them across runs without
+        clearing the field you're not using. When only one form is set, no toggle is
+        needed; when neither or an incomplete pair is set, this raises the same way
+        `validate()` always has.
+        """
+        has_single = bool(self.gee_static_single_date)
+        has_pair = bool(self.gee_static_top_date and self.gee_static_bottom_date)
+        has_partial_pair = bool(self.gee_static_top_date or self.gee_static_bottom_date) and not has_pair
+        toggle = self.gee_static_manual_layering
+
+        if toggle == "single":
+            if not has_single:
+                raise ValueError("gee_static_manual_layering='single' requires gee_static_single_date.")
+            return "single"
+        if toggle == "mosaic":
+            if not has_pair:
+                raise ValueError(
+                    "gee_static_manual_layering='mosaic' requires both gee_static_top_date "
+                    "and gee_static_bottom_date."
+                )
+            return "mosaic"
+        if toggle is not None:
+            raise ValueError(f"gee_static_manual_layering must be 'single' or 'mosaic', got {toggle!r}.")
+
+        if has_single and has_pair:
+            raise ValueError(
+                "gee_static_mode='api_manual' got both gee_static_single_date "
+                f"({self.gee_static_single_date!r}) and a top/bottom pair "
+                f"({self.gee_static_top_date!r}, {self.gee_static_bottom_date!r}). Set "
+                "gee_static_manual_layering='single' or 'mosaic' to say which one wins."
+            )
+        if has_single and has_partial_pair:
+            raise ValueError(
+                f"gee_static_single_date ({self.gee_static_single_date!r}) is set together "
+                "with only one of gee_static_top_date / gee_static_bottom_date "
+                f"({self.gee_static_top_date!r}, {self.gee_static_bottom_date!r}). Drop "
+                "the stray date, or set gee_static_manual_layering='mosaic' and supply "
+                "both top_date and bottom_date."
+            )
+        if has_pair:
+            return "mosaic"
+        if has_single:
+            return "single"
+        if has_partial_pair:
+            raise ValueError(
+                "gee_static_mode='api_manual': only one of gee_static_top_date / "
+                "gee_static_bottom_date is set. A mosaic composite needs both -- or set "
+                "gee_static_single_date for a single-date composite."
+            )
+        raise ValueError(
+            "gee_static_mode='api_manual' requires gee_static_single_date, "
+            "or both gee_static_top_date and gee_static_bottom_date."
+        )
 
     @property
     def sentinel2_available(self) -> bool:
@@ -602,18 +685,36 @@ class PipelineConfig:
                 raise ValueError(f"stac_static_mode must be 'auto' or 'manual', got {self.stac_static_mode!r}.")
             if self.stac_static_mode == "manual" and not self.stac_static_dates:
                 raise ValueError("stac_static_mode='manual' requires stac_static_dates=['YYYY-MM-DD', ...].")
+            if self.stac_static_mode == "auto":
+                # An unknown region (e.g. a typo copied from a wheat job) is exactly the
+                # kind of mistake this method exists to catch before any acquisition --
+                # but the check itself lives in resolved_static_windows(), which otherwise
+                # is not called until the static stage begins, after the NDVI stage (which
+                # can be minutes to tens of minutes on a real district) has already run.
+                priority_windows = self.resolved_static_windows()
+                if self.stac_static_dates and priority_windows:
+                    # stac_static_dates only takes effect in 'manual' mode, or in 'auto'
+                    # mode for a crop with no priority windows at all -- every shipped
+                    # crop that reaches here has priority windows, so this field is a
+                    # silent no-op the way it's set.
+                    import logging
+
+                    logging.getLogger(__name__).warning(
+                        f"stac_static_dates={self.stac_static_dates!r} was set but "
+                        f"stac_static_mode='auto' and '{self.crop}' has priority windows "
+                        "configured -- the priority-window selector decides the date(s) "
+                        "instead, and stac_static_dates has no effect. Set "
+                        "stac_static_mode='manual' to use it."
+                    )
 
         if self.run_static_model and self.static_source == "gee":
             if self.gee_static_mode == "manual_gcs_link" and not self.gee_static_gcs_uri:
                 raise ValueError("gee_static_mode='manual_gcs_link' requires gee_static_gcs_uri='gs://...'.")
             if self.gee_static_mode == "api_manual":
-                has_single = bool(self.gee_static_single_date)
-                has_pair = bool(self.gee_static_top_date and self.gee_static_bottom_date)
-                if not (has_single or has_pair):
-                    raise ValueError(
-                        "gee_static_mode='api_manual' requires gee_static_single_date, "
-                        "or both gee_static_top_date and gee_static_bottom_date."
-                    )
+                # Every way this can be wrong -- neither form set, both set with no
+                # toggle to break the tie, a stray extra date next to a clean single/pair,
+                # or an incomplete pair -- is caught here, before any acquisition.
+                self.resolved_gee_manual_layering()
             if self.gee_static_mode not in ("api_auto", "api_manual", "manual_gcs_link"):
                 raise ValueError(f"Unknown gee_static_mode: {self.gee_static_mode!r}.")
 

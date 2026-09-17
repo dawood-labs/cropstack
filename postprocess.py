@@ -32,7 +32,9 @@ from scipy.ndimage import binary_dilation, generate_binary_structure, label
 from shapely.geometry import MultiPolygon, shape
 
 ACRES_PER_SQ_METRE = 0.000247105
-# Pakistan-wide AOIs; matches the original notebooks' hardcoded area CRS.
+# Pakistan-wide AOIs; matches the original notebooks' hardcoded area CRS. Fixed by
+# operator request -- see TEST_REPORT_2026-09-16.md for the tradeoff (a per-AOI zone is
+# more accurate but was explicitly declined in favor of one fixed zone for every AOI).
 AREA_CRS_EPSG = 32642
 
 

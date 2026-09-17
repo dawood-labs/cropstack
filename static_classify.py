@@ -31,6 +31,8 @@ from rasterio.windows import Window
 from shapely.geometry import box
 from tqdm import tqdm
 
+import aoi_io
+
 logger = logging.getLogger(__name__)
 
 # Per-process caches: workers are reused across windows, so paying the model load and
@@ -178,9 +180,12 @@ def _estimate_aoi_pixels(aoi, transform, grid_pixels: int) -> int:
     rasterising, which would cost a full extra pass over the grid.
     """
     try:
-        centroid = aoi.geometry.union_all().centroid if hasattr(aoi.geometry, "union_all")             else aoi.geometry.unary_union.centroid
-        utm_zone = int((centroid.x + 180) / 6) + 1
-        utm_epsg = (32600 if centroid.y >= 0 else 32700) + utm_zone
+        # A real lon/lat, regardless of what CRS `aoi` is already in -- `local_utm_epsg`
+        # needs degrees, and callers here have handed this both raw (EPSG:4326) and
+        # already reprojected to the static image's grid.
+        aoi_4326 = aoi.to_crs(4326)
+        centroid = aoi_4326.geometry.union_all().centroid if hasattr(aoi_4326.geometry, "union_all")             else aoi_4326.geometry.unary_union.centroid
+        utm_epsg = aoi_io.local_utm_epsg(centroid.x, centroid.y)
         projected = aoi.to_crs(epsg=utm_epsg)
 
         pixel_width_deg, pixel_height_deg = abs(transform.a), abs(transform.e)
