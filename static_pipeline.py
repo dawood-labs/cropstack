@@ -218,11 +218,11 @@ def select_dates_by_priority(cfg: PipelineConfig) -> Tuple[Optional[list], dict,
             )
         else:
             logger.info(f"Chose {chosen['label']} at {coverage_of(chosen):.1f}% "
-                        f"(floor {floor:.0f}%).")
+                        f"(floor {floor:.1f}%).")
     else:
         chosen = max(scored, key=coverage_of)
         logger.warning(
-            f"No window reached the {floor:.0f}% coverage floor. Falling back to the best "
+            f"No window reached the {floor:.1f}% coverage floor. Falling back to the best "
             f"available: {chosen['label']} at {chosen.get('coverage_pct')}% -- the result "
             "rests on partly cloudy or partly covered imagery."
         )
@@ -380,12 +380,14 @@ def _acquire_static_from_stac(cfg: PipelineConfig, staging_dir: Path) -> Tuple[s
             f"AOI coverage={selection.get('coverage_pct')}%, metric={selection.get('cloud_metric')}"
         )
         _check_static_coverage(cfg, selection.get("coverage_pct"))
-    else:
+    elif selected_dates and len(selected_dates) > 1:
         # The first manual date is the anchor: it is layered on top AND is the
         # radiometric reference the other layers are matched to, so a partial or
-        # swath-edge scene in that position degrades the whole composite.
+        # swath-edge scene in that position degrades the whole composite. A single date
+        # has no layering and nothing to be an anchor over, so this would otherwise warn
+        # about a hazard that isn't there.
         logger.warning(
-            f"Manual static dates: {selected_dates[0] if selected_dates else '?'} is the ANCHOR "
+            f"Manual static dates: {selected_dates[0]} is the ANCHOR "
             "(layered on top and used as the radiometric reference). Put the date with the "
             "best AOI coverage first -- chronological order is not automatically correct."
         )
@@ -421,7 +423,10 @@ def _acquire_static_from_gee(cfg: PipelineConfig, staging_dir: Path) -> Tuple[st
     sensor_mode = cfg.gee_sensor_mode
     asset_base = Path(cfg.aoi_path).stem
     manual_mode = cfg.gee_static_mode == "api_manual"
-    composite_type = "mosaic" if (manual_mode and cfg.gee_static_top_date) else "single"
+    # The same decision validate() already made (and already raised on, if it was
+    # ambiguous) -- calling it again here rather than re-deriving it from the raw fields
+    # is what keeps this and validate() unable to disagree.
+    composite_type = cfg.resolved_gee_manual_layering() if manual_mode else "single"
 
     # The static composite is exported once over the AOI's bounding box (matching the
     # original notebooks' `fc.geometry().bounds()`), so no grid split or asset ingestion

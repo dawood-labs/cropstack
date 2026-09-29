@@ -19,6 +19,8 @@ MODULES = [
     "test_pool_recycle",
     "test_resources",
     "test_window_model_match",
+    "test_config_validation",
+    "test_batch_resources",
 ]
 
 if __name__ == "__main__":

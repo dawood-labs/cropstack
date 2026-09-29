@@ -126,17 +126,25 @@ def run_batch(
     job that needs it.
 
     Worker counts are sized for this machine unless the job sets them: `plan` (or, by
-    default, `resources.plan_resources` given the job count) supplies `ndvi_worker_count`,
+    default, `resources.plan_resources`) supplies `ndvi_worker_count`,
     `static_worker_count`, `stac_worker_count` and `static_chunk_size`. Anything a job
     states explicitly always wins -- the plan only fills what was left unsaid, because a
     default chosen on one box is not a default.
+
+    The plan is sized for **one district at a time**, deliberately not for `len(jobs)`
+    running concurrently: jobs above are run strictly sequentially (see the module
+    docstring), so a job here should get the same single-district worker counts it would
+    get running alone, not a fraction divided across a concurrency that never happens. A
+    caller that genuinely does run several of *these* processes concurrently (e.g. one
+    `batch.py` invocation per machine in a fleet) should pass its own `plan` computed with
+    the real `districts_in_parallel`.
     """
     jobs = list(jobs)
     results: List[Dict[str, Any]] = []
     gee_credentials, gee_project = None, None
 
     if plan is None and auto_resources:
-        plan = resources.plan_resources(district_count=len(jobs))
+        plan = resources.plan_resources(district_count=1)
     defaults = plan.config_overrides() if plan else {}
 
     logger.info(f"Starting batch of {len(jobs)} job(s).")

@@ -32,6 +32,18 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_AOI_CACHE_DIR = os.path.expanduser("~/.cache/fao_pipeline/aoi")
 
+
+def local_utm_epsg(lon: float, lat: float) -> int:
+    """The UTM zone whose central meridian is closest to this point.
+
+    Used wherever this pipeline needs to reproject into metres to compute an area or a
+    pixel count. There is no one UTM zone that is correct for every AOI -- Punjab alone
+    straddles zones 42N and 43N near 72 deg E -- so callers pass a real lon/lat (usually
+    the AOI's own centroid) rather than a CRS chosen once for a single country or region.
+    """
+    zone = int((lon + 180) / 6) + 1
+    return (32600 if lat >= 0 else 32700) + zone
+
 # Everything ESRI may scatter next to a .shp. The first three are mandatory; the rest
 # are fetched when present because losing a .prj silently breaks reprojection.
 SHAPEFILE_SIDECAR_EXTENSIONS = [
@@ -208,6 +220,66 @@ def _download_from_gcs(uri: str, cache_dir: Path, gcs_key_path: Optional[str]) -
     return local_path
 
 
+def _validate_and_clean_geometry(resolved: Path, cache_dir: Path):
+    """Rejects an AOI with nothing to grid or acquire against, repairs invalid geometry,
+    and drops anything that isn't a polygon.
+
+    `gee_client.split_aoi_into_grid` already applies these checks, but only on the GEE
+    grid-split path. The STAC path -- the default, and the one this pipeline's own README
+    recommends -- handed the AOI straight to `farmdar.sentinel` unchecked: an empty AOI
+    crashed deep inside tile-grid math (`ValueError: cannot convert float NaN to integer`),
+    and a points-only AOI (no polygon at all) passed `validate()` and proceeded straight to
+    real Sentinel-2 acquisition. Moving the same cleaning rules here means both backends
+    inherit them, whichever one reads the AOI first.
+
+    Returns `(path_to_use, crs)`. `path_to_use` is `resolved` unchanged when nothing needed
+    repairing, or a cleaned copy in `cache_dir` when it did -- so every later `gpd.read_file`
+    on `cfg.aoi_path` (there are several, scattered across the pipeline) sees the same
+    cleaned geometry without having to change any of those call sites.
+    """
+    import geopandas as gpd
+
+    try:
+        aoi = gpd.read_file(resolved)
+    except Exception as exc:
+        raise ValueError(f"Could not read AOI {resolved}: {exc}")
+
+    if aoi.empty:
+        raise ValueError(f"AOI contains no features: {resolved}")
+
+    changed = False
+
+    invalid = ~aoi.geometry.is_valid
+    if invalid.any():
+        logger.warning(
+            f"Repairing {int(invalid.sum())} invalid AOI geometr(ies) in {resolved.name} "
+            "before use."
+        )
+        aoi.loc[invalid, "geometry"] = aoi.loc[invalid, "geometry"].make_valid()
+        changed = True
+
+    polygonal = aoi.geom_type.isin(["Polygon", "MultiPolygon"])
+    if not polygonal.all():
+        logger.warning(
+            f"Dropping {int((~polygonal).sum())} non-polygon geometr(ies) "
+            f"(point/line/other) from {resolved.name} before use."
+        )
+        aoi = aoi[polygonal]
+        changed = True
+
+    if aoi.empty:
+        raise ValueError(f"AOI has no polygon geometry after cleaning: {resolved}")
+
+    if not changed:
+        return resolved, aoi.crs
+
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    cleaned_path = cache_dir / f"{resolved.stem}_cleaned.gpkg"
+    aoi.to_file(cleaned_path, driver="GPKG")
+    logger.info(f"Wrote a repaired copy of the AOI -> {cleaned_path}")
+    return cleaned_path, aoi.crs
+
+
 def resolve_aoi(
     source: Union[str, Path],
     cache_dir: Union[str, Path] = DEFAULT_AOI_CACHE_DIR,
@@ -263,13 +335,8 @@ def resolve_aoi(
         logger.warning(f"Unrecognised AOI extension '{resolved.suffix}'; trying to read it anyway.")
 
     if verify_readable:
-        import geopandas as gpd
-
-        try:
-            preview = gpd.read_file(resolved, rows=1)
-        except Exception as exc:
-            raise ValueError(f"Could not read AOI {resolved}: {exc}")
-        if preview.crs is None:
+        resolved, crs = _validate_and_clean_geometry(resolved, cache_dir)
+        if crs is None:
             logger.warning(f"AOI {resolved.name} has no CRS defined; EPSG:4326 will be assumed.")
 
     return resolved
