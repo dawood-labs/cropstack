@@ -6,6 +6,8 @@ the Kasur shape (6 bands, uint16, chunk 2048) and the box it ran on (8 cores, 61
 """
 from __future__ import annotations
 
+from unittest import mock
+
 import resources
 import static_classify
 
@@ -92,7 +94,10 @@ def run(check):
           plan.districts_in_parallel == 1 and plan.static_worker_count == 3
           and plan.static_chunk_size == 512, plan.describe()[:70])
 
-    plan = resources.plan_resources(district_count=2, cores=8, available_memory_gib=None)
+    # None means "detect", so detection itself must fail for RAM to be unknown;
+    # otherwise the result depends on how much is free on the box running the test.
+    with mock.patch.object(resources, "available_gib", return_value=None):
+        plan = resources.plan_resources(district_count=2, cores=8, available_memory_gib=None)
     check("unknown RAM does not crash the planner",
           plan.districts_in_parallel >= 1 and plan.static_chunk_size == 2048,
           plan.describe()[:70])
