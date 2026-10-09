@@ -41,7 +41,7 @@ _MODEL_CACHE: Dict[str, Any] = {}
 _DATASET_CACHE: Dict[str, Any] = {}
 
 
-def get_static_model(model_path: str) -> Any:
+def get_static_model(model_path: str, n_jobs: int = 1) -> Any:
     model = _MODEL_CACHE.get(model_path)
     if model is None:
         # Imported lazily so an NDVI-only run needs no xgboost installed.
@@ -53,6 +53,8 @@ def get_static_model(model_path: str) -> Any:
         # parallelism, and one GPU context cannot be shared across pool workers.
         model.set_params(n_jobs=1, device="cpu")
         _MODEL_CACHE[model_path] = model
+    # Shared mode asks for every core from the one in-process copy.
+    model.set_params(n_jobs=n_jobs)
     return model
 
 
@@ -321,9 +323,10 @@ def classify_window(
     model_positive_class: int,
     crop_label: int,
     background_label: int,
+    n_jobs: int = 1,
 ) -> Tuple[Window, np.ndarray]:
-    """Classifies one window of the static image. Runs inside a pool worker."""
-    model = get_static_model(model_path)
+    """Classifies one window of the static image, in a pool worker or (shared mode) in-process."""
+    model = get_static_model(model_path, n_jobs)
     src = _open_cached(static_image_path)
 
     nodata_value = src.nodata if src.nodata is not None else 0
@@ -376,8 +379,13 @@ def classify_static_image(
     memory_fraction: float = 0.5,
     model_memory_expansion: float = 12.0,
     memory_budget_bytes: Optional[int] = None,
+    shared_model: bool = False,
 ) -> Optional[str]:
-    """Windowed, multiprocess XGBoost inference over the static image.
+    """Windowed XGBoost inference over the static image.
+
+    `shared_model=True` loads the model once in this process and lets XGBoost use every
+    core per window, instead of one model copy per pool worker. With a large model (the
+    563 MB spring-maize JSON) that is one resident copy instead of several.
 
     The model is referenced by path rather than passed as an object, so nothing large is
     pickled per task; each worker loads and caches its own CPU-only copy. Returns the
@@ -425,6 +433,10 @@ def classify_static_image(
     output_profile.update(driver="GTiff", dtype=rasterio.uint8, count=1, nodata=output_nodata,
                           compress="lzw", tiled=True, blockxsize=256, blockysize=256, BIGTIFF="YES")
 
+    if shared_model:
+        return _classify_in_process(static_image_path, output_path, output_profile, windows, crop_mask_path,
+                                    model_path, use_mask, model_positive_class, crop_label, background_label)
+
     worker_count = resolve_worker_count(
         requested=worker_count, window_count=len(windows), model_path=model_path,
         memory_fraction=memory_fraction, model_memory_expansion=model_memory_expansion,
@@ -465,5 +477,28 @@ def classify_static_image(
         Path(temporary_path).unlink(missing_ok=True)
         raise
 
+    os.replace(temporary_path, output_path)
+    return crop_mask_path
+
+
+def _classify_in_process(static_image_path, output_path, output_profile, windows, crop_mask_path, model_path,
+                         use_mask, model_positive_class, crop_label, background_label) -> Optional[str]:
+    """Shared-model path of `classify_static_image`: one model copy, all cores, same temp-file discipline."""
+    logger.info(f"Classifying {len(windows)} window(s) in-process with one shared model (XGBoost on all cores)...")
+    temporary_path = f"{output_path}.tmp.tif"
+    try:
+        with rasterio.open(temporary_path, "w", **output_profile) as dst:
+            for window in tqdm(windows, desc="Classifying static image", unit="block"):
+                window, labels = classify_window(static_image_path, crop_mask_path, window, model_path, use_mask,
+                                                 model_positive_class, crop_label, background_label, n_jobs=-1)
+                dst.write(labels, 1, window=window)
+    except BaseException:
+        Path(temporary_path).unlink(missing_ok=True)
+        raise
+    finally:
+        _MODEL_CACHE.pop(model_path, None)
+        for dataset in _DATASET_CACHE.values():
+            dataset.close()
+        _DATASET_CACHE.clear()
     os.replace(temporary_path, output_path)
     return crop_mask_path

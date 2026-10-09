@@ -527,6 +527,7 @@ def run_static_pipeline(
             output_nodata=cfg.static_output_nodata,
             memory_fraction=cfg.static_memory_fraction,
             model_memory_expansion=cfg.static_model_memory_expansion,
+            shared_model=cfg.static_shared_model,
         )
 
     if cfg.delete_raw_static_tiles:

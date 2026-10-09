@@ -400,6 +400,8 @@ class PipelineConfig:
     # this fraction of free RAM. A 563 MB gradient-boosted JSON was measured at 5.2 GiB
     # resident, so sizing purely from cpu_count() reserves tens of GiB of copies.
     static_memory_fraction: float = 0.5
+    # True: one model copy in this process, XGBoost threads on all cores (no worker pool).
+    static_shared_model: bool = True
     static_model_memory_expansion: float = 12.0
     # Per-tile budget. Applied to the batch as a whole (max_tasks x this), on
     # as_completed -- the thing that actually blocks when a pool dies.
